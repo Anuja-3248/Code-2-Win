@@ -1,0 +1,276 @@
+:root {
+  /* Color Palette - Modern Medical & Healthcare Trust */
+  --primary: #176B87;
+  --primary-hover: #115369;
+  --primary-light: #EAF6F8;
+  --primary-border: #CFE8ED;
+  
+  --secondary: #64B5C8;
+  --secondary-light: #F0F8FA;
+  
+  --accent: #F28C8C;
+  --accent-light: #FDF2F2;
+  
+  --success: #3E9C6B;
+  --success-light: #EBF7F0;
+  --success-border: #C8EBD5;
+  
+  --warning: #E09B2D;
+  --warning-light: #FEF8EC;
+  
+  --emergency: #D9534F;
+  --emergency-light: #FCEDED;
+  
+  --bg-app: #FFFFFF;
+  --bg-section: #F7FAFC;
+  --bg-teal-section: #EAF6F8;
+  --bg-card: #FFFFFF;
+  --bg-subtle: #F2F6F9;
+  
+  --text-main: #20323D;
+  --text-secondary: #586976;
+  --text-muted: #8A9BA8;
+  --text-inverse: #FFFFFF;
+  
+  --border-color: #E2E8F0;
+  --border-subtle: #EEF2F6;
+  
+  /* Distinct Premium Medical Typography */
+  --font-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Plus Jakarta Sans', 'Manrope', system-ui, -apple-system, sans-serif;
+  
+  /* Radii - Subtle & Professional */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 9999px;
+  
+  /* Shadows - Natural and Subtle */
+  --shadow-xs: 0 1px 2px rgba(32, 50, 61, 0.04);
+  --shadow-sm: 0 2px 8px rgba(32, 50, 61, 0.05), 0 1px 2px rgba(32, 50, 61, 0.03);
+  --shadow-md: 0 8px 20px rgba(32, 50, 61, 0.06), 0 2px 6px rgba(32, 50, 61, 0.03);
+  --shadow-lg: 0 16px 36px rgba(32, 50, 61, 0.08), 0 4px 10px rgba(32, 50, 61, 0.03);
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--text-main);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+h1 { font-size: 2.85rem; font-weight: 800; letter-spacing: -0.03em; }
+h2 { font-size: 2.1rem; font-weight: 750; letter-spacing: -0.025em; }
+h3 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.015em; }
+h4 { font-size: 1.1rem; font-weight: 600; }
+
+p {
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: all var(--transition-fast);
+}
+
+/* Layout Utilities */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #FFFFFF;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.container-responsive {
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 1.75rem;
+}
+
+.container-narrow {
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Base Card */
+.resq-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  transition: all var(--transition-fast);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-xs);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary {
+  background-color: var(--bg-card);
+  color: var(--primary);
+  border: 1.5px solid var(--primary-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--primary-light);
+  border-color: var(--secondary);
+}
+
+.btn-outline {
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-outline:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary);
+  background-color: var(--bg-section);
+}
+
+.btn-lg {
+  padding: 0.9rem 1.85rem;
+  font-size: 1.05rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-sm {
+  padding: 0.45rem 0.95rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.775rem;
+  font-weight: 600;
+}
+
+.badge-teal {
+  background-color: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid var(--primary-border);
+}
+
+.badge-success {
+  background-color: var(--success-light);
+  color: var(--success);
+  border: 1px solid var(--success-border);
+}
+
+.badge-neutral {
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+/* Status Indicator Dot */
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Subtle reveal animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Responsive */
+@media (max-width: 820px) {
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.7rem; }
+  h3 { font-size: 1.2rem; }
+  .resq-card { padding: 1.25rem; }
+}
