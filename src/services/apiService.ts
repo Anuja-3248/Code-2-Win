@@ -4,14 +4,21 @@ import * as hospitalService from './hospitalService';
 import * as locationService from './locationService';
 
 /**
- * Clean API Service Facade.
- * When Sarthak's backend is ready, developers can seamlessly switch `USE_MOCK_DATA = false`
- * and point endpoints directly to the database/REST endpoints.
+ * API Service Facade connecting directly to Firebase Firestore with local fallback.
  */
 export const ApiService = {
   // Location & Geocoding
   async getLocation() {
     return locationService.getCurrentLocation();
+  },
+
+  // Hospital Authentication & Signup (Firestore collection "hospitals")
+  async signupHospital(email: string, password: string, hospitalName?: string) {
+    return hospitalService.signupHospital(email, password, hospitalName);
+  },
+
+  async loginHospital(email: string, password: string) {
+    return hospitalService.loginHospital(email, password);
   },
 
   // Hospital resource querying
@@ -31,6 +38,10 @@ export const ApiService = {
   // Hospital resource updates
   async updateAvailability(hospitalId: string, payload: ResourceUpdatePayload) {
     return hospitalService.updateHospitalResources(hospitalId, payload);
+  },
+
+  async saveFullHospitalTelemetry(hospitalId: string, payload: any) {
+    return hospitalService.saveFullHospitalTelemetry(hospitalId, payload);
   },
 
   // Hospital activity audit trail

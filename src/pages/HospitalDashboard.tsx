@@ -33,13 +33,18 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchDashboardData = async () => {
+    setIsLoading(true);
     try {
-      const data = await ApiService.fetchHospitalById(hospitalId);
+      let data = await ApiService.fetchHospitalById(hospitalId);
+      if (!data) {
+        ApiService.resetDemoData();
+        data = await ApiService.fetchHospitalById(hospitalId);
+      }
       setHospital(data);
       const activityLogs = await ApiService.getActivityLogs();
       setLogs(activityLogs);
     } catch (e) {
-      console.error(e);
+      console.error('Error fetching dashboard telemetry:', e);
     } finally {
       setIsLoading(false);
     }
@@ -90,11 +95,47 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
     return false;
   };
 
-  if (isLoading || !hospital) {
+  const handleSaveFullTelemetry = async (payload: any): Promise<boolean> => {
+    if (!hospital) return false;
+    const res = await ApiService.saveFullHospitalTelemetry(hospital.id, payload);
+    if (res.success && res.hospital) {
+      setHospital(res.hospital);
+      const newLogs = await ApiService.getActivityLogs();
+      setLogs(newLogs);
+      return true;
+    }
+    return false;
+  };
+
+  if (isLoading) {
     return (
       <div className="container-responsive" style={{ padding: '4rem 1.5rem', textAlign: 'center' }}>
         <RefreshCw size={28} className="status-dot-pulse" style={{ color: 'var(--primary)', margin: '0 auto 1rem' }} />
         <p style={{ color: 'var(--text-secondary)' }}>Loading hospital resource telemetry...</p>
+      </div>
+    );
+  }
+
+  if (!hospital) {
+    return (
+      <div className="container-responsive" style={{ padding: '4rem 1.5rem', textAlign: 'center' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--text-main)' }}>
+          Hospital Telemetry Unavailable
+        </h2>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
+          Unable to locate live resource data for facility ID: {hospitalId}.
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            ApiService.resetDemoData();
+            fetchDashboardData();
+          }}
+          className="btn btn-primary"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+        >
+          <RefreshCw size={16} /> Reset Telemetry & Reload
+        </button>
       </div>
     );
   }
@@ -446,10 +487,9 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
           {/* Left Column: Update Resource Section */}
           <div>
             <ResourceUpdateForm
-              currentIcu={hospital.icuAvailable}
-              currentVentilators={hospital.ventilatorsAvailable}
-              currentGeneral={hospital.generalBedsAvailable}
+              hospital={hospital}
               onUpdate={handleUpdateAvailability}
+              onSaveFullTelemetry={handleSaveFullTelemetry}
             />
 
             {/* Test Link to Ambulance search */}
