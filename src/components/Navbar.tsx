@@ -28,11 +28,11 @@ export const Navbar: React.FC<NavbarProps> = () => {
   return (
     <header
       style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.78)',
+        backgroundColor: 'rgba(7, 15, 30, 0.88)',
         backdropFilter: 'blur(20px) saturate(180%)',
         WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-        borderBottom: '1px solid rgba(186, 230, 253, 0.45)',
-        boxShadow: '0 4px 20px -2px rgba(10, 25, 47, 0.05), inset 0 -1px 0 rgba(255, 255, 255, 0.6)',
+        borderBottom: '1px solid rgba(56, 189, 248, 0.25)',
+        boxShadow: '0 4px 24px -2px rgba(0, 0, 0, 0.5), inset 0 -1px 0 rgba(255, 255, 255, 0.1)',
         position: 'sticky',
         top: 0,
         zIndex: 100,
@@ -71,10 +71,12 @@ export const Navbar: React.FC<NavbarProps> = () => {
             }}
             style={{
               fontSize: '0.9375rem',
-              fontWeight: 500,
-              color: 'var(--text-main)',
+              fontWeight: 600,
+              color: '#BAE6FD',
               transition: 'color var(--transition-fast)',
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#BAE6FD')}
           >
             How It Works
           </a>
@@ -89,10 +91,12 @@ export const Navbar: React.FC<NavbarProps> = () => {
             }}
             style={{
               fontSize: '0.9375rem',
-              fontWeight: 500,
-              color: 'var(--text-main)',
+              fontWeight: 600,
+              color: '#BAE6FD',
               transition: 'color var(--transition-fast)',
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#BAE6FD')}
           >
             For Hospitals
           </a>
@@ -107,27 +111,40 @@ export const Navbar: React.FC<NavbarProps> = () => {
             }}
             style={{
               fontSize: '0.9375rem',
-              fontWeight: 500,
-              color: 'var(--text-main)',
+              fontWeight: 600,
+              color: '#BAE6FD',
               transition: 'color var(--transition-fast)',
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#BAE6FD')}
           >
             About
           </a>
+
+          <Link
+            to="/hospital/login"
+            className="btn btn-secondary"
+            style={{
+              padding: '0.55rem 1.15rem',
+              fontSize: '0.875rem',
+            }}
+          >
+            Hospital Portal
+          </Link>
 
           {/* Primary Action */}
           <Link
             to="/ambulance"
             className="btn btn-primary"
             style={{
-              marginLeft: '0.5rem',
+              marginLeft: '0.25rem',
               padding: '0.6rem 1.25rem',
               fontSize: '0.9375rem',
               gap: '0.45rem',
             }}
           >
             <Ambulance size={16} />
-            Find a Hospital
+            Find Hospital
           </Link>
         </nav>
 
@@ -140,9 +157,10 @@ export const Navbar: React.FC<NavbarProps> = () => {
           style={{
             display: 'none',
             padding: '0.5rem',
-            color: 'var(--text-main)',
-            borderRadius: '6px',
-            backgroundColor: 'var(--bg-section)',
+            color: '#FFFFFF',
+            borderRadius: '8px',
+            backgroundColor: 'rgba(19, 46, 84, 0.6)',
+            border: '1px solid rgba(56, 189, 248, 0.3)',
           }}
         >
           {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -153,13 +171,14 @@ export const Navbar: React.FC<NavbarProps> = () => {
       {mobileMenuOpen && (
         <div
           style={{
-            backgroundColor: '#FFFFFF',
-            borderBottom: '1px solid var(--border-color)',
+            backgroundColor: 'rgba(7, 15, 30, 0.96)',
+            backdropFilter: 'blur(20px)',
+            borderBottom: '1px solid rgba(56, 189, 248, 0.3)',
             padding: '1.25rem 1.75rem',
             display: 'flex',
             flexDirection: 'column',
             gap: '1rem',
-            boxShadow: 'var(--shadow-md)',
+            boxShadow: 'var(--shadow-lg)',
           }}
           className="mobile-drawer"
         >
@@ -176,7 +195,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
             style={{
               fontSize: '0.95rem',
               fontWeight: 600,
-              color: 'var(--text-main)',
+              color: '#BAE6FD',
               padding: '0.4rem 0',
             }}
           >
@@ -196,7 +215,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
             style={{
               fontSize: '0.95rem',
               fontWeight: 600,
-              color: 'var(--text-main)',
+              color: '#BAE6FD',
               padding: '0.4rem 0',
             }}
           >
@@ -216,7 +235,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
             style={{
               fontSize: '0.95rem',
               fontWeight: 600,
-              color: 'var(--text-main)',
+              color: '#BAE6FD',
               padding: '0.4rem 0',
             }}
           >
@@ -231,13 +250,13 @@ export const Navbar: React.FC<NavbarProps> = () => {
               style={{ width: '100%', justifyContent: 'center' }}
             >
               <Ambulance size={16} />
-              Find a Hospital
+              Find Hospital
             </Link>
 
             <Link
               to="/hospital/login"
               onClick={() => setMobileMenuOpen(false)}
-              className="btn btn-outline"
+              className="btn btn-secondary"
               style={{ width: '100%', justifyContent: 'center' }}
             >
               Hospital Portal

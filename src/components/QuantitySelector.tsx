@@ -36,25 +36,25 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
         <label
           style={{
             fontFamily: 'var(--font-heading)',
-            fontSize: '1.0625rem',
-            fontWeight: 700,
-            color: 'var(--text-main)',
+            fontSize: '1.1rem',
+            fontWeight: 800,
+            color: 'var(--text-navy)',
           }}
         >
           {label}
         </label>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
         <div
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
             border: '1.5px solid rgba(186, 230, 253, 0.8)',
             borderRadius: 'var(--radius-md)',
             padding: '4px',
-            boxShadow: '0 4px 12px rgba(10, 25, 47, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.9)',
+            boxShadow: '0 4px 12px rgba(10, 25, 47, 0.05), inset 0 1px 1px rgba(255, 255, 255, 1)',
           }}
         >
           {/* Decrement Button */}
@@ -67,7 +67,7 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
               width: 40,
               height: 40,
               borderRadius: '8px',
-              backgroundColor: value <= min ? 'transparent' : 'rgba(240, 249, 255, 0.8)',
+              backgroundColor: value <= min ? 'transparent' : 'rgba(240, 249, 255, 0.9)',
               color: value <= min ? 'var(--text-muted)' : 'var(--text-navy)',
               display: 'flex',
               alignItems: 'center',
@@ -84,11 +84,11 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
           {/* Value Display */}
           <div
             style={{
-              minWidth: 54,
+              minWidth: 58,
               textAlign: 'center',
               fontFamily: 'var(--font-heading)',
-              fontSize: '1.4rem',
-              fontWeight: 800,
+              fontSize: '1.45rem',
+              fontWeight: 850,
               color: 'var(--royal-700)',
               userSelect: 'none',
             }}
@@ -112,8 +112,8 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
               alignItems: 'center',
               justifyContent: 'center',
               cursor: value >= max ? 'not-allowed' : 'pointer',
-              border: value >= max ? '1px solid transparent' : '1px solid rgba(255, 255, 255, 0.3)',
-              boxShadow: value >= max ? 'none' : '0 4px 10px rgba(29, 78, 216, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
+              border: value >= max ? '1px solid transparent' : '1px solid rgba(255, 255, 255, 0.35)',
+              boxShadow: value >= max ? 'none' : '0 4px 12px rgba(29, 78, 216, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
               transition: 'all var(--transition-fast)',
             }}
           >
@@ -121,13 +121,13 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
           </button>
         </div>
 
-        <span style={{ fontSize: '0.9rem', color: 'var(--text-navy)', fontWeight: 600 }}>
+        <span style={{ fontSize: '0.95rem', color: 'var(--text-navy)', fontWeight: 600 }}>
           {value === 1 ? 'Patient unit required' : 'Patient units required'}
         </span>
       </div>
 
       {helperText && (
-        <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
+        <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
           {helperText}
         </p>
       )}

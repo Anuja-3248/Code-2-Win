@@ -54,16 +54,16 @@ export const LivePredictionIndicator: React.FC<LivePredictionIndicatorProps> = (
   return (
     <div
       style={{
-        backgroundColor: 'rgba(240, 249, 255, 0.7)',
+        backgroundColor: 'rgba(240, 249, 255, 0.75)',
         backdropFilter: 'blur(8px)',
-        border: '1px solid rgba(186, 230, 253, 0.7)',
+        border: '1px solid rgba(186, 230, 253, 0.75)',
         borderRadius: 'var(--radius-md)',
-        padding: '0.85rem 1.1rem',
+        padding: '0.85rem 1.15rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: '0.85rem',
-        boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.9)',
+        boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.95)',
       }}
     >
       {/* Current Availability */}
@@ -72,7 +72,7 @@ export const LivePredictionIndicator: React.FC<LivePredictionIndicatorProps> = (
           Current Verified
         </span>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem', marginTop: '2px' }}>
-          <span style={{ fontSize: '1.35rem', fontWeight: 800, color: currentAvailable > 0 ? '#047857' : 'var(--emergency)' }}>
+          <span style={{ fontSize: '1.4rem', fontWeight: 800, color: currentAvailable > 0 ? '#047857' : 'var(--emergency)' }}>
             {currentAvailable}
           </span>
           <span style={{ fontSize: '0.825rem', color: 'var(--text-navy)', fontWeight: 600 }}>
@@ -98,7 +98,7 @@ export const LivePredictionIndicator: React.FC<LivePredictionIndicatorProps> = (
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem', marginTop: '2px' }}>
           <span
             style={{
-              fontSize: '1.35rem',
+              fontSize: '1.4rem',
               fontWeight: 800,
               color: isDrop ? 'var(--text-navy)' : isGain ? '#047857' : 'var(--text-navy)',
             }}
@@ -113,4 +113,3 @@ export const LivePredictionIndicator: React.FC<LivePredictionIndicatorProps> = (
     </div>
   );
 };
-

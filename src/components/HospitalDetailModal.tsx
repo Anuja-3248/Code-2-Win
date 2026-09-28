@@ -54,7 +54,7 @@ export const HospitalDetailModal: React.FC<HospitalDetailModalProps> = ({
           overflowY: 'auto',
           padding: '2rem',
           position: 'relative',
-          backgroundColor: 'rgba(255, 255, 255, 0.92)',
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
           boxShadow: '0 25px 60px -10px rgba(5, 14, 29, 0.4), inset 0 1.5px 1px #ffffff',
           border: '1.5px solid rgba(255, 255, 255, 0.95)',
         }}

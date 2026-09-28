@@ -6,13 +6,13 @@ export const Footer: React.FC = () => {
   return (
     <footer
       style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.75)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        borderTop: '1px solid rgba(186, 230, 253, 0.5)',
+        backgroundColor: 'rgba(4, 10, 20, 0.85)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderTop: '1px solid rgba(56, 189, 248, 0.25)',
         padding: '3.5rem 0 2.25rem',
         marginTop: 'auto',
-        boxShadow: '0 -4px 20px rgba(10, 25, 47, 0.03)',
+        boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.6)',
       }}
     >
       <div className="container-responsive">
@@ -24,13 +24,13 @@ export const Footer: React.FC = () => {
             flexWrap: 'wrap',
             gap: '1.75rem',
             paddingBottom: '2rem',
-            borderBottom: '1px solid rgba(186, 230, 253, 0.4)',
+            borderBottom: '1px solid rgba(56, 189, 248, 0.15)',
           }}
         >
           {/* Left: Brand and Mission */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
             <Logo size="md" />
-            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+            <p style={{ fontSize: '0.9rem', color: '#94A3B8', fontWeight: 500 }}>
               Connecting emergencies to verified hospital care, faster.
             </p>
           </div>
@@ -39,21 +39,27 @@ export const Footer: React.FC = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.75rem', flexWrap: 'wrap' }}>
             <a
               href="#how-it-works"
-              style={{ fontSize: '0.925rem', color: 'var(--text-navy)', fontWeight: 600, transition: 'color var(--transition-fast)' }}
+              style={{ fontSize: '0.925rem', color: '#BAE6FD', fontWeight: 600, transition: 'color var(--transition-fast)' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = '#BAE6FD')}
             >
               How It Works
             </a>
-            <span style={{ color: 'rgba(147, 197, 253, 0.6)' }}>·</span>
+            <span style={{ color: 'rgba(56, 189, 248, 0.3)' }}>·</span>
             <Link
               to="/hospital/login"
-              style={{ fontSize: '0.925rem', color: 'var(--text-navy)', fontWeight: 600, transition: 'color var(--transition-fast)' }}
+              style={{ fontSize: '0.925rem', color: '#BAE6FD', fontWeight: 600, transition: 'color var(--transition-fast)' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = '#BAE6FD')}
             >
               Hospital Portal
             </Link>
-            <span style={{ color: 'rgba(147, 197, 253, 0.6)' }}>·</span>
+            <span style={{ color: 'rgba(56, 189, 248, 0.3)' }}>·</span>
             <a
               href="#about"
-              style={{ fontSize: '0.925rem', color: 'var(--text-navy)', fontWeight: 600, transition: 'color var(--transition-fast)' }}
+              style={{ fontSize: '0.925rem', color: '#BAE6FD', fontWeight: 600, transition: 'color var(--transition-fast)' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = '#BAE6FD')}
             >
               About
             </a>
@@ -70,7 +76,7 @@ export const Footer: React.FC = () => {
             flexWrap: 'wrap',
             gap: '1rem',
             fontSize: '0.825rem',
-            color: 'var(--text-muted)',
+            color: '#64748B',
           }}
         >
           <div>
@@ -84,4 +90,3 @@ export const Footer: React.FC = () => {
     </footer>
   );
 };
-

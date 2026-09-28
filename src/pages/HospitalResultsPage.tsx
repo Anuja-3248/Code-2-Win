@@ -96,7 +96,7 @@ export const HospitalResultsPage: React.FC = () => {
           <Link
             to="/ambulance"
             className="btn btn-outline btn-sm"
-            style={{ gap: '0.4rem' }}
+            style={{ gap: '0.45rem' }}
           >
             <ArrowLeft size={15} />
             Modify Emergency Request
@@ -106,7 +106,7 @@ export const HospitalResultsPage: React.FC = () => {
             type="button"
             onClick={() => executeSearch(request)}
             className="btn btn-secondary btn-sm"
-            style={{ gap: '0.4rem' }}
+            style={{ gap: '0.45rem' }}
           >
             <RefreshCw size={14} />
             Refresh Hospital Mesh
@@ -117,10 +117,10 @@ export const HospitalResultsPage: React.FC = () => {
         <div
           className="resq-card"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.85)',
+            backgroundColor: 'rgba(255, 255, 255, 0.88)',
             border: '1.5px solid rgba(186, 230, 253, 0.8)',
             marginBottom: '2rem',
-            padding: '1.35rem 1.75rem',
+            padding: '1.4rem 1.75rem',
             boxShadow: 'var(--shadow-3d)',
           }}
         >
@@ -129,7 +129,7 @@ export const HospitalResultsPage: React.FC = () => {
               <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--royal-700)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Active Ambulance Request Summary
               </span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginTop: '0.4rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.75rem', marginTop: '0.4rem', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
                   <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Resource:</span>
                   <strong style={{ color: 'var(--royal-700)', fontSize: '1.05rem' }}>{request.resource}</strong>
@@ -161,8 +161,8 @@ export const HospitalResultsPage: React.FC = () => {
 
         {/* Results Heading */}
         <div style={{ marginBottom: '1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-            <h1 style={{ fontSize: '1.75rem', fontWeight: 800 }}>Suitable Hospitals Nearby</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.25rem' }}>
+            <h1 style={{ fontSize: '1.85rem', fontWeight: 800 }}>Suitable Hospitals Nearby</h1>
             <span className="badge badge-teal">
               {matches.length} Suitable {matches.length === 1 ? 'Hospital' : 'Hospitals'}
             </span>
@@ -185,7 +185,7 @@ export const HospitalResultsPage: React.FC = () => {
             style={{
               display: 'grid',
               gridTemplateColumns: '1fr',
-              gap: '1.25rem',
+              gap: '1.35rem',
             }}
           >
             {matches.map((match, index) => (

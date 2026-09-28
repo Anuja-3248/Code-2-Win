@@ -62,19 +62,19 @@ export const AmbulanceUnitHeader: React.FC = () => {
 
   return (
     <>
-      {/* Unit Identity Banner - 3D Glass Coated */}
+      {/* Unit Identity Banner - 3D Deep Navy Glass Coated */}
       <div
         className="resq-card"
         style={{
-          padding: '0.95rem 1.4rem',
+          padding: '1rem 1.4rem',
           marginBottom: '2rem',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: '0.85rem',
-          backgroundColor: 'rgba(255, 255, 255, 0.82)',
-          border: '1.5px solid rgba(186, 230, 253, 0.8)',
+          backgroundColor: 'rgba(13, 27, 49, 0.72)',
+          border: '1.5px solid rgba(56, 189, 248, 0.25)',
           boxShadow: 'var(--shadow-3d)',
         }}
       >
@@ -89,24 +89,24 @@ export const AmbulanceUnitHeader: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 4px 12px rgba(29, 78, 216, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
+              boxShadow: '0 4px 12px rgba(29, 78, 216, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
+              border: '1px solid rgba(255, 255, 255, 0.35)',
             }}
           >
             <Ambulance size={22} />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-              <strong style={{ fontSize: '1.05rem', color: 'var(--text-navy)', letterSpacing: '0.2px' }}>
+              <strong style={{ fontSize: '1.05rem', color: '#FFFFFF', letterSpacing: '0.2px' }}>
                 Unit ID: {profile.ambulanceId}
               </strong>
               <span className="badge badge-teal" style={{ fontSize: '0.725rem' }}>
                 <CheckCircle2 size={12} /> Unit Active
               </span>
             </div>
-            <div style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
-              <Truck size={13} style={{ display: 'inline', marginRight: '4px', color: 'var(--royal-600)' }} />
-              <strong>{profile.vehicleNumber}</strong> ({profile.ambulanceType} Unit) • Driver: {profile.driverName} ({profile.driverPhone})
+            <div style={{ fontSize: '0.825rem', color: '#94A3B8', marginTop: '2px' }}>
+              <Truck size={13} style={{ display: 'inline', marginRight: '4px', color: '#38BDF8' }} />
+              <strong style={{ color: '#BAE6FD' }}>{profile.vehicleNumber}</strong> ({profile.ambulanceType} Unit) • Driver: {profile.driverName} ({profile.driverPhone})
             </div>
           </div>
         </div>
@@ -130,8 +130,8 @@ export const AmbulanceUnitHeader: React.FC = () => {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(15, 23, 42, 0.5)',
-            backdropFilter: 'blur(4px)',
+            backgroundColor: 'rgba(4, 10, 20, 0.75)',
+            backdropFilter: 'blur(10px)',
             zIndex: 1100,
             display: 'flex',
             alignItems: 'center',
@@ -145,27 +145,28 @@ export const AmbulanceUnitHeader: React.FC = () => {
             style={{
               width: '100%',
               maxWidth: 520,
-              padding: '1.75rem',
+              padding: '2rem',
               borderRadius: '16px',
-              backgroundColor: '#ffffff',
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+              backgroundColor: 'rgba(10, 25, 47, 0.95)',
+              border: '1.5px solid rgba(56, 189, 248, 0.35)',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)',
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
-              <Shield size={20} color="#2563eb" />
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: '#1e293b' }}>
+              <Shield size={20} color="#38BDF8" />
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, color: '#FFFFFF' }}>
                 Ambulance Unit Registration & Identity
               </h2>
             </div>
-            <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '1.25rem' }}>
+            <p style={{ fontSize: '0.85rem', color: '#94A3B8', marginBottom: '1.25rem' }}>
               Your unit ID is permanently authenticated. This information is automatically transmitted to emergency triage staff during Pre-Alerts.
             </p>
 
-            <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+            <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                 <div>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#BAE6FD', display: 'block', marginBottom: '4px' }}>
                     Vehicle Reg. Number
                   </label>
                   <input
@@ -174,18 +175,17 @@ export const AmbulanceUnitHeader: React.FC = () => {
                     placeholder="e.g. MH12 AB 1234"
                     value={formData.vehicleNumber}
                     onChange={(e) => setFormData({ ...formData, vehicleNumber: e.target.value })}
-                    className="input-field"
-                    style={{ width: '100%', padding: '0.55rem 0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+                    style={{ width: '100%', padding: '0.6rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(56, 189, 248, 0.3)', backgroundColor: 'rgba(7, 15, 30, 0.8)', color: '#FFFFFF' }}
                   />
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#BAE6FD', display: 'block', marginBottom: '4px' }}>
                     Ambulance Type
                   </label>
                   <select
                     value={formData.ambulanceType}
                     onChange={(e) => setFormData({ ...formData, ambulanceType: e.target.value as any })}
-                    style={{ width: '100%', padding: '0.55rem 0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1', backgroundColor: '#fff' }}
+                    style={{ width: '100%', padding: '0.6rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(56, 189, 248, 0.3)', backgroundColor: 'rgba(7, 15, 30, 0.8)', color: '#FFFFFF' }}
                   >
                     <option value="ALS">ALS (Advanced Life Support)</option>
                     <option value="BLS">BLS (Basic Life Support)</option>
@@ -197,7 +197,7 @@ export const AmbulanceUnitHeader: React.FC = () => {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                 <div>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#BAE6FD', display: 'block', marginBottom: '4px' }}>
                     Paramedic / Driver Name
                   </label>
                   <input
@@ -206,12 +206,11 @@ export const AmbulanceUnitHeader: React.FC = () => {
                     placeholder="e.g. Ramesh Patil"
                     value={formData.driverName}
                     onChange={(e) => setFormData({ ...formData, driverName: e.target.value })}
-                    className="input-field"
-                    style={{ width: '100%', padding: '0.55rem 0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+                    style={{ width: '100%', padding: '0.6rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(56, 189, 248, 0.3)', backgroundColor: 'rgba(7, 15, 30, 0.8)', color: '#FFFFFF' }}
                   />
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#BAE6FD', display: 'block', marginBottom: '4px' }}>
                     Emergency Mobile Phone
                   </label>
                   <input
@@ -220,14 +219,13 @@ export const AmbulanceUnitHeader: React.FC = () => {
                     placeholder="e.g. +91 98220 12345"
                     value={formData.driverPhone}
                     onChange={(e) => setFormData({ ...formData, driverPhone: e.target.value })}
-                    className="input-field"
-                    style={{ width: '100%', padding: '0.55rem 0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+                    style={{ width: '100%', padding: '0.6rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(56, 189, 248, 0.3)', backgroundColor: 'rgba(7, 15, 30, 0.8)', color: '#FFFFFF' }}
                   />
                 </div>
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#BAE6FD', display: 'block', marginBottom: '4px' }}>
                   Ambulance Email
                 </label>
                 <input
@@ -236,13 +234,12 @@ export const AmbulanceUnitHeader: React.FC = () => {
                   placeholder="amb108@pune-ems.gov.in"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="input-field"
-                  style={{ width: '100%', padding: '0.55rem 0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+                  style={{ width: '100%', padding: '0.6rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(56, 189, 248, 0.3)', backgroundColor: 'rgba(7, 15, 30, 0.8)', color: '#FFFFFF' }}
                 />
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#BAE6FD', display: 'block', marginBottom: '4px' }}>
                   Base Station / Operating Hub
                 </label>
                 <input
@@ -250,8 +247,7 @@ export const AmbulanceUnitHeader: React.FC = () => {
                   placeholder="e.g. Pune Central Depot"
                   value={formData.baseStation || ''}
                   onChange={(e) => setFormData({ ...formData, baseStation: e.target.value })}
-                  className="input-field"
-                  style={{ width: '100%', padding: '0.55rem 0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+                  style={{ width: '100%', padding: '0.6rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(56, 189, 248, 0.3)', backgroundColor: 'rgba(7, 15, 30, 0.8)', color: '#FFFFFF' }}
                 />
               </div>
 
@@ -267,7 +263,7 @@ export const AmbulanceUnitHeader: React.FC = () => {
                 <button
                   type="submit"
                   className="btn btn-primary"
-                  style={{ padding: '0.5rem 1.25rem', backgroundColor: '#2563eb' }}
+                  style={{ padding: '0.5rem 1.25rem' }}
                 >
                   Save & Keep Logged In
                 </button>

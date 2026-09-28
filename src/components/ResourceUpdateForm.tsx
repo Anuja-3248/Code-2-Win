@@ -160,6 +160,25 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
     }
   };
 
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '0.65rem 0.85rem',
+    borderRadius: 'var(--radius-sm)',
+    border: '1.5px solid var(--border-color)',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    color: 'var(--text-main)',
+    fontSize: '0.9rem',
+    outline: 'none',
+  };
+
+  const labelStyle: React.CSSProperties = {
+    fontSize: '0.8rem',
+    fontWeight: 700,
+    color: 'var(--text-main)',
+    display: 'block',
+    marginBottom: '4px',
+  };
+
   return (
     <div
       className="resq-card"
@@ -298,22 +317,14 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
             }}
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label htmlFor="resource-type-select" style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}>
+              <label htmlFor="resource-type-select" style={labelStyle}>
                 Resource Category
               </label>
               <select
                 id="resource-type-select"
                 value={resourceType}
                 onChange={handleResourceChange}
-                style={{
-                  padding: '0.65rem 0.85rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  backgroundColor: 'var(--bg-card)',
-                  color: 'var(--text-main)',
-                  fontSize: '0.9375rem',
-                  outline: 'none',
-                }}
+                style={inputStyle}
               >
                 <option value="ICU">ICU Beds (Intensive Care)</option>
                 <option value="Ventilator">Ventilators (Mechanical)</option>
@@ -322,7 +333,7 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label htmlFor="available-count-input" style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}>
+              <label htmlFor="available-count-input" style={labelStyle}>
                 Available Units / Beds
               </label>
               <input
@@ -332,15 +343,7 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
                 max={500}
                 value={availableCount}
                 onChange={(e) => setAvailableCount(parseInt(e.target.value, 10) || 0)}
-                style={{
-                  padding: '0.65rem 0.85rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  backgroundColor: 'var(--bg-card)',
-                  color: 'var(--text-main)',
-                  fontSize: '0.9375rem',
-                  outline: 'none',
-                }}
+                style={inputStyle}
               />
             </div>
           </div>
@@ -369,75 +372,51 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
             {/* Hospital Name */}
             <div style={{ gridColumn: 'span 2' }}>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>Hospital Name</label>
+              <label style={labelStyle}>Hospital Name</label>
               <input
                 type="text"
                 required
                 value={hospitalName}
                 onChange={(e) => setHospitalName(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
 
             {/* Address */}
             <div style={{ gridColumn: 'span 2' }}>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>Address</label>
+              <label style={labelStyle}>Address</label>
               <input
                 type="text"
                 required
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Full hospital address"
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
 
             {/* Latitude & Longitude */}
             <div>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>Latitude</label>
+              <label style={labelStyle}>Latitude</label>
               <input
                 type="number"
                 step="any"
                 required
                 value={latitude}
                 onChange={(e) => setLatitude(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>Longitude</label>
+              <label style={labelStyle}>Longitude</label>
               <input
                 type="number"
                 step="any"
                 required
                 value={longitude}
                 onChange={(e) => setLongitude(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
 
@@ -455,99 +434,69 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
 
             {/* ICU Beds */}
             <div>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>Total ICU Beds</label>
+              <label style={labelStyle}>Total ICU Beds</label>
               <input
                 type="number"
                 required
                 min={0}
                 value={icuTotal}
                 onChange={(e) => setIcuTotal(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>Current ICU Available</label>
+              <label style={labelStyle}>Current ICU Available</label>
               <input
                 type="number"
                 required
                 min={0}
                 value={icuAvailable}
                 onChange={(e) => setIcuAvailable(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
 
             {/* Ventilators */}
             <div>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>Total Ventilators</label>
+              <label style={labelStyle}>Total Ventilators</label>
               <input
                 type="number"
                 required
                 min={0}
                 value={ventilatorTotal}
                 onChange={(e) => setVentilatorTotal(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>Current Ventilators Available</label>
+              <label style={labelStyle}>Current Ventilators Available</label>
               <input
                 type="number"
                 required
                 min={0}
                 value={ventilatorsAvailable}
                 onChange={(e) => setVentilatorsAvailable(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
 
             {/* General Beds & Occupancy Rate */}
             <div>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>General Beds Available</label>
+              <label style={labelStyle}>General Beds Available</label>
               <input
                 type="number"
                 required
                 min={0}
                 value={generalBedsAvailable}
                 onChange={(e) => setGeneralBedsAvailable(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>Occupancy Rate (%)</label>
+              <label style={labelStyle}>Occupancy Rate (%)</label>
               <input
                 type="number"
                 step="any"
@@ -556,86 +505,56 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
                 max={100}
                 value={occupancyRate}
                 onChange={(e) => setOccupancyRate(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
 
             {/* 30-min dynamics */}
             <div>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>Admissions (last 30m)</label>
+              <label style={labelStyle}>Admissions (last 30m)</label>
               <input
                 type="number"
                 required
                 min={0}
                 value={admissionsLast30Min}
                 onChange={(e) => setAdmissionsLast30Min(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>Discharges (last 30m)</label>
+              <label style={labelStyle}>Discharges (last 30m)</label>
               <input
                 type="number"
                 required
                 min={0}
                 value={dischargesLast30Min}
                 onChange={(e) => setDischargesLast30Min(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>Emergency Arrivals (30m)</label>
+              <label style={labelStyle}>Emergency Arrivals (30m)</label>
               <input
                 type="number"
                 required
                 min={0}
                 value={emergencyArrivalsLast30Min}
                 onChange={(e) => setEmergencyArrivalsLast30Min(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>ICU Available (30m later)</label>
+              <label style={labelStyle}>ICU Available (30m later)</label>
               <input
                 type="number"
                 required
                 min={0}
                 value={icuAvailable30MinLater}
                 onChange={(e) => setIcuAvailable30MinLater(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1.5px solid var(--border-color)',
-                  fontSize: '0.875rem',
-                }}
+                style={inputStyle}
               />
             </div>
           </div>

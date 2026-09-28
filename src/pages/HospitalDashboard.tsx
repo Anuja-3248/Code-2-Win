@@ -166,7 +166,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
             </p>
           </div>
 
-        {/* Facility & Last Updated Badge - 3D Glass */}
+          {/* Facility & Last Updated Badge - 3D Glass */}
           <div
             className="resq-card"
             style={{
@@ -310,7 +310,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
                       <div style={{ fontSize: '0.825rem', color: '#475569', marginTop: '3px' }}>
                         Requested: <strong style={{ color: '#1d4ed8' }}>{alert.quantity}x {alert.requiredResource} Bed</strong> • Driver: {alert.driverName} (<a href={`tel:${alert.driverPhone}`} style={{ color: '#2563eb', textDecoration: 'none' }}>{alert.driverPhone}</a>)
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '2px' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#94A3B8', marginTop: '2px' }}>
                         Alert ID: {alert.id} • Dispatched at {new Date(alert.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>

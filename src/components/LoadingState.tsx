@@ -48,8 +48,9 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
         margin: '2rem auto',
         padding: '2.5rem 2rem',
         textAlign: 'center',
-        border: '1px solid var(--primary-border)',
-        boxShadow: 'var(--shadow-md)',
+        border: '1.5px solid rgba(186, 230, 253, 0.8)',
+        boxShadow: 'var(--shadow-3d)',
+        backgroundColor: 'rgba(255, 255, 255, 0.92)',
       }}
     >
       {/* Central Animated Pulse Symbol */}
@@ -58,13 +59,15 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
           width: 64,
           height: 64,
           borderRadius: '16px',
-          backgroundColor: 'var(--primary-light)',
+          backgroundColor: 'rgba(239, 246, 255, 0.95)',
           color: 'var(--primary)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           margin: '0 auto 1.25rem',
           position: 'relative',
+          border: '1px solid rgba(147, 197, 253, 0.8)',
+          boxShadow: '0 4px 12px rgba(37, 99, 235, 0.15)',
         }}
       >
         <Hospital size={32} />
@@ -73,17 +76,17 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
             position: 'absolute',
             top: -4,
             right: -4,
-            color: 'var(--primary)',
+            color: 'var(--royal-600)',
           }}
         >
           <Sparkles size={18} />
         </span>
       </div>
 
-      <h2 style={{ fontSize: '1.45rem', marginBottom: '0.4rem' }}>
+      <h2 style={{ fontSize: '1.55rem', fontWeight: 800, color: 'var(--text-navy)', marginBottom: '0.4rem' }}>
         Finding Suitable Hospitals...
       </h2>
-      <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1.75rem' }}>
+      <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '1.75rem' }}>
         Matching your emergency request with real-time hospital resource availability and predictive capacity.
       </p>
 
@@ -94,10 +97,10 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
           flexDirection: 'column',
           gap: '0.85rem',
           textAlign: 'left',
-          backgroundColor: 'var(--bg-subtle)',
+          backgroundColor: 'rgba(240, 249, 255, 0.7)',
           borderRadius: 'var(--radius-sm)',
           padding: '1.25rem',
-          border: '1px solid var(--border-color)',
+          border: '1px solid rgba(186, 230, 253, 0.7)',
         }}
       >
         {steps.map((s, idx) => {
@@ -126,7 +129,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
                       width: 18,
                       height: 18,
                       borderRadius: '50%',
-                      border: '2px solid var(--border-color)',
+                      border: '2px solid rgba(186, 230, 253, 0.8)',
                     }}
                   />
                 )}
@@ -136,8 +139,8 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
                 <div
                   style={{
                     fontSize: '0.9rem',
-                    fontWeight: isCurrent || isDone ? 600 : 500,
-                    color: isCurrent ? 'var(--primary)' : isDone ? 'var(--text-main)' : 'var(--text-secondary)',
+                    fontWeight: isCurrent || isDone ? 700 : 500,
+                    color: isCurrent ? 'var(--primary)' : isDone ? 'var(--text-navy)' : 'var(--text-secondary)',
                   }}
                 >
                   {s.label}

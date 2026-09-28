@@ -41,10 +41,10 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
         }
       }}
       style={{
-        backgroundColor: isSelected ? 'rgba(239, 246, 255, 0.95)' : 'rgba(255, 255, 255, 0.78)',
+        backgroundColor: isSelected ? 'rgba(239, 246, 255, 0.95)' : 'rgba(255, 255, 255, 0.85)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-        border: `2px solid ${isSelected ? 'var(--royal-600)' : 'rgba(186, 230, 253, 0.6)'}`,
+        border: `2px solid ${isSelected ? 'var(--royal-600)' : 'rgba(186, 230, 253, 0.7)'}`,
         borderRadius: 'var(--radius-md)',
         padding: '1.35rem 1.15rem',
         cursor: 'pointer',
@@ -52,9 +52,9 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        gap: '0.75rem',
+        gap: '0.85rem',
         boxShadow: isSelected
-          ? '0 10px 25px -4px rgba(37, 99, 235, 0.2), inset 0 1.5px 1px rgba(255, 255, 255, 1)'
+          ? '0 10px 25px -4px rgba(37, 99, 235, 0.25), inset 0 1.5px 1px rgba(255, 255, 255, 1)'
           : 'var(--shadow-sm)',
         transform: isSelected ? 'translateY(-3px)' : 'none',
         outline: 'none',
@@ -76,7 +76,8 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 2px 6px rgba(29, 78, 216, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
+            boxShadow: '0 2px 8px rgba(37, 99, 235, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
+            border: '1px solid rgba(255, 255, 255, 0.4)',
           }}
         >
           <Check size={13} strokeWidth={3} />
@@ -91,15 +92,15 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
           borderRadius: '12px',
           background: isSelected
             ? 'var(--royal-gradient-3d)'
-            : 'linear-gradient(135deg, rgba(240, 249, 255, 0.9), rgba(224, 242, 254, 0.6))',
+            : 'linear-gradient(135deg, rgba(240, 249, 255, 0.95), rgba(224, 242, 254, 0.7))',
           color: isSelected ? '#ffffff' : 'var(--royal-700)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           boxShadow: isSelected
-            ? '0 6px 16px rgba(29, 78, 216, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6)'
-            : '0 2px 6px rgba(10, 25, 47, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.9)',
-          border: isSelected ? '1px solid rgba(255, 255, 255, 0.3)' : '1px solid rgba(186, 230, 253, 0.8)',
+            ? '0 6px 16px rgba(29, 78, 216, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.6)'
+            : '0 2px 6px rgba(10, 25, 47, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.95)',
+          border: isSelected ? '1px solid rgba(255, 255, 255, 0.4)' : '1px solid rgba(186, 230, 253, 0.8)',
           transition: 'all var(--transition-fast)',
         }}
       >
@@ -110,7 +111,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
       <div>
         <h4
           style={{
-            fontSize: '1.1rem',
+            fontSize: '1.15rem',
             fontWeight: 800,
             color: isSelected ? 'var(--royal-800)' : 'var(--text-navy)',
             marginBottom: '4px',
@@ -122,7 +123,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
           style={{
             fontSize: '0.835rem',
             color: isSelected ? 'var(--navy-700)' : 'var(--text-secondary)',
-            lineHeight: 1.4,
+            lineHeight: 1.45,
           }}
         >
           {description}
@@ -131,4 +132,3 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
     </div>
   );
 };
-

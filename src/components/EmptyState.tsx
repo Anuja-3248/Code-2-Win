@@ -22,8 +22,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         margin: '2rem auto',
         padding: '2.5rem 2rem',
         textAlign: 'center',
-        border: '1px solid var(--border-color)',
-        boxShadow: 'var(--shadow-md)',
+        border: '1.5px solid rgba(186, 230, 253, 0.8)',
+        boxShadow: 'var(--shadow-3d)',
+        backgroundColor: 'rgba(255, 255, 255, 0.92)',
       }}
     >
       <div
@@ -37,12 +38,13 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           alignItems: 'center',
           justifyContent: 'center',
           margin: '0 auto 1.25rem',
+          border: '1px solid var(--warning-border)',
         }}
       >
         <Hospital size={30} />
       </div>
 
-      <h2 style={{ fontSize: '1.45rem', marginBottom: '0.4rem', color: 'var(--text-main)' }}>
+      <h2 style={{ fontSize: '1.45rem', marginBottom: '0.4rem', color: 'var(--text-navy)', fontWeight: 800 }}>
         No suitable hospital found nearby
       </h2>
 
@@ -53,18 +55,18 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       {/* Suggestion notice */}
       <div
         style={{
-          backgroundColor: 'var(--bg-subtle)',
+          backgroundColor: 'rgba(240, 249, 255, 0.8)',
           borderRadius: 'var(--radius-sm)',
-          padding: '0.85rem 1rem',
-          fontSize: '0.8125rem',
+          padding: '0.95rem 1.15rem',
+          fontSize: '0.825rem',
           color: 'var(--text-secondary)',
           marginBottom: '1.75rem',
           textAlign: 'left',
-          border: '1px solid var(--border-color)',
+          border: '1px solid rgba(186, 230, 253, 0.6)',
         }}
       >
-        <strong>Recommended Next Steps:</strong>
-        <ul style={{ paddingLeft: '1.25rem', marginTop: '0.35rem', lineHeight: 1.4 }}>
+        <strong style={{ color: 'var(--text-navy)' }}>Recommended Next Steps:</strong>
+        <ul style={{ paddingLeft: '1.25rem', marginTop: '0.35rem', lineHeight: 1.5, color: 'var(--text-secondary)' }}>
           <li>Adjust the required quantity to check single bed / partial capacity</li>
           <li>Select an alternative resource tier (e.g. General Bed with mobile ventilator)</li>
           <li>Contact Central Dispatch (108 / Emergency ER line) for manual diversion</li>

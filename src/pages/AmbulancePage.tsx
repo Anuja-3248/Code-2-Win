@@ -60,19 +60,27 @@ export const AmbulancePage: React.FC = () => {
         <AmbulanceUnitHeader />
 
         {/* Page Header */}
-        <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '0.65rem' }}>
-            <span className="badge badge-emergency">
-              <Ambulance size={14} />
-              Ambulance Emergency Dispatch
+        <div style={{ marginBottom: '2.25rem', textAlign: 'center' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '0.75rem' }}>
+            <span className="badge badge-teal" style={{ padding: '0.4rem 0.95rem', fontSize: '0.825rem' }}>
+              <Ambulance size={15} style={{ color: 'var(--royal-600)' }} />
+              <span style={{ fontWeight: 700, letterSpacing: '0.02em' }}>AMBULANCE EMERGENCY DISPATCH</span>
             </span>
           </div>
 
-          <h1 style={{ fontSize: 'clamp(1.85rem, 3.5vw, 2.35rem)', fontWeight: 800, marginBottom: '0.5rem' }}>
+          <h1
+            style={{
+              fontSize: 'clamp(2.1rem, 4vw, 2.75rem)',
+              fontWeight: 850,
+              color: 'var(--text-navy)',
+              marginBottom: '0.65rem',
+              letterSpacing: '-0.03em',
+            }}
+          >
             Find the right hospital
           </h1>
-          <p style={{ fontSize: '1rem', color: 'var(--text-secondary)', maxWidth: '580px', margin: '0 auto' }}>
-            Tell us what the patient needs and we'll identify suitable nearby hospitals using real-time capacity and machine learning predictions.
+          <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6 }}>
+            Specify patient triage requirements. We match nearby facilities using live SQL capacity feeds and 30-minute predictive triage models.
           </p>
         </div>
 
@@ -81,42 +89,42 @@ export const AmbulancePage: React.FC = () => {
           <div
             className="resq-card"
             style={{
-              padding: '2.25rem 2rem',
+              padding: '2.5rem 2.25rem',
               display: 'flex',
               flexDirection: 'column',
               gap: '2.25rem',
               border: '1.5px solid rgba(255, 255, 255, 0.95)',
               boxShadow: 'var(--shadow-3d)',
-              backgroundColor: 'rgba(255, 255, 255, 0.82)',
+              backgroundColor: 'rgba(255, 255, 255, 0.86)',
             }}
           >
             {/* Step 1: Select Resource */}
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.15rem' }}>
                 <label
                   style={{
                     fontFamily: 'var(--font-heading)',
-                    fontSize: '1.15rem',
+                    fontSize: '1.2rem',
                     fontWeight: 800,
                     color: 'var(--text-navy)',
                   }}
                 >
                   Step 1 — What does the patient need?
                 </label>
-                <span className="badge badge-teal" style={{ fontSize: '0.72rem' }}>Required</span>
+                <span className="badge badge-teal" style={{ fontSize: '0.75rem' }}>Required</span>
               </div>
 
               <div
                 style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
-                  gap: '1rem',
+                  gap: '1.1rem',
                 }}
               >
                 <ResourceCard
                   type="ICU"
-                  title="ICU"
-                  description="Critical care bed required with continuous telemetry"
+                  title="ICU Bed"
+                  description="Critical care bed with continuous monitoring"
                   isSelected={resource === 'ICU'}
                   onSelect={(t) => setResource(t)}
                 />
@@ -124,7 +132,7 @@ export const AmbulancePage: React.FC = () => {
                 <ResourceCard
                   type="Ventilator"
                   title="Ventilator"
-                  description="Advanced mechanical respiratory support system"
+                  description="Advanced mechanical respiratory support"
                   isSelected={resource === 'Ventilator'}
                   onSelect={(t) => setResource(t)}
                 />
@@ -132,14 +140,14 @@ export const AmbulancePage: React.FC = () => {
                 <ResourceCard
                   type="General Bed"
                   title="General Bed"
-                  description="Standard in-patient emergency admission bed"
+                  description="Standard in-patient emergency admission"
                   isSelected={resource === 'General Bed'}
                   onSelect={(t) => setResource(t)}
                 />
               </div>
             </div>
 
-            <div style={{ height: 1, backgroundColor: 'rgba(186, 230, 253, 0.5)' }} />
+            <div style={{ height: 1, backgroundColor: 'rgba(186, 230, 253, 0.6)' }} />
 
             {/* Step 2: Quantity Selector */}
             <div>
@@ -153,7 +161,7 @@ export const AmbulancePage: React.FC = () => {
               />
             </div>
 
-            <div style={{ height: 1, backgroundColor: 'rgba(186, 230, 253, 0.5)' }} />
+            <div style={{ height: 1, backgroundColor: 'rgba(186, 230, 253, 0.6)' }} />
 
             {/* Step 3: Ambulance Location */}
             <div>
@@ -163,7 +171,7 @@ export const AmbulancePage: React.FC = () => {
               />
             </div>
 
-            <div style={{ height: 1, backgroundColor: 'rgba(186, 230, 253, 0.5)' }} />
+            <div style={{ height: 1, backgroundColor: 'rgba(186, 230, 253, 0.6)' }} />
 
             {/* Step 4: Submit Button & Note */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
@@ -174,6 +182,7 @@ export const AmbulancePage: React.FC = () => {
                   width: '100%',
                   fontSize: '1.15rem',
                   padding: '1.1rem 1.75rem',
+                  gap: '0.75rem',
                 }}
               >
                 <Search size={22} />
@@ -186,7 +195,7 @@ export const AmbulancePage: React.FC = () => {
                   fontSize: '0.825rem',
                   color: 'var(--text-secondary)',
                   textAlign: 'center',
-                  lineHeight: 1.45,
+                  lineHeight: 1.5,
                 }}
               >
                 Your request will be matched with nearby hospitals based on real-time resource availability and predicted 30-minute capacity.

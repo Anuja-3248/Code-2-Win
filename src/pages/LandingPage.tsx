@@ -46,7 +46,7 @@ export const LandingPage: React.FC = () => {
                     padding: '0.4rem 0.95rem',
                     fontSize: '0.825rem',
                     gap: '0.5rem',
-                    boxShadow: '0 4px 12px rgba(37, 99, 235, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.9)',
+                    boxShadow: '0 4px 12px rgba(37, 99, 235, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.95)',
                   }}
                 >
                   <span className="status-dot status-dot-pulse" style={{ backgroundColor: 'var(--royal-600)' }} />
@@ -148,7 +148,7 @@ export const LandingPage: React.FC = () => {
                 style={{
                   position: 'absolute',
                   inset: -15,
-                  background: 'radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, rgba(37, 99, 235, 0.15) 50%, transparent 70%)',
+                  background: 'radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(37, 99, 235, 0.12) 50%, transparent 70%)',
                   filter: 'blur(30px)',
                   borderRadius: '30px',
                   zIndex: 0,
@@ -162,7 +162,7 @@ export const LandingPage: React.FC = () => {
                   zIndex: 1,
                   padding: '12px',
                   borderRadius: 'var(--radius-xl)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.82)',
                   boxShadow: 'var(--shadow-3d-hover)',
                   border: '1.5px solid rgba(255, 255, 255, 0.95)',
                 }}
@@ -191,7 +191,7 @@ export const LandingPage: React.FC = () => {
                     style={{
                       position: 'absolute',
                       inset: 0,
-                      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, transparent 50%, rgba(10, 25, 47, 0.2) 100%)',
+                      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, rgba(10, 25, 47, 0.15) 100%)',
                       pointerEvents: 'none',
                     }}
                   />
@@ -204,12 +204,12 @@ export const LandingPage: React.FC = () => {
                     bottom: 24,
                     left: 24,
                     right: 24,
-                    backgroundColor: 'rgba(10, 25, 47, 0.88)',
+                    backgroundColor: 'rgba(10, 25, 47, 0.92)',
                     backdropFilter: 'blur(16px)',
                     WebkitBackdropFilter: 'blur(16px)',
                     border: '1px solid rgba(56, 189, 248, 0.4)',
                     borderRadius: 'var(--radius-md)',
-                    padding: '0.75rem 1.1rem',
+                    padding: '0.85rem 1.15rem',
                     color: '#FFFFFF',
                     display: 'flex',
                     alignItems: 'center',
@@ -286,7 +286,7 @@ export const LandingPage: React.FC = () => {
               style={{
                 padding: '12px',
                 borderRadius: 'var(--radius-xl)',
-                backgroundColor: 'rgba(255, 255, 255, 0.75)',
+                backgroundColor: 'rgba(255, 255, 255, 0.82)',
                 border: '1px solid rgba(255, 255, 255, 0.95)',
                 boxShadow: 'var(--shadow-3d)',
               }}
@@ -367,7 +367,8 @@ export const LandingPage: React.FC = () => {
                     padding: '1.1rem 1rem',
                     textAlign: 'center',
                     borderRadius: 'var(--radius-md)',
-                    border: '1px solid rgba(186, 230, 253, 0.6)',
+                    border: '1px solid rgba(186, 230, 253, 0.7)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
                   }}
                 >
                   <div style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--royal-700)', letterSpacing: '-0.02em' }}>
@@ -384,7 +385,8 @@ export const LandingPage: React.FC = () => {
                     padding: '1.1rem 1rem',
                     textAlign: 'center',
                     borderRadius: 'var(--radius-md)',
-                    border: '1px solid rgba(186, 230, 253, 0.6)',
+                    border: '1px solid rgba(186, 230, 253, 0.7)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
                   }}
                 >
                   <div style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--royal-700)', letterSpacing: '-0.02em' }}>
@@ -401,7 +403,8 @@ export const LandingPage: React.FC = () => {
                     padding: '1.1rem 1rem',
                     textAlign: 'center',
                     borderRadius: 'var(--radius-md)',
-                    border: '1px solid rgba(186, 230, 253, 0.6)',
+                    border: '1px solid rgba(186, 230, 253, 0.7)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
                   }}
                 >
                   <div style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--royal-700)', letterSpacing: '-0.02em' }}>
@@ -651,7 +654,7 @@ export const LandingPage: React.FC = () => {
               {/* Request Summary Glass Bar */}
               <div
                 style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.88)',
                   backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(186, 230, 253, 0.8)',
                   borderRadius: 'var(--radius-md)',
@@ -683,7 +686,7 @@ export const LandingPage: React.FC = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '1.25rem',
-                  backgroundColor: 'rgba(255, 255, 255, 0.92)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
                   boxShadow: '0 8px 24px rgba(37, 99, 235, 0.12), inset 0 1px 1px rgba(255, 255, 255, 1)',
                 }}
               >
@@ -713,7 +716,7 @@ export const LandingPage: React.FC = () => {
                 {/* Live Availability strip */}
                 <div
                   style={{
-                    backgroundColor: 'rgba(240, 253, 244, 0.8)',
+                    backgroundColor: 'rgba(240, 253, 244, 0.85)',
                     border: '1px solid rgba(167, 243, 208, 0.8)',
                     borderRadius: 'var(--radius-md)',
                     padding: '0.9rem 1.25rem',
@@ -813,7 +816,7 @@ export const LandingPage: React.FC = () => {
               style={{
                 padding: '12px',
                 borderRadius: 'var(--radius-xl)',
-                backgroundColor: 'rgba(255, 255, 255, 0.75)',
+                backgroundColor: 'rgba(255, 255, 255, 0.82)',
                 border: '1px solid rgba(255, 255, 255, 0.95)',
                 boxShadow: 'var(--shadow-3d)',
               }}

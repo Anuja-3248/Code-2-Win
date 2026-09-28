@@ -90,8 +90,8 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({ hospital, onCl
         style={{
           width: '100%',
           maxWidth: 580,
-          padding: '2rem',
-          backgroundColor: 'rgba(255, 255, 255, 0.94)',
+          padding: '2.25rem 2rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
           boxShadow: '0 25px 60px -10px rgba(5, 14, 29, 0.4), inset 0 1.5px 1px #ffffff',
           border: '1.5px solid rgba(255, 255, 255, 0.95)',
         }}
@@ -160,19 +160,19 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({ hospital, onCl
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '0.85rem' }}>
-            <div style={{ backgroundColor: 'var(--card-bg)', padding: '0.5rem', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+            <div style={{ backgroundColor: '#ffffff', padding: '0.55rem', borderRadius: '6px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Distance</div>
               <div style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--primary)' }}>
                 {hospital.distanceKm !== undefined ? `${hospital.distanceKm.toFixed(1)} km` : '4.2 km'}
               </div>
             </div>
-            <div style={{ backgroundColor: 'var(--card-bg)', padding: '0.5rem', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+            <div style={{ backgroundColor: '#ffffff', padding: '0.55rem', borderRadius: '6px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Est. Transit Time</div>
               <div style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--primary)' }}>
                 {hospital.etaMinutes !== undefined ? `~${Math.round(hospital.etaMinutes)} mins` : '~12 mins'}
               </div>
             </div>
-            <div style={{ backgroundColor: 'var(--card-bg)', padding: '0.5rem', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+            <div style={{ backgroundColor: '#ffffff', padding: '0.55rem', borderRadius: '6px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>ICU Beds</div>
               <div style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--success)' }}>
                 {hospital.icuAvailable} Free

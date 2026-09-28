@@ -50,7 +50,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
         gap: '1.35rem',
         border: rank === 1 ? '2px solid var(--royal-600)' : '1px solid rgba(186, 230, 253, 0.7)',
         position: 'relative',
-        backgroundColor: rank === 1 ? 'rgba(255, 255, 255, 0.92)' : 'rgba(255, 255, 255, 0.82)',
+        backgroundColor: rank === 1 ? 'rgba(255, 255, 255, 0.94)' : 'rgba(255, 255, 255, 0.85)',
         boxShadow: rank === 1 ? '0 16px 36px -6px rgba(37, 99, 235, 0.18), inset 0 1px 1px #ffffff' : 'var(--shadow-3d)',
       }}
     >
@@ -65,7 +65,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
             color: '#ffffff',
             fontSize: '0.75rem',
             fontWeight: 800,
-            padding: '3px 10px',
+            padding: '3px 12px',
             borderRadius: 'var(--radius-pill)',
             letterSpacing: '0.04em',
             textTransform: 'uppercase',
@@ -84,8 +84,8 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
       {/* Header Section */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.65rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-navy)' }}>{hospital.name}</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+            <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-navy)' }}>{hospital.name}</h3>
             <StatusBadge status={statusBadge} size="sm" />
           </div>
 
@@ -101,7 +101,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
             display: 'flex',
             alignItems: 'center',
             gap: '0.65rem',
-            backgroundColor: 'rgba(224, 242, 254, 0.7)',
+            backgroundColor: 'rgba(224, 242, 254, 0.75)',
             backdropFilter: 'blur(8px)',
             padding: '0.45rem 0.85rem',
             borderRadius: 'var(--radius-sm)',

@@ -13,15 +13,15 @@ export const Logo: React.FC<LogoProps> = ({
   clickable = true,
 }) => {
   const iconDimensions = {
-    sm: { box: 26, stroke: 2.2 },
-    md: { box: 32, stroke: 2.2 },
-    lg: { box: 40, stroke: 2.4 },
+    sm: { box: 28, stroke: 2.2 },
+    md: { box: 34, stroke: 2.2 },
+    lg: { box: 42, stroke: 2.4 },
   }[size];
 
   const titleSizes = {
-    sm: '1.15rem',
-    md: '1.3rem',
-    lg: '1.55rem',
+    sm: '1.2rem',
+    md: '1.35rem',
+    lg: '1.65rem',
   }[size];
 
   const content = (
@@ -31,14 +31,14 @@ export const Logo: React.FC<LogoProps> = ({
         style={{
           width: iconDimensions.box,
           height: iconDimensions.box,
-          background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 60%, #0A192F 100%)',
+          background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #1D4ED8 100%)',
           borderRadius: '10px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           color: '#ffffff',
-          boxShadow: '0 4px 12px rgba(29, 78, 216, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6), inset 0 -1px 2px rgba(0, 0, 0, 0.2)',
-          border: '1px solid rgba(255, 255, 255, 0.3)',
+          boxShadow: '0 0 16px rgba(56, 189, 248, 0.5), 0 4px 12px rgba(29, 78, 216, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.7)',
+          border: '1px solid rgba(255, 255, 255, 0.4)',
           flexShrink: 0,
         }}
       >
@@ -65,20 +65,20 @@ export const Logo: React.FC<LogoProps> = ({
           style={{
             fontFamily: 'var(--font-heading)',
             fontSize: titleSizes,
-            fontWeight: 800,
-            color: 'var(--text-navy)',
+            fontWeight: 850,
+            color: '#FFFFFF',
             letterSpacing: '-0.025em',
             lineHeight: 1.15,
           }}
         >
-          ResQ<span style={{ color: 'var(--royal-600)', background: 'linear-gradient(135deg, #2563EB, #1D4ED8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Link</span>
+          ResQ<span style={{ background: 'linear-gradient(135deg, #38BDF8 0%, #60A5FA 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textShadow: '0 0 15px rgba(56, 189, 248, 0.3)' }}>Link</span>
         </span>
 
         {showTagline && (
           <span
             style={{
               fontSize: '0.8rem',
-              color: 'var(--text-secondary)',
+              color: '#94A3B8',
               fontWeight: 500,
               marginTop: '1px',
             }}
