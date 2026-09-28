@@ -166,97 +166,91 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
             </p>
           </div>
 
-          {/* Facility & Last Updated Badge */}
+        {/* Facility & Last Updated Badge - 3D Glass */}
           <div
+            className="resq-card"
             style={{
-              backgroundColor: '#FFFFFF',
-              border: '1px solid var(--border-color)',
-              borderRadius: 'var(--radius-sm)',
-              padding: '0.75rem 1rem',
+              padding: '0.85rem 1.25rem',
               display: 'flex',
               alignItems: 'center',
-              gap: '1rem',
-              boxShadow: 'var(--shadow-xs)',
+              gap: '1.25rem',
+              backgroundColor: 'rgba(255, 255, 255, 0.88)',
+              border: '1.5px solid rgba(186, 230, 253, 0.8)',
+              boxShadow: 'var(--shadow-3d)',
             }}
           >
             <div>
-              <div style={{ fontWeight: 800, color: 'var(--text-main)', fontSize: '0.95rem' }}>
+              <div style={{ fontWeight: 800, color: 'var(--text-navy)', fontSize: '0.985rem' }}>
                 {hospital.name}
               </div>
-              <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <Clock size={12} />
-                Last updated: <strong>{hospital.lastUpdated}</strong>
+              <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+                <Clock size={13} style={{ color: 'var(--royal-600)' }} />
+                Last synchronized: <strong>{hospital.lastUpdated}</strong>
               </div>
             </div>
 
             <button
               type="button"
               onClick={fetchDashboardData}
-              className="btn btn-outline btn-sm"
+              className="btn btn-secondary btn-sm"
               title="Refresh telemetry"
-              style={{ padding: '0.4rem 0.6rem' }}
+              style={{ padding: '0.45rem 0.75rem' }}
             >
               <RefreshCw size={14} />
             </button>
           </div>
         </div>
 
-        {/* Live Incoming Ambulance Pre-Alerts Radar */}
+        {/* Live Incoming Ambulance Pre-Alerts Radar - 3D Glass Panel */}
         <div
+          className="resq-card"
           style={{
-            backgroundColor: preAlerts.some((a) => a.status === 'EN_ROUTE') ? '#fef2f2' : '#f8fafc',
-            border: `1.5px solid ${preAlerts.some((a) => a.status === 'EN_ROUTE') ? '#fca5a5' : '#e2e8f0'}`,
-            borderRadius: '12px',
-            padding: '1.25rem',
+            backgroundColor: preAlerts.some((a) => a.status === 'EN_ROUTE') ? 'rgba(254, 242, 242, 0.9)' : 'rgba(255, 255, 255, 0.85)',
+            border: `1.5px solid ${preAlerts.some((a) => a.status === 'EN_ROUTE') ? 'rgba(252, 165, 165, 0.8)' : 'rgba(186, 230, 253, 0.8)'}`,
+            padding: '1.5rem',
             marginBottom: '2rem',
-            boxShadow: preAlerts.some((a) => a.status === 'EN_ROUTE') ? '0 4px 12px rgba(239, 68, 68, 0.15)' : 'none',
+            boxShadow: preAlerts.some((a) => a.status === 'EN_ROUTE') ? '0 12px 28px rgba(225, 29, 72, 0.15)' : 'var(--shadow-3d)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <div
                 style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: '50%',
-                  backgroundColor: preAlerts.some((a) => a.status === 'EN_ROUTE') ? '#ef4444' : '#64748b',
+                  width: 36,
+                  height: 36,
+                  borderRadius: '10px',
+                  backgroundColor: preAlerts.some((a) => a.status === 'EN_ROUTE') ? 'var(--emergency)' : 'var(--royal-600)',
                   color: '#fff',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  animation: preAlerts.some((a) => a.status === 'EN_ROUTE') ? 'pulse 1.5s infinite' : 'none',
+                  boxShadow: '0 4px 10px rgba(29, 78, 216, 0.3)',
                 }}
               >
-                <Radio size={16} />
+                <Radio size={18} className="status-dot-pulse" />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: '#1e293b' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0, color: 'var(--text-navy)' }}>
                   Live Inbound Ambulance Pre-Alerts
                 </h3>
-                <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>
-                  Real-time ER telemetry sent by approaching ambulances via persistent unit IDs.
+                <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', margin: 0 }}>
+                  Real-time ER telemetry communicated by approaching ambulances in transit.
                 </p>
               </div>
             </div>
 
             <span
-              style={{
-                backgroundColor: preAlerts.length > 0 ? '#fee2e2' : '#e2e8f0',
-                color: preAlerts.length > 0 ? '#991b1b' : '#475569',
-                padding: '4px 10px',
-                borderRadius: '20px',
-                fontSize: '0.78rem',
-                fontWeight: 700,
-              }}
+              className={preAlerts.length > 0 ? 'badge badge-emergency' : 'badge badge-teal'}
+              style={{ fontSize: '0.8rem' }}
             >
               {preAlerts.filter((a) => a.status !== 'ARRIVED').length} Active En Route
             </span>
           </div>
 
           {preAlerts.length === 0 ? (
-            <div style={{ padding: '0.75rem 1rem', fontSize: '0.85rem', color: '#64748b', backgroundColor: '#ffffff', borderRadius: '8px', border: '1px dashed #cbd5e1', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={16} color="#10b981" />
-              ER Triage Radar Clear — No emergency ambulances currently en route to this facility.
+            <div style={{ padding: '0.85rem 1.25rem', fontSize: '0.875rem', color: 'var(--text-secondary)', backgroundColor: 'rgba(240, 249, 255, 0.6)', borderRadius: 'var(--radius-sm)', border: '1px dashed rgba(147, 197, 253, 0.8)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <CheckCircle2 size={18} color="#059669" />
+              <span>ER Triage Radar Clear — No emergency ambulances currently routed to this facility.</span>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>

@@ -76,33 +76,34 @@ export const AmbulancePage: React.FC = () => {
           </p>
         </div>
 
-        {/* Large Emergency Request Card */}
+        {/* Large Emergency Request Card - 3D Glass Coated */}
         <form onSubmit={handleSubmit}>
           <div
             className="resq-card"
             style={{
-              padding: '2rem',
+              padding: '2.25rem 2rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '2rem',
-              border: '1.5px solid var(--border-color)',
-              boxShadow: 'var(--shadow-md)',
+              gap: '2.25rem',
+              border: '1.5px solid rgba(255, 255, 255, 0.95)',
+              boxShadow: 'var(--shadow-3d)',
+              backgroundColor: 'rgba(255, 255, 255, 0.82)',
             }}
           >
             {/* Step 1: Select Resource */}
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
                 <label
                   style={{
                     fontFamily: 'var(--font-heading)',
-                    fontSize: '1.125rem',
-                    fontWeight: 700,
-                    color: 'var(--text-main)',
+                    fontSize: '1.15rem',
+                    fontWeight: 800,
+                    color: 'var(--text-navy)',
                   }}
                 >
                   Step 1 — What does the patient need?
                 </label>
-                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Required</span>
+                <span className="badge badge-teal" style={{ fontSize: '0.72rem' }}>Required</span>
               </div>
 
               <div
@@ -138,7 +139,7 @@ export const AmbulancePage: React.FC = () => {
               </div>
             </div>
 
-            <div style={{ height: 1, backgroundColor: 'var(--border-color)' }} />
+            <div style={{ height: 1, backgroundColor: 'rgba(186, 230, 253, 0.5)' }} />
 
             {/* Step 2: Quantity Selector */}
             <div>
@@ -148,11 +149,11 @@ export const AmbulancePage: React.FC = () => {
                 min={1}
                 max={10}
                 label="Step 2 — How many are required?"
-                helperText="Enter the number of resources required for this emergency."
+                helperText="Enter the number of units required for this emergency dispatch."
               />
             </div>
 
-            <div style={{ height: 1, backgroundColor: 'var(--border-color)' }} />
+            <div style={{ height: 1, backgroundColor: 'rgba(186, 230, 253, 0.5)' }} />
 
             {/* Step 3: Ambulance Location */}
             <div>
@@ -162,31 +163,30 @@ export const AmbulancePage: React.FC = () => {
               />
             </div>
 
-            <div style={{ height: 1, backgroundColor: 'var(--border-color)' }} />
+            <div style={{ height: 1, backgroundColor: 'rgba(186, 230, 253, 0.5)' }} />
 
             {/* Step 4: Submit Button & Note */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               <button
                 type="submit"
                 className="btn btn-primary btn-lg"
                 style={{
                   width: '100%',
-                  fontSize: '1.125rem',
-                  padding: '1rem 1.5rem',
-                  boxShadow: 'var(--shadow-md)',
+                  fontSize: '1.15rem',
+                  padding: '1.1rem 1.75rem',
                 }}
               >
-                <Search size={20} />
+                <Search size={22} />
                 Find Suitable Hospitals
-                <ArrowRight size={18} />
+                <ArrowRight size={20} />
               </button>
 
               <p
                 style={{
-                  fontSize: '0.8125rem',
+                  fontSize: '0.825rem',
                   color: 'var(--text-secondary)',
                   textAlign: 'center',
-                  lineHeight: 1.4,
+                  lineHeight: 1.45,
                 }}
               >
                 Your request will be matched with nearby hospitals based on real-time resource availability and predicted 30-minute capacity.

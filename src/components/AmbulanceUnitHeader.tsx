@@ -62,60 +62,50 @@ export const AmbulanceUnitHeader: React.FC = () => {
 
   return (
     <>
-      {/* Unit Identity Banner */}
+      {/* Unit Identity Banner - 3D Glass Coated */}
       <div
+        className="resq-card"
         style={{
-          backgroundColor: '#eff6ff',
-          border: '1px solid #bfdbfe',
-          borderRadius: '12px',
-          padding: '0.85rem 1.25rem',
-          marginBottom: '1.75rem',
+          padding: '0.95rem 1.4rem',
+          marginBottom: '2rem',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '0.75rem',
+          gap: '0.85rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.82)',
+          border: '1.5px solid rgba(186, 230, 253, 0.8)',
+          boxShadow: 'var(--shadow-3d)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.95rem' }}>
           <div
             style={{
-              width: 42,
-              height: 42,
-              borderRadius: '10px',
-              backgroundColor: '#2563eb',
+              width: 44,
+              height: 44,
+              borderRadius: '12px',
+              background: 'var(--royal-gradient-3d)',
               color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 2px 6px rgba(37, 99, 235, 0.25)',
+              boxShadow: '0 4px 12px rgba(29, 78, 216, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
             }}
           >
             <Ambulance size={22} />
           </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <strong style={{ fontSize: '1.05rem', color: '#1e3a8a', letterSpacing: '0.2px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <strong style={{ fontSize: '1.05rem', color: 'var(--text-navy)', letterSpacing: '0.2px' }}>
                 Unit ID: {profile.ambulanceId}
               </strong>
-              <span
-                style={{
-                  backgroundColor: '#dbeafe',
-                  color: '#1d4ed8',
-                  padding: '2px 8px',
-                  borderRadius: '20px',
-                  fontSize: '0.75rem',
-                  fontWeight: 700,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                }}
-              >
-                <CheckCircle2 size={12} /> Permanent Login Active
+              <span className="badge badge-teal" style={{ fontSize: '0.725rem' }}>
+                <CheckCircle2 size={12} /> Unit Active
               </span>
             </div>
-            <div style={{ fontSize: '0.825rem', color: '#475569', marginTop: '2px' }}>
-              <Truck size={13} style={{ display: 'inline', marginRight: '4px' }} />
+            <div style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
+              <Truck size={13} style={{ display: 'inline', marginRight: '4px', color: 'var(--royal-600)' }} />
               <strong>{profile.vehicleNumber}</strong> ({profile.ambulanceType} Unit) • Driver: {profile.driverName} ({profile.driverPhone})
             </div>
           </div>
@@ -124,13 +114,10 @@ export const AmbulanceUnitHeader: React.FC = () => {
         <button
           type="button"
           onClick={() => setIsModalOpen(true)}
-          className="btn btn-sm btn-outline"
+          className="btn btn-sm btn-secondary"
           style={{
             fontSize: '0.8125rem',
-            padding: '0.35rem 0.75rem',
-            borderColor: '#93c5fd',
-            color: '#1d4ed8',
-            backgroundColor: '#ffffff',
+            padding: '0.4rem 0.85rem',
           }}
         >
           <Edit3 size={14} /> Update Unit Details

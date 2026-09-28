@@ -161,49 +161,60 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
   };
 
   return (
-    <div className="resq-card" style={{ border: '1px solid var(--border-color)' }}>
+    <div
+      className="resq-card"
+      style={{
+        border: '1.5px solid rgba(186, 230, 253, 0.8)',
+        backgroundColor: 'rgba(255, 255, 255, 0.88)',
+        boxShadow: 'var(--shadow-3d)',
+        padding: '1.75rem',
+      }}
+    >
       {/* Header & Mode Switch */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.75rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.85rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
           <div
             style={{
-              width: 34,
-              height: 34,
-              borderRadius: '8px',
-              backgroundColor: 'var(--primary-light)',
-              color: 'var(--primary)',
+              width: 38,
+              height: 38,
+              borderRadius: '10px',
+              background: 'var(--royal-gradient-3d)',
+              color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              boxShadow: '0 4px 10px rgba(29, 78, 216, 0.3)',
             }}
           >
-            <Activity size={18} />
+            <Activity size={20} />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: 800 }}>Update Resource Telemetry</h3>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-navy)' }}>Update Resource Telemetry</h3>
+            <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
               Sync live capacity directly to cloud database & emergency dispatch
             </p>
           </div>
         </div>
 
-        {/* Tab Buttons */}
-        <div style={{ display: 'flex', backgroundColor: 'var(--bg-section)', borderRadius: '6px', padding: '3px' }}>
+        {/* Tab Buttons - 3D Glass Pill */}
+        <div style={{ display: 'flex', backgroundColor: 'rgba(224, 242, 254, 0.6)', border: '1px solid rgba(186, 230, 253, 0.8)', borderRadius: 'var(--radius-sm)', padding: '3px' }}>
           <button
             type="button"
             onClick={() => setActiveTab('full')}
             style={{
-              padding: '4px 12px',
-              borderRadius: '4px',
+              padding: '6px 14px',
+              borderRadius: '6px',
               border: 'none',
               backgroundColor: activeTab === 'full' ? '#fff' : 'transparent',
-              color: activeTab === 'full' ? 'var(--primary)' : 'var(--text-secondary)',
-              fontWeight: 700,
-              fontSize: '0.78rem',
+              color: activeTab === 'full' ? 'var(--royal-700)' : 'var(--text-secondary)',
+              fontWeight: 800,
+              fontSize: '0.8rem',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '4px',
+              gap: '5px',
+              boxShadow: activeTab === 'full' ? '0 2px 6px rgba(10, 25, 47, 0.08)' : 'none',
+              transition: 'all 0.2s',
             }}
           >
             <Edit3 size={13} /> Full Telemetry Table
@@ -212,17 +223,19 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
             type="button"
             onClick={() => setActiveTab('quick')}
             style={{
-              padding: '4px 12px',
-              borderRadius: '4px',
+              padding: '6px 14px',
+              borderRadius: '6px',
               border: 'none',
               backgroundColor: activeTab === 'quick' ? '#fff' : 'transparent',
-              color: activeTab === 'quick' ? 'var(--primary)' : 'var(--text-secondary)',
-              fontWeight: 700,
-              fontSize: '0.78rem',
+              color: activeTab === 'quick' ? 'var(--royal-700)' : 'var(--text-secondary)',
+              fontWeight: 800,
+              fontSize: '0.8rem',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '4px',
+              gap: '5px',
+              boxShadow: activeTab === 'quick' ? '0 2px 6px rgba(10, 25, 47, 0.08)' : 'none',
+              transition: 'all 0.2s',
             }}
           >
             <Sliders size={13} /> Quick Adjust

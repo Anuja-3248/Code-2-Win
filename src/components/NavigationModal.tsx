@@ -73,14 +73,15 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({ hospital, onCl
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(36, 55, 70, 0.45)',
-        backdropFilter: 'blur(3px)',
+        backgroundColor: 'rgba(10, 25, 47, 0.55)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
         zIndex: 1000,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '1rem',
-        animation: 'fadeIn 0.2s ease',
+        animation: 'fadeIn 0.25s ease',
       }}
       onClick={onClose}
     >
@@ -89,30 +90,32 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({ hospital, onCl
         style={{
           width: '100%',
           maxWidth: 580,
-          padding: '1.75rem',
-          boxShadow: 'var(--shadow-lg)',
-          border: '1px solid var(--primary-border)',
+          padding: '2rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.94)',
+          boxShadow: '0 25px 60px -10px rgba(5, 14, 29, 0.4), inset 0 1.5px 1px #ffffff',
+          border: '1.5px solid rgba(255, 255, 255, 0.95)',
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
             <div
               style={{
-                width: 36,
-                height: 36,
-                borderRadius: '8px',
-                backgroundColor: 'var(--primary)',
+                width: 40,
+                height: 40,
+                borderRadius: '10px',
+                background: 'var(--royal-gradient-3d)',
                 color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                boxShadow: '0 4px 12px rgba(29, 78, 216, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
               }}
             >
-              <Navigation size={18} />
+              <Navigation size={20} />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 800 }}>En Route Dispatch</h3>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-navy)' }}>En Route Dispatch</h3>
               <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
                 Target Destination & Emergency Pre-Alert
               </p>
@@ -122,12 +125,17 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({ hospital, onCl
             type="button"
             onClick={onClose}
             style={{
-              background: 'transparent',
-              border: 'none',
+              width: 36,
+              height: 36,
+              borderRadius: '50%',
+              backgroundColor: 'rgba(240, 249, 255, 0.8)',
+              border: '1px solid rgba(186, 230, 253, 0.8)',
+              color: 'var(--text-navy)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               cursor: 'pointer',
-              color: 'var(--text-secondary)',
               padding: '4px',
-              borderRadius: '6px',
             }}
           >
             <X size={20} />

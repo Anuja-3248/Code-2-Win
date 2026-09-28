@@ -113,47 +113,48 @@ export const HospitalResultsPage: React.FC = () => {
           </button>
         </div>
 
-        {/* Request Summary Top Card */}
+        {/* Request Summary Top Card - 3D Glass Coated */}
         <div
           className="resq-card"
           style={{
-            backgroundColor: '#FFFFFF',
-            border: '1px solid var(--border-color)',
+            backgroundColor: 'rgba(255, 255, 255, 0.85)',
+            border: '1.5px solid rgba(186, 230, 253, 0.8)',
             marginBottom: '2rem',
-            padding: '1.25rem 1.5rem',
+            padding: '1.35rem 1.75rem',
+            boxShadow: 'var(--shadow-3d)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--royal-700)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Active Ambulance Request Summary
               </span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginTop: '0.4rem', flexWrap: 'wrap' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginTop: '0.4rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
                   <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Resource:</span>
-                  <strong style={{ color: 'var(--primary)', fontSize: '1rem' }}>{request.resource}</strong>
+                  <strong style={{ color: 'var(--royal-700)', fontSize: '1.05rem' }}>{request.resource}</strong>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Required Quantity:</span>
-                  <strong style={{ fontSize: '1rem', color: 'var(--text-main)' }}>{request.quantity} units</strong>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Quantity:</span>
+                  <strong style={{ fontSize: '1.05rem', color: 'var(--text-navy)' }}>{request.quantity} units</strong>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <MapPin size={15} style={{ color: 'var(--primary)' }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                  <MapPin size={16} style={{ color: 'var(--royal-600)' }} />
                   <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Location:</span>
-                  <strong style={{ fontSize: '0.95rem' }}>{request.locationName || 'Pune, Maharashtra'}</strong>
+                  <strong style={{ fontSize: '0.95rem', color: 'var(--text-navy)' }}>{request.locationName || 'Pune, Maharashtra'}</strong>
                 </div>
               </div>
             </div>
 
             <Link
               to="/ambulance"
-              className="btn btn-outline btn-sm"
-              style={{ fontSize: '0.8rem', gap: '4px' }}
+              className="btn btn-secondary btn-sm"
+              style={{ fontSize: '0.825rem', gap: '5px' }}
             >
-              <SlidersHorizontal size={13} />
-              Change
+              <SlidersHorizontal size={14} />
+              Change Query
             </Link>
           </div>
         </div>

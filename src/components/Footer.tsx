@@ -6,10 +6,13 @@ export const Footer: React.FC = () => {
   return (
     <footer
       style={{
-        backgroundColor: '#FFFFFF',
-        borderTop: '1px solid var(--border-color)',
-        padding: '3rem 0 2rem',
+        backgroundColor: 'rgba(255, 255, 255, 0.75)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderTop: '1px solid rgba(186, 230, 253, 0.5)',
+        padding: '3.5rem 0 2.25rem',
         marginTop: 'auto',
+        boxShadow: '0 -4px 20px rgba(10, 25, 47, 0.03)',
       }}
     >
       <div className="container-responsive">
@@ -19,38 +22,38 @@ export const Footer: React.FC = () => {
             alignItems: 'center',
             justifyContent: 'space-between',
             flexWrap: 'wrap',
-            gap: '1.5rem',
+            gap: '1.75rem',
             paddingBottom: '2rem',
-            borderBottom: '1px solid var(--border-color)',
+            borderBottom: '1px solid rgba(186, 230, 253, 0.4)',
           }}
         >
           {/* Left: Brand and Mission */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
             <Logo size="md" />
             <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-              Connecting emergencies to available care.
+              Connecting emergencies to verified hospital care, faster.
             </p>
           </div>
 
           {/* Right: Minimal Navigation Links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.75rem', flexWrap: 'wrap' }}>
             <a
               href="#how-it-works"
-              style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}
+              style={{ fontSize: '0.925rem', color: 'var(--text-navy)', fontWeight: 600, transition: 'color var(--transition-fast)' }}
             >
               How It Works
             </a>
-            <span style={{ color: 'var(--border-color)' }}>·</span>
+            <span style={{ color: 'rgba(147, 197, 253, 0.6)' }}>·</span>
             <Link
               to="/hospital/login"
-              style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}
+              style={{ fontSize: '0.925rem', color: 'var(--text-navy)', fontWeight: 600, transition: 'color var(--transition-fast)' }}
             >
-              Hospitals
+              Hospital Portal
             </Link>
-            <span style={{ color: 'var(--border-color)' }}>·</span>
+            <span style={{ color: 'rgba(147, 197, 253, 0.6)' }}>·</span>
             <a
               href="#about"
-              style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}
+              style={{ fontSize: '0.925rem', color: 'var(--text-navy)', fontWeight: 600, transition: 'color var(--transition-fast)' }}
             >
               About
             </a>
@@ -71,13 +74,14 @@ export const Footer: React.FC = () => {
           }}
         >
           <div>
-            © 2026 ResQLink. All rights reserved.
+            © 2026 ResQLink Emergency Health Network. All rights reserved.
           </div>
           <div>
-            Designed for emergency medical response and hospital resource coordination.
+            Engineered with real-time clinical bed telemetry & predictive resource dispatch.
           </div>
         </div>
       </div>
     </footer>
   );
 };
+

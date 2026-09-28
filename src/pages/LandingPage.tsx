@@ -6,6 +6,11 @@ import {
   ArrowRight,
   CheckCircle2,
   MapPin,
+  Sparkles,
+  ShieldCheck,
+  Activity,
+  Radio,
+  Zap,
 } from 'lucide-react';
 import heroParamedicsImg from '../assets/images/hero-paramedics.jpg';
 import doctorEmergencyImg from '../assets/images/doctor-emergency.jpg';
@@ -17,51 +22,78 @@ export const LandingPage: React.FC = () => {
       {/* 1. HERO SECTION */}
       <section
         style={{
-          backgroundColor: '#FFFFFF',
-          padding: '4.5rem 0 5rem',
-          borderBottom: '1px solid var(--border-color)',
+          position: 'relative',
+          padding: '5rem 0 5.5rem',
+          overflow: 'hidden',
         }}
       >
         <div className="container-responsive">
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(330px, 1fr))',
-              gap: '3.5rem',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+              gap: '4rem',
               alignItems: 'center',
             }}
           >
             {/* Left Content */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.6rem', position: 'relative', zIndex: 2 }}>
+              {/* Clinical Precision Badge */}
+              <div style={{ display: 'inline-flex', alignItems: 'center' }}>
+                <span
+                  className="badge badge-teal"
+                  style={{
+                    padding: '0.4rem 0.95rem',
+                    fontSize: '0.825rem',
+                    gap: '0.5rem',
+                    boxShadow: '0 4px 12px rgba(37, 99, 235, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.9)',
+                  }}
+                >
+                  <span className="status-dot status-dot-pulse" style={{ backgroundColor: 'var(--royal-600)' }} />
+                  <span style={{ fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                    Clinical Emergency Network
+                  </span>
+                </span>
+              </div>
+
               <h1
                 style={{
-                  fontSize: 'clamp(2.35rem, 4.5vw, 3.25rem)',
+                  fontSize: 'clamp(2.45rem, 4.8vw, 3.4rem)',
                   fontWeight: 800,
-                  color: 'var(--text-main)',
+                  color: 'var(--text-navy)',
                   lineHeight: 1.15,
-                  letterSpacing: '-0.03em',
+                  letterSpacing: '-0.035em',
                 }}
               >
-                The right care, when every minute matters.
+                The right care, when every{' '}
+                <span
+                  style={{
+                    background: 'linear-gradient(135deg, #1D4ED8 0%, #2563EB 50%, #0284C7 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                >
+                  minute matters.
+                </span>
               </h1>
 
               <p
                 style={{
                   fontSize: '1.15rem',
                   color: 'var(--text-secondary)',
-                  lineHeight: 1.6,
-                  maxWidth: '520px',
+                  lineHeight: 1.65,
+                  maxWidth: '540px',
                 }}
               >
-                ResQLink helps emergency teams find nearby hospitals with the resources they need — using real-time availability and proximity.
+                ResQLink coordinates emergency response teams with nearby hospital facilities in real time — matching ICU beds, mechanical ventilators, and clinical capacity before transport.
               </p>
 
-              {/* Action Buttons */}
+              {/* 3D Action Buttons */}
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '1rem',
+                  gap: '1.1rem',
                   flexWrap: 'wrap',
                   paddingTop: '0.5rem',
                 }}
@@ -69,7 +101,7 @@ export const LandingPage: React.FC = () => {
                 <Link
                   to="/ambulance"
                   className="btn btn-primary btn-lg"
-                  style={{ gap: '0.6rem' }}
+                  style={{ gap: '0.65rem' }}
                 >
                   <Ambulance size={20} />
                   Find a Hospital
@@ -78,7 +110,7 @@ export const LandingPage: React.FC = () => {
                 <Link
                   to="/hospital/login"
                   className="btn btn-secondary btn-lg"
-                  style={{ gap: '0.6rem' }}
+                  style={{ gap: '0.65rem' }}
                 >
                   <Hospital size={20} />
                   Hospital Portal
@@ -90,47 +122,141 @@ export const LandingPage: React.FC = () => {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '1.75rem',
-                  paddingTop: '1rem',
-                  borderTop: '1px solid var(--border-subtle)',
-                  fontSize: '0.85rem',
+                  gap: '2rem',
+                  paddingTop: '1.25rem',
+                  borderTop: '1px solid var(--border-color)',
+                  fontSize: '0.875rem',
                   color: 'var(--text-secondary)',
                   flexWrap: 'wrap',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <CheckCircle2 size={16} style={{ color: 'var(--success)' }} />
-                  <span>Instant ambulance access</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <ShieldCheck size={18} style={{ color: 'var(--royal-600)' }} />
+                  <span style={{ fontWeight: 600 }}>Zero-Latency GPS Triage</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <CheckCircle2 size={16} style={{ color: 'var(--success)' }} />
-                  <span>Real-time hospital capacity</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <CheckCircle2 size={18} style={{ color: 'var(--success)' }} />
+                  <span style={{ fontWeight: 600 }}>Real-Time Capacity Verified</span>
                 </div>
               </div>
             </div>
 
-            {/* Right: High-quality real photograph of paramedics */}
+            {/* Right: High-quality 3D Glass Coated Paramedic Frame */}
             <div style={{ position: 'relative' }}>
+              {/* Ambient Glow Background behind Glass */}
               <div
                 style={{
-                  overflow: 'hidden',
-                  borderRadius: 'var(--radius-lg)',
-                  border: '1px solid var(--border-color)',
-                  boxShadow: 'var(--shadow-md)',
-                  backgroundColor: 'var(--bg-section)',
-                  aspectRatio: '4 / 3',
+                  position: 'absolute',
+                  inset: -15,
+                  background: 'radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, rgba(37, 99, 235, 0.15) 50%, transparent 70%)',
+                  filter: 'blur(30px)',
+                  borderRadius: '30px',
+                  zIndex: 0,
+                }}
+              />
+
+              <div
+                className="resq-card glass-hero-float"
+                style={{
+                  position: 'relative',
+                  zIndex: 1,
+                  padding: '12px',
+                  borderRadius: 'var(--radius-xl)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                  boxShadow: 'var(--shadow-3d-hover)',
+                  border: '1.5px solid rgba(255, 255, 255, 0.95)',
                 }}
               >
-                <img
-                  src={heroParamedicsImg}
-                  alt="Paramedic emergency response team preparing critical medical care"
+                <div
                   style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    display: 'block',
+                    overflow: 'hidden',
+                    borderRadius: 'calc(var(--radius-xl) - 6px)',
+                    aspectRatio: '4 / 3',
+                    position: 'relative',
                   }}
-                />
+                >
+                  <img
+                    src={heroParamedicsImg}
+                    alt="Paramedic emergency response team preparing critical medical care"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      display: 'block',
+                      transition: 'transform 0.5s ease',
+                    }}
+                  />
+                  {/* Subtle 3D Glass Specular Overlay */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, transparent 50%, rgba(10, 25, 47, 0.2) 100%)',
+                      pointerEvents: 'none',
+                    }}
+                  />
+                </div>
+
+                {/* Floating 3D Telemetry Pill */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: 24,
+                    left: 24,
+                    right: 24,
+                    backgroundColor: 'rgba(10, 25, 47, 0.88)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                    border: '1px solid rgba(56, 189, 248, 0.4)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '0.75rem 1.1rem',
+                    color: '#FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 12px 28px rgba(5, 14, 29, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3)',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div
+                      style={{
+                        width: 32,
+                        height: 32,
+                        borderRadius: '8px',
+                        backgroundColor: 'rgba(37, 99, 235, 0.3)',
+                        border: '1px solid #38BDF8',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#38BDF8',
+                      }}
+                    >
+                      <Activity size={16} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.02em' }}>Live Hospital Sync</div>
+                      <div style={{ fontSize: '0.72rem', color: '#BAE6FD' }}>Real-Time Route & Capacity Active</div>
+                    </div>
+                  </div>
+
+                  <span
+                    style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      backgroundColor: 'rgba(5, 150, 105, 0.25)',
+                      border: '1px solid rgba(16, 185, 129, 0.6)',
+                      color: '#6EE7B7',
+                      padding: '3px 8px',
+                      borderRadius: 'var(--radius-pill)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                    }}
+                  >
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#10B981' }} />
+                    99.8% Online
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -141,9 +267,8 @@ export const LandingPage: React.FC = () => {
       <section
         id="about"
         style={{
-          backgroundColor: 'var(--bg-section)',
           padding: '5.5rem 0',
-          borderBottom: '1px solid var(--border-color)',
+          position: 'relative',
         }}
       >
         <div className="container-responsive">
@@ -151,39 +276,56 @@ export const LandingPage: React.FC = () => {
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-              gap: '4rem',
+              gap: '4.5rem',
               alignItems: 'center',
             }}
           >
-            {/* Real Doctor Care Photograph */}
+            {/* Real Doctor Care Photograph with 3D Glass Layering */}
             <div
+              className="resq-card"
               style={{
-                borderRadius: 'var(--radius-lg)',
-                overflow: 'hidden',
-                border: '1px solid var(--border-color)',
-                boxShadow: 'var(--shadow-sm)',
-                aspectRatio: '4 / 3',
+                padding: '12px',
+                borderRadius: 'var(--radius-xl)',
+                backgroundColor: 'rgba(255, 255, 255, 0.75)',
+                border: '1px solid rgba(255, 255, 255, 0.95)',
+                boxShadow: 'var(--shadow-3d)',
               }}
             >
-              <img
-                src={doctorEmergencyImg}
-                alt="Emergency physician reviewing real-time patient bed capacity"
+              <div
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block',
+                  borderRadius: 'calc(var(--radius-xl) - 6px)',
+                  overflow: 'hidden',
+                  aspectRatio: '4 / 3',
+                  position: 'relative',
                 }}
-              />
+              >
+                <img
+                  src={doctorEmergencyImg}
+                  alt="Emergency physician reviewing real-time patient bed capacity"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                  }}
+                />
+              </div>
             </div>
 
             {/* Editorial Text Block */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.35rem' }}>
+              <div style={{ display: 'inline-flex' }}>
+                <span className="badge badge-teal">
+                  <ShieldCheck size={14} />
+                  Clinical Reliability & Safety
+                </span>
+              </div>
+
               <h2
                 style={{
-                  fontSize: 'clamp(1.85rem, 3.2vw, 2.35rem)',
+                  fontSize: 'clamp(1.95rem, 3.4vw, 2.45rem)',
                   fontWeight: 800,
-                  color: 'var(--text-main)',
+                  color: 'var(--text-navy)',
                   lineHeight: 1.25,
                 }}
               >
@@ -197,7 +339,7 @@ export const LandingPage: React.FC = () => {
                   lineHeight: 1.7,
                 }}
               >
-                When transporting a patient in critical condition, emergency teams cannot afford the risk of arriving at a facility with zero available ICU beds or unavailable ventilators.
+                When transporting a patient in critical condition, emergency teams cannot afford the risk of arriving at a facility with zero available ICU beds or occupied mechanical ventilators.
               </p>
 
               <p
@@ -207,42 +349,66 @@ export const LandingPage: React.FC = () => {
                   lineHeight: 1.7,
                 }}
               >
-                ResQLink helps reduce uncertainty by showing available hospital resources before arrival. By connecting ambulances with live hospital capacity and real-time travel times, emergency teams make confident decisions without delay.
+                ResQLink eliminates clinical uncertainty by establishing transparency between ambulances and hospital networks before arrival. Real-time proximity, current bed status, and 30-minute machine learning availability forecasts empower rapid decisions.
               </p>
 
+              {/* 3D Glass Stats Grid */}
               <div
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-                  gap: '1.5rem',
-                  paddingTop: '1rem',
-                  borderTop: '1px solid var(--border-color)',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+                  gap: '1rem',
+                  paddingTop: '0.75rem',
                 }}
               >
-                <div>
-                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--primary)' }}>
+                <div
+                  className="resq-card"
+                  style={{
+                    padding: '1.1rem 1rem',
+                    textAlign: 'center',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1px solid rgba(186, 230, 253, 0.6)',
+                  }}
+                >
+                  <div style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--royal-700)', letterSpacing: '-0.02em' }}>
                     &lt; 10s
                   </div>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-                    Emergency Match Speed
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, marginTop: '2px' }}>
+                    Match Speed
                   </div>
                 </div>
 
-                <div>
-                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--primary)' }}>
+                <div
+                  className="resq-card"
+                  style={{
+                    padding: '1.1rem 1rem',
+                    textAlign: 'center',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1px solid rgba(186, 230, 253, 0.6)',
+                  }}
+                >
+                  <div style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--royal-700)', letterSpacing: '-0.02em' }}>
                     Live
                   </div>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-                    Real-Time Bed Tracking
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, marginTop: '2px' }}>
+                    Resource Telemetry
                   </div>
                 </div>
 
-                <div>
-                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--primary)' }}>
+                <div
+                  className="resq-card"
+                  style={{
+                    padding: '1.1rem 1rem',
+                    textAlign: 'center',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1px solid rgba(186, 230, 253, 0.6)',
+                  }}
+                >
+                  <div style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--royal-700)', letterSpacing: '-0.02em' }}>
                     100%
                   </div>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-                    Transparent Availability
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, marginTop: '2px' }}>
+                    Verified Capacity
                   </div>
                 </div>
               </div>
@@ -255,19 +421,24 @@ export const LandingPage: React.FC = () => {
       <section
         id="how-it-works"
         style={{
-          backgroundColor: '#FFFFFF',
           padding: '5.5rem 0',
-          borderBottom: '1px solid var(--border-color)',
+          position: 'relative',
         }}
       >
         <div className="container-responsive">
           {/* Section Header */}
           <div style={{ maxWidth: '680px', marginBottom: '3.5rem' }}>
+            <div style={{ display: 'inline-flex', marginBottom: '0.65rem' }}>
+              <span className="badge badge-teal">
+                <Zap size={14} />
+                Streamlined Protocol
+              </span>
+            </div>
             <h2
               style={{
-                fontSize: 'clamp(1.85rem, 3vw, 2.35rem)',
+                fontSize: 'clamp(1.95rem, 3.2vw, 2.45rem)',
                 fontWeight: 800,
-                color: 'var(--text-main)',
+                color: 'var(--text-navy)',
                 lineHeight: 1.25,
               }}
             >
@@ -275,328 +446,289 @@ export const LandingPage: React.FC = () => {
             </h2>
           </div>
 
-          {/* 3 Simple Numbered Steps with Thin Connecting Lines */}
+          {/* 3 Numbered Steps with 3D Glass Cards */}
           <div
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '2.5rem',
+              gap: '2rem',
               position: 'relative',
             }}
           >
             {/* Step 1 */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  marginBottom: '0.25rem',
-                }}
-              >
-                <span
+            <div
+              className="resq-card resq-card-interactive"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                border: '1.5px solid rgba(186, 230, 253, 0.7)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div
                   style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: '12px',
+                    background: 'var(--royal-gradient-3d)',
+                    color: '#FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     fontFamily: 'var(--font-heading)',
-                    fontSize: '1.85rem',
+                    fontSize: '1.35rem',
                     fontWeight: 800,
-                    color: 'var(--primary)',
-                    lineHeight: 1,
+                    boxShadow: '0 6px 16px rgba(29, 78, 216, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
                   }}
                 >
                   01
-                </span>
-                <div
-                  style={{
-                    height: '1px',
-                    flex: 1,
-                    backgroundColor: 'var(--border-color)',
-                  }}
-                />
+                </div>
+                <span className="badge badge-teal" style={{ fontSize: '0.72rem' }}>Input</span>
               </div>
 
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-navy)' }}>
                 Tell us what is needed
               </h3>
               <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                Select the required resource (ICU, Ventilator, or General Bed), quantity required, and ambulance location.
+                Select the required medical resource (ICU, Ventilator, or General Bed), quantity required, and ambulance GPS anchor.
               </p>
             </div>
 
             {/* Step 2 */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  marginBottom: '0.25rem',
-                }}
-              >
-                <span
+            <div
+              className="resq-card resq-card-interactive"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                border: '1.5px solid rgba(186, 230, 253, 0.7)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div
                   style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: '12px',
+                    background: 'var(--royal-gradient-3d)',
+                    color: '#FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     fontFamily: 'var(--font-heading)',
-                    fontSize: '1.85rem',
+                    fontSize: '1.35rem',
                     fontWeight: 800,
-                    color: 'var(--primary)',
-                    lineHeight: 1,
+                    boxShadow: '0 6px 16px rgba(29, 78, 216, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
                   }}
                 >
                   02
-                </span>
-                <div
-                  style={{
-                    height: '1px',
-                    flex: 1,
-                    backgroundColor: 'var(--border-color)',
-                  }}
-                />
+                </div>
+                <span className="badge badge-teal" style={{ fontSize: '0.72rem' }}>Engine Match</span>
               </div>
 
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-navy)' }}>
                 We check nearby hospitals
               </h3>
               <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                ResQLink evaluates hospitals based on distance, estimated travel time, and real-time resource availability.
+                ResQLink dynamically evaluates regional facilities based on real-time distance, transit duration, and live resource availability.
               </p>
             </div>
 
             {/* Step 3 */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  marginBottom: '0.25rem',
-                }}
-              >
-                <span
+            <div
+              className="resq-card resq-card-interactive"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                border: '1.5px solid rgba(186, 230, 253, 0.7)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div
                   style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: '12px',
+                    background: 'var(--royal-gradient-3d)',
+                    color: '#FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     fontFamily: 'var(--font-heading)',
-                    fontSize: '1.85rem',
+                    fontSize: '1.35rem',
                     fontWeight: 800,
-                    color: 'var(--primary)',
-                    lineHeight: 1,
+                    boxShadow: '0 6px 16px rgba(29, 78, 216, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
                   }}
                 >
                   03
-                </span>
-                <div
-                  style={{
-                    height: '1px',
-                    flex: 1,
-                    backgroundColor: 'var(--border-color)',
-                  }}
-                />
+                </div>
+                <span className="badge badge-teal" style={{ fontSize: '0.72rem' }}>Navigation</span>
               </div>
 
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-navy)' }}>
                 Choose where to go
               </h3>
               <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                View suitable hospitals and their current live availability, and navigate directly.
+                Review suitable hospitals, verify live clinical capacity, and navigate directly with zero communication friction.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 4. PRODUCT PREVIEW SECTION (Light Teal Background) */}
+      {/* 4. PRODUCT PREVIEW SECTION (3D Glass Mockup) */}
       <section
         style={{
-          backgroundColor: 'var(--bg-teal-section)',
           padding: '5.5rem 0',
-          borderBottom: '1px solid var(--border-color)',
+          position: 'relative',
         }}
       >
         <div className="container-responsive">
-          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 3rem' }}>
+          <div style={{ textAlign: 'center', maxWidth: '660px', margin: '0 auto 3.5rem' }}>
+            <div style={{ display: 'inline-flex', marginBottom: '0.65rem' }}>
+              <span className="badge badge-teal">
+                <Sparkles size={14} />
+                Next-Gen Medical Telemetry
+              </span>
+            </div>
             <h2
               style={{
-                fontSize: 'clamp(1.85rem, 3vw, 2.35rem)',
+                fontSize: 'clamp(1.95rem, 3.2vw, 2.45rem)',
                 fontWeight: 800,
-                color: 'var(--text-main)',
+                color: 'var(--text-navy)',
                 marginBottom: '0.75rem',
               }}
             >
               Know what is available before you arrive.
             </h2>
-            <p style={{ fontSize: '1rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-              A clean, clear interface built for fast decision-making during high-stress emergency dispatches.
+            <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+              A high-precision 3D glass interface built for high-stakes decision-making under urgent emergency constraints.
             </p>
           </div>
 
-          {/* Large, Clean Mockup of the Hospital Results Interface */}
+          {/* 3D Glass Browser Mockup */}
           <div
+            className="resq-card"
             style={{
-              maxWidth: '860px',
+              maxWidth: '880px',
               margin: '0 auto',
-              backgroundColor: '#FFFFFF',
-              borderRadius: 'var(--radius-lg)',
-              border: '1px solid var(--primary-border)',
-              boxShadow: 'var(--shadow-lg)',
+              padding: 0,
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--shadow-3d-hover)',
+              border: '1.5px solid rgba(255, 255, 255, 0.95)',
               overflow: 'hidden',
             }}
           >
             {/* Mock Window Header */}
             <div
               style={{
-                backgroundColor: 'var(--bg-section)',
-                borderBottom: '1px solid var(--border-color)',
-                padding: '0.85rem 1.5rem',
+                backgroundColor: 'rgba(10, 25, 47, 0.92)',
+                backdropFilter: 'blur(16px)',
+                padding: '0.9rem 1.75rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                borderBottom: '1px solid rgba(56, 189, 248, 0.25)',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#CBD5E1', display: 'inline-block' }} />
-                <span style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#CBD5E1', display: 'inline-block' }} />
-                <span style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#CBD5E1', display: 'inline-block' }} />
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginLeft: '8px', fontWeight: 500 }}>
-                  resqlink.org/ambulance/results
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ width: 11, height: 11, borderRadius: '50%', backgroundColor: '#EF4444', display: 'inline-block' }} />
+                <span style={{ width: 11, height: 11, borderRadius: '50%', backgroundColor: '#F59E0B', display: 'inline-block' }} />
+                <span style={{ width: 11, height: 11, borderRadius: '50%', backgroundColor: '#10B981', display: 'inline-block' }} />
+                <span style={{ fontSize: '0.82rem', color: '#BAE6FD', marginLeft: '12px', fontWeight: 600, fontFamily: 'monospace' }}>
+                  resqlink.health/ambulance/results
                 </span>
               </div>
-              <span className="badge badge-success" style={{ fontSize: '0.725rem' }}>
+              <span className="badge badge-success" style={{ fontSize: '0.75rem' }}>
                 3 Suitable Matches
               </span>
             </div>
 
-            {/* Mock Content */}
-            <div style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              {/* Request Summary */}
+            {/* Mock Content Body with Frosted Panels */}
+            <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', backgroundColor: 'rgba(240, 249, 255, 0.5)' }}>
+              {/* Request Summary Glass Bar */}
               <div
                 style={{
-                  backgroundColor: 'var(--bg-section)',
-                  border: '1px solid var(--border-color)',
-                  borderRadius: 'var(--radius-sm)',
-                  padding: '0.85rem 1.25rem',
+                  backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(186, 230, 253, 0.8)',
+                  borderRadius: 'var(--radius-md)',
+                  padding: '1rem 1.5rem',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   flexWrap: 'wrap',
                   gap: '0.75rem',
-                  fontSize: '0.875rem',
+                  fontSize: '0.9rem',
+                  boxShadow: 'var(--shadow-sm)',
                 }}
               >
-                <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-                  <span>Requested: <strong style={{ color: 'var(--primary)' }}>2 ICU Beds</strong></span>
-                  <span>Location: <strong>Pune, Maharashtra</strong></span>
+                <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                  <span>Requested: <strong style={{ color: 'var(--royal-700)' }}>2 ICU Beds</strong></span>
+                  <span>Anchor: <strong style={{ color: 'var(--text-navy)' }}>Pune Medical Center</strong></span>
                 </div>
-                <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Live GPS Matched</span>
+                <span className="badge badge-teal" style={{ fontSize: '0.75rem' }}>
+                  <Radio size={12} className="status-dot-pulse" /> Live Telemetry
+                </span>
               </div>
 
-              {/* Hospital Card 1 - Ruby Care */}
+              {/* Hospital Card 1 - Ruby Care (Top Match) */}
               <div
                 style={{
-                  border: '1.5px solid var(--primary)',
-                  borderRadius: 'var(--radius-md)',
-                  padding: '1.25rem',
+                  border: '2px solid rgba(37, 99, 235, 0.7)',
+                  borderRadius: 'var(--radius-lg)',
+                  padding: '1.5rem',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '1rem',
-                  backgroundColor: '#FFFFFF',
+                  gap: '1.25rem',
+                  backgroundColor: 'rgba(255, 255, 255, 0.92)',
+                  boxShadow: '0 8px 24px rgba(37, 99, 235, 0.12), inset 0 1px 1px rgba(255, 255, 255, 1)',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                      <h4 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-navy)' }}>
                         Ruby Care Hospital
                       </h4>
-                      <span className="badge badge-success" style={{ fontSize: '0.725rem' }}>
-                        Available
+                      <span className="badge badge-success" style={{ fontSize: '0.75rem' }}>
+                        Optimal Match
                       </span>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                      <MapPin size={13} style={{ color: 'var(--primary)' }} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                      <MapPin size={15} style={{ color: 'var(--royal-600)' }} />
                       <span>40 Sassoon Road, Sangamvadi, Pune</span>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', backgroundColor: 'var(--bg-section)', padding: '0.35rem 0.65rem', borderRadius: 'var(--radius-sm)' }}>
-                    <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '0.85rem' }}>3.2 km</span>
-                    <span style={{ color: 'var(--border-color)' }}>|</span>
-                    <span style={{ fontWeight: 700, color: 'var(--success)', fontSize: '0.85rem' }}>9 min ETA</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', backgroundColor: 'rgba(224, 242, 254, 0.7)', padding: '0.45rem 0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(186, 230, 253, 0.8)' }}>
+                    <span style={{ fontWeight: 800, color: 'var(--royal-700)', fontSize: '0.9rem' }}>3.2 km</span>
+                    <span style={{ color: 'rgba(147, 197, 253, 0.8)' }}>|</span>
+                    <span style={{ fontWeight: 800, color: 'var(--success)', fontSize: '0.9rem' }}>9 min ETA</span>
                   </div>
                 </div>
 
                 {/* Live Availability strip */}
                 <div
                   style={{
-                    backgroundColor: 'var(--bg-section)',
-                    border: '1px solid var(--border-color)',
-                    borderRadius: 'var(--radius-sm)',
-                    padding: '0.75rem 1rem',
+                    backgroundColor: 'rgba(240, 253, 244, 0.8)',
+                    border: '1px solid rgba(167, 243, 208, 0.8)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '0.9rem 1.25rem',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}
                 >
                   <div>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Current Live Availability</span>
-                    <div style={{ fontWeight: 800, color: '#1e7e48', fontSize: '1.15rem' }}>4 ICU Beds Available</div>
+                    <span style={{ fontSize: '0.75rem', color: '#065F46', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>Current Verified Capacity</span>
+                    <div style={{ fontWeight: 800, color: '#047857', fontSize: '1.25rem' }}>4 ICU Beds Available</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Total Facility Capacity</span>
-                    <div style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '1.05rem' }}>24 Total ICU Beds</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Hospital Card 2 - CityCare */}
-              <div
-                style={{
-                  border: '1px solid var(--border-color)',
-                  borderRadius: 'var(--radius-md)',
-                  padding: '1.25rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem',
-                  backgroundColor: '#FFFFFF',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                        CityCare Hospital
-                      </h4>
-                      <span className="badge badge-teal" style={{ fontSize: '0.725rem' }}>
-                        Suitable
-                      </span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                      <MapPin size={13} style={{ color: 'var(--primary)' }} />
-                      <span>Connaught Road, Near Pune Station</span>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', backgroundColor: 'var(--bg-section)', padding: '0.35rem 0.65rem', borderRadius: 'var(--radius-sm)' }}>
-                    <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '0.85rem' }}>4.8 km</span>
-                    <span style={{ color: 'var(--border-color)' }}>|</span>
-                    <span style={{ fontWeight: 700, color: 'var(--success)', fontSize: '0.85rem' }}>12 min ETA</span>
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: 'var(--bg-section)',
-                    border: '1px solid var(--border-color)',
-                    borderRadius: 'var(--radius-sm)',
-                    padding: '0.75rem 1rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <div>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Current Live Availability</span>
-                    <div style={{ fontWeight: 800, color: '#1e7e48', fontSize: '1.15rem' }}>6 ICU Beds Available</div>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Total Facility Capacity</span>
-                    <div style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '1.05rem' }}>30 Total ICU Beds</div>
+                    <span style={{ fontSize: '0.75rem', color: '#065F46', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>Facility Total</span>
+                    <div style={{ fontWeight: 800, color: 'var(--text-navy)', fontSize: '1.15rem' }}>24 Total ICU Units</div>
                   </div>
                 </div>
               </div>
@@ -609,9 +741,8 @@ export const LandingPage: React.FC = () => {
       <section
         id="for-hospitals"
         style={{
-          backgroundColor: '#FFFFFF',
           padding: '5.5rem 0',
-          borderBottom: '1px solid var(--border-color)',
+          position: 'relative',
         }}
       >
         <div className="container-responsive">
@@ -619,17 +750,24 @@ export const LandingPage: React.FC = () => {
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-              gap: '4rem',
+              gap: '4.5rem',
               alignItems: 'center',
             }}
           >
             {/* Left Content */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.35rem' }}>
+              <div style={{ display: 'inline-flex' }}>
+                <span className="badge badge-teal">
+                  <Hospital size={14} />
+                  Hospital Operations Portal
+                </span>
+              </div>
+
               <h2
                 style={{
-                  fontSize: 'clamp(1.85rem, 3.2vw, 2.35rem)',
+                  fontSize: 'clamp(1.95rem, 3.4vw, 2.45rem)',
                   fontWeight: 800,
-                  color: 'var(--text-main)',
+                  color: 'var(--text-navy)',
                   lineHeight: 1.25,
                 }}
               >
@@ -643,7 +781,7 @@ export const LandingPage: React.FC = () => {
                   lineHeight: 1.7,
                 }}
               >
-                Hospitals can keep their emergency resource information up to date in seconds through the Hospital Portal.
+                Hospitals can keep their emergency resource telemetry up to date in seconds through the secure Hospital Portal.
               </p>
 
               <p
@@ -653,87 +791,143 @@ export const LandingPage: React.FC = () => {
                   lineHeight: 1.7,
                 }}
               >
-                By publishing live counts for ICU beds, mechanical ventilators, and general ward turnover, facilities prevent department overload and ensure incoming patients match available clinical capability.
+                By publishing live counts for ICU beds, mechanical ventilators, and general ward turnover, healthcare systems prevent ED crowding and ensure inbound trauma matches clinical readiness.
               </p>
 
               <div style={{ paddingTop: '0.5rem' }}>
                 <Link
                   to="/hospital/login"
                   className="btn btn-secondary btn-lg"
-                  style={{ gap: '0.6rem' }}
+                  style={{ gap: '0.65rem' }}
                 >
                   <Hospital size={18} />
-                  Hospital Portal
+                  Enter Hospital Portal
                   <ArrowRight size={16} />
                 </Link>
               </div>
             </div>
 
-            {/* Right: Real Hospital Staff Image */}
+            {/* Right: Real Hospital Staff Image with 3D Glass Frame */}
             <div
+              className="resq-card"
               style={{
-                borderRadius: 'var(--radius-lg)',
-                overflow: 'hidden',
-                border: '1px solid var(--border-color)',
-                boxShadow: 'var(--shadow-sm)',
-                aspectRatio: '4 / 3',
+                padding: '12px',
+                borderRadius: 'var(--radius-xl)',
+                backgroundColor: 'rgba(255, 255, 255, 0.75)',
+                border: '1px solid rgba(255, 255, 255, 0.95)',
+                boxShadow: 'var(--shadow-3d)',
               }}
             >
-              <img
-                src={hospitalStaffImg}
-                alt="Hospital operations and triage coordination staff managing resource availability"
+              <div
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block',
+                  borderRadius: 'calc(var(--radius-xl) - 6px)',
+                  overflow: 'hidden',
+                  aspectRatio: '4 / 3',
+                  position: 'relative',
                 }}
-              />
+              >
+                <img
+                  src={hospitalStaffImg}
+                  alt="Hospital operations and triage coordination staff managing resource availability"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 6. FINAL CTA (Calm Light-Teal Section) */}
+      {/* 6. FINAL CTA (3D Deep Navy & Royal Blue Glass Hero) */}
       <section
         style={{
-          backgroundColor: 'var(--bg-teal-section)',
-          padding: '5rem 0',
-          textAlign: 'center',
+          padding: '5rem 0 6rem',
+          position: 'relative',
         }}
       >
-        <div className="container-narrow" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
-          <h2
+        <div className="container-narrow">
+          <div
+            className="glass-navy-panel"
             style={{
-              fontSize: 'clamp(2rem, 3.8vw, 2.65rem)',
-              fontWeight: 800,
-              color: 'var(--text-main)',
-              letterSpacing: '-0.025em',
+              padding: '4rem 2.5rem',
+              borderRadius: 'var(--radius-xl)',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '1.75rem',
+              position: 'relative',
+              overflow: 'hidden',
             }}
           >
-            When every minute matters, make every decision count.
-          </h2>
+            {/* Top specular shimmer overlay */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '45%',
+                background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, transparent 100%)',
+                pointerEvents: 'none',
+              }}
+            />
 
-          <p
-            style={{
-              fontSize: '1.1rem',
-              color: 'var(--text-secondary)',
-              maxWidth: '540px',
-              lineHeight: 1.6,
-            }}
-          >
-            Identify suitable hospital care with real-time resource availability and proximity in seconds.
-          </p>
-
-          <div style={{ paddingTop: '0.5rem' }}>
-            <Link
-              to="/ambulance"
-              className="btn btn-primary btn-lg"
-              style={{ gap: '0.65rem', padding: '0.95rem 2.25rem', fontSize: '1.1rem' }}
+            <span
+              className="badge"
+              style={{
+                backgroundColor: 'rgba(56, 189, 248, 0.2)',
+                border: '1px solid rgba(56, 189, 248, 0.5)',
+                color: '#BAE6FD',
+              }}
             >
-              <Ambulance size={20} />
-              Find a Hospital
-            </Link>
+              <Sparkles size={13} />
+              Mission Critical Healthcare Infrastructure
+            </span>
+
+            <h2
+              style={{
+                fontSize: 'clamp(2.1rem, 4vw, 2.75rem)',
+                fontWeight: 800,
+                color: '#FFFFFF',
+                letterSpacing: '-0.03em',
+                lineHeight: 1.2,
+                maxWidth: '640px',
+              }}
+            >
+              When every minute matters, make every decision count.
+            </h2>
+
+            <p
+              style={{
+                fontSize: '1.15rem',
+                color: '#BAE6FD',
+                maxWidth: '560px',
+                lineHeight: 1.65,
+              }}
+            >
+              Connect your emergency dispatch workflow with live hospital capacity and turn travel time into saved lives.
+            </p>
+
+            <div style={{ paddingTop: '0.75rem' }}>
+              <Link
+                to="/ambulance"
+                className="btn btn-primary btn-lg"
+                style={{
+                  gap: '0.75rem',
+                  padding: '1rem 2.5rem',
+                  fontSize: '1.1rem',
+                  boxShadow: '0 8px 24px rgba(37, 99, 235, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
+                }}
+              >
+                <Ambulance size={22} />
+                Find a Hospital Now
+              </Link>
+            </div>
           </div>
         </div>
       </section>

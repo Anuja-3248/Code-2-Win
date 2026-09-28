@@ -45,16 +45,16 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
         </label>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
         <div
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            backgroundColor: 'var(--bg-card)',
-            border: '1.5px solid var(--border-color)',
-            borderRadius: 'var(--radius-sm)',
-            padding: '3px',
-            boxShadow: 'var(--shadow-xs)',
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            border: '1.5px solid rgba(186, 230, 253, 0.8)',
+            borderRadius: 'var(--radius-md)',
+            padding: '4px',
+            boxShadow: '0 4px 12px rgba(10, 25, 47, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.9)',
           }}
         >
           {/* Decrement Button */}
@@ -64,15 +64,17 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
             disabled={value <= min}
             aria-label="Decrease quantity"
             style={{
-              width: 38,
-              height: 38,
-              borderRadius: '6px',
-              backgroundColor: value <= min ? 'transparent' : 'var(--bg-subtle)',
-              color: value <= min ? 'var(--text-muted)' : 'var(--text-main)',
+              width: 40,
+              height: 40,
+              borderRadius: '8px',
+              backgroundColor: value <= min ? 'transparent' : 'rgba(240, 249, 255, 0.8)',
+              color: value <= min ? 'var(--text-muted)' : 'var(--text-navy)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: value <= min ? 'not-allowed' : 'pointer',
+              border: value <= min ? '1px solid transparent' : '1px solid rgba(186, 230, 253, 0.6)',
+              boxShadow: value <= min ? 'none' : '0 2px 4px rgba(10, 25, 47, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.8)',
               transition: 'all var(--transition-fast)',
             }}
           >
@@ -82,12 +84,12 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
           {/* Value Display */}
           <div
             style={{
-              minWidth: 48,
+              minWidth: 54,
               textAlign: 'center',
               fontFamily: 'var(--font-heading)',
-              fontSize: '1.25rem',
+              fontSize: '1.4rem',
               fontWeight: 800,
-              color: 'var(--primary)',
+              color: 'var(--royal-700)',
               userSelect: 'none',
             }}
           >
@@ -101,15 +103,17 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
             disabled={value >= max}
             aria-label="Increase quantity"
             style={{
-              width: 38,
-              height: 38,
-              borderRadius: '6px',
-              backgroundColor: value >= max ? 'transparent' : 'var(--primary-light)',
-              color: value >= max ? 'var(--text-muted)' : 'var(--primary)',
+              width: 40,
+              height: 40,
+              borderRadius: '8px',
+              background: value >= max ? 'transparent' : 'var(--royal-gradient-3d)',
+              color: value >= max ? 'var(--text-muted)' : '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: value >= max ? 'not-allowed' : 'pointer',
+              border: value >= max ? '1px solid transparent' : '1px solid rgba(255, 255, 255, 0.3)',
+              boxShadow: value >= max ? 'none' : '0 4px 10px rgba(29, 78, 216, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
               transition: 'all var(--transition-fast)',
             }}
           >
@@ -117,8 +121,8 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
           </button>
         </div>
 
-        <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-          {value === 1 ? 'Patient unit' : 'Patient units'}
+        <span style={{ fontSize: '0.9rem', color: 'var(--text-navy)', fontWeight: 600 }}>
+          {value === 1 ? 'Patient unit required' : 'Patient units required'}
         </span>
       </div>
 

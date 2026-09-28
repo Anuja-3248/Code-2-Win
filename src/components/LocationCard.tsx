@@ -74,48 +74,51 @@ export const LocationCard: React.FC<LocationCardProps> = ({
         </button>
       </div>
 
-      {/* Location summary container */}
+      {/* Location summary container with 3D glass effect */}
       <div
+        className="resq-card"
         style={{
-          backgroundColor: 'var(--bg-card)',
-          border: '1px solid var(--border-color)',
-          borderRadius: 'var(--radius-sm)',
-          padding: '1rem',
+          padding: '1.25rem 1.4rem',
           display: 'flex',
           flexDirection: 'column',
-          gap: '0.65rem',
+          gap: '0.85rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.85)',
+          border: '1.5px solid rgba(186, 230, 253, 0.8)',
+          boxShadow: 'var(--shadow-3d)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
             <div
               style={{
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
-                backgroundColor: 'var(--primary-light)',
-                color: 'var(--primary)',
+                width: 38,
+                height: 38,
+                borderRadius: '10px',
+                background: 'linear-gradient(135deg, rgba(224, 242, 254, 0.9), rgba(186, 230, 253, 0.7))',
+                color: 'var(--royal-700)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
+                border: '1px solid rgba(147, 197, 253, 0.8)',
+                boxShadow: '0 2px 6px rgba(10, 25, 47, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.9)',
               }}
             >
-              <Compass size={16} />
+              <Compass size={18} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '0.9375rem' }}>
+              <div style={{ fontWeight: 800, color: 'var(--text-navy)', fontSize: '0.985rem' }}>
                 {location.locationName}
               </div>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-                Active Ambulance GPS Anchor
+                Active Emergency GPS Fix
               </div>
             </div>
           </div>
 
           <span className="badge badge-teal">
-            <span className="status-dot status-dot-pulse" style={{ backgroundColor: 'var(--primary)' }} />
-            GPS Locked
+            <span className="status-dot status-dot-pulse" style={{ backgroundColor: 'var(--royal-600)' }} />
+            GPS Locked & Verified
           </span>
         </div>
 
@@ -124,25 +127,25 @@ export const LocationCard: React.FC<LocationCardProps> = ({
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
-            gap: '0.75rem',
-            paddingTop: '0.65rem',
-            borderTop: '1px solid var(--border-color)',
-            fontSize: '0.8125rem',
+            gap: '1rem',
+            paddingTop: '0.85rem',
+            borderTop: '1px solid rgba(186, 230, 253, 0.5)',
+            fontSize: '0.85rem',
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.72rem', textTransform: 'uppercase', fontWeight: 600 }}>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.72rem', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
               Latitude
             </span>
-            <span style={{ fontWeight: 600, color: 'var(--text-main)', fontFamily: 'monospace' }}>
+            <span style={{ fontWeight: 700, color: 'var(--text-navy)', fontFamily: 'monospace' }}>
               {location.latitude.toFixed(4)}° N
             </span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.72rem', textTransform: 'uppercase', fontWeight: 600 }}>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.72rem', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
               Longitude
             </span>
-            <span style={{ fontWeight: 600, color: 'var(--text-main)', fontFamily: 'monospace' }}>
+            <span style={{ fontWeight: 700, color: 'var(--text-navy)', fontFamily: 'monospace' }}>
               {location.longitude.toFixed(4)}° E
             </span>
           </div>

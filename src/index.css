@@ -1,59 +1,131 @@
 :root {
-  /* Color Palette - Modern Medical & Healthcare Trust */
-  --primary: #176B87;
-  --primary-hover: #115369;
-  --primary-light: #EAF6F8;
-  --primary-border: #CFE8ED;
+  /* ==========================================================================
+     COLOR PALETTE — Deep Navy, Royal Blue & Ice-Blue
+     Competence, Safety, Authority & Real-Time Clinical Precision
+     ========================================================================== */
   
-  --secondary: #64B5C8;
-  --secondary-light: #F0F8FA;
+  /* Deep Navy Hierarchy (Authority, Contrast & Structure) */
+  --navy-950: #050E1D;
+  --navy-900: #0A192F;
+  --navy-850: #0D203D;
+  --navy-800: #102A4C;
+  --navy-700: #1B3B65;
+  --navy-600: #254F85;
+  --navy-500: #3567A8;
+  --navy-glass: rgba(10, 25, 47, 0.85);
+
+  /* Royal Blue (Competence, Primary Clinical Action & Focal Brand) */
+  --royal-900: #172554;
+  --royal-800: #1E40AF;
+  --royal-700: #1D4ED8;
+  --royal-600: #2563EB;
+  --royal-500: #3B82F6;
+  --royal-400: #60A5FA;
+  --royal-gradient: linear-gradient(135deg, #2563EB 0%, #1D4ED8 50%, #1E40AF 100%);
+  --royal-gradient-3d: linear-gradient(180deg, #3B82F6 0%, #2563EB 40%, #1D4ED8 100%);
+
+  /* Ice-Blue (Crystal Glass, Reflections, Sheen & Soft Surfaces) */
+  --ice-900: #0C4A6E;
+  --ice-700: #0369A1;
+  --ice-600: #0284C7;
+  --ice-500: #0EA5E9;
+  --ice-400: #38BDF8;
+  --ice-300: #7DD3FC;
+  --ice-200: #BAE6FD;
+  --ice-100: #E0F2FE;
+  --ice-50:  #F0F9FF;
+  --ice-surface: rgba(224, 242, 254, 0.45);
+  --ice-glow: rgba(56, 189, 248, 0.25);
+
+  /* Semantic Aliases */
+  --primary: #1D4ED8;
+  --primary-hover: #1E40AF;
+  --primary-dark: #0A192F;
+  --primary-light: #EFF6FF;
+  --primary-border: #93C5FD;
   
-  --accent: #F28C8C;
-  --accent-light: #FDF2F2;
+  --secondary: #0284C7;
+  --secondary-light: #F0F9FF;
   
-  --success: #3E9C6B;
-  --success-light: #EBF7F0;
-  --success-border: #C8EBD5;
+  --accent: #38BDF8;
+  --accent-light: #E0F2FE;
   
-  --warning: #E09B2D;
-  --warning-light: #FEF8EC;
+  --success: #059669;
+  --success-light: #ECFDF5;
+  --success-border: #A7F3D0;
   
-  --emergency: #D9534F;
-  --emergency-light: #FCEDED;
+  --warning: #D97706;
+  --warning-light: #FFFBEB;
+  --warning-border: #FDE68A;
   
-  --bg-app: #FFFFFF;
-  --bg-section: #F7FAFC;
-  --bg-teal-section: #EAF6F8;
-  --bg-card: #FFFFFF;
-  --bg-subtle: #F2F6F9;
+  --emergency: #E11D48;
+  --emergency-light: #FFF1F2;
+  --emergency-border: #FECDD3;
   
-  --text-main: #20323D;
-  --text-secondary: #586976;
-  --text-muted: #8A9BA8;
+  /* App Surfaces & Backgrounds with Ambient Light */
+  --bg-app: #F4F8FC;
+  --bg-section: #EDF4FA;
+  --bg-teal-section: #E6F2FC;
+  --bg-card: rgba(255, 255, 255, 0.82);
+  --bg-card-solid: #FFFFFF;
+  --bg-subtle: rgba(240, 249, 255, 0.65);
+  
+  /* Typography Colors */
+  --text-main: #0A192F;
+  --text-navy: #0D203D;
+  --text-secondary: #334E68;
+  --text-muted: #627D98;
   --text-inverse: #FFFFFF;
   
-  --border-color: #E2E8F0;
-  --border-subtle: #EEF2F6;
-  
-  /* Distinct Premium Medical Typography */
+  /* Glass Borders */
+  --border-color: rgba(147, 197, 253, 0.4);
+  --border-subtle: rgba(186, 230, 253, 0.3);
+  --glass-border-specular: rgba(255, 255, 255, 0.85);
+  --glass-border-glow: rgba(56, 189, 248, 0.5);
+
+  /* Typography Fonts */
   --font-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-body: 'Plus Jakarta Sans', 'Manrope', system-ui, -apple-system, sans-serif;
   
-  /* Radii - Subtle & Professional */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
   --radius-pill: 9999px;
   
-  /* Shadows - Natural and Subtle */
-  --shadow-xs: 0 1px 2px rgba(32, 50, 61, 0.04);
-  --shadow-sm: 0 2px 8px rgba(32, 50, 61, 0.05), 0 1px 2px rgba(32, 50, 61, 0.03);
-  --shadow-md: 0 8px 20px rgba(32, 50, 61, 0.06), 0 2px 6px rgba(32, 50, 61, 0.03);
-  --shadow-lg: 0 16px 36px rgba(32, 50, 61, 0.08), 0 4px 10px rgba(32, 50, 61, 0.03);
-  
+  /* 3D Glass Shadows & Specular Bevels */
+  --shadow-xs: 0 2px 4px rgba(10, 25, 47, 0.04);
+  --shadow-sm: 0 4px 12px rgba(10, 25, 47, 0.06), 0 1px 2px rgba(10, 25, 47, 0.04);
+  --shadow-md: 0 10px 25px -5px rgba(10, 25, 47, 0.08), 0 4px 10px -2px rgba(37, 99, 235, 0.05);
+  --shadow-lg: 0 20px 38px -10px rgba(10, 25, 47, 0.12), 0 8px 16px -4px rgba(37, 99, 235, 0.08);
+  --shadow-3d: 
+    0 16px 36px -8px rgba(10, 25, 47, 0.12),
+    0 6px 12px -2px rgba(37, 99, 235, 0.08),
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 4px 0 rgba(186, 230, 253, 0.25);
+  --shadow-3d-hover: 
+    0 24px 48px -10px rgba(10, 25, 47, 0.18),
+    0 12px 24px -4px rgba(37, 99, 235, 0.14),
+    inset 0 2px 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 6px 0 rgba(56, 189, 248, 0.35);
+
+  --shadow-btn-3d:
+    0 6px 18px -2px rgba(29, 78, 216, 0.42),
+    0 2px 4px 0 rgba(10, 25, 47, 0.1),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -2px 0 0 rgba(10, 25, 47, 0.25);
+
+  --shadow-btn-3d-hover:
+    0 10px 26px -2px rgba(29, 78, 216, 0.55),
+    0 4px 8px 0 rgba(10, 25, 47, 0.14),
+    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -2px 0 0 rgba(10, 25, 47, 0.3);
+
   /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 *, *::before, *::after {
@@ -69,6 +141,12 @@ html {
 body {
   min-height: 100%;
   background-color: var(--bg-app);
+  background-image: 
+    radial-gradient(circle at 12% 15%, rgba(56, 189, 248, 0.14) 0%, transparent 42%),
+    radial-gradient(circle at 88% 30%, rgba(37, 99, 235, 0.11) 0%, transparent 48%),
+    radial-gradient(circle at 50% 85%, rgba(13, 32, 61, 0.06) 0%, transparent 55%),
+    radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.1) 0%, transparent 35%);
+  background-attachment: fixed;
   color: var(--text-main);
   font-family: var(--font-body);
   font-size: 15px;
@@ -77,18 +155,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Headings */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  color: var(--text-main);
+  color: var(--text-navy);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   line-height: 1.25;
 }
 
-h1 { font-size: 2.85rem; font-weight: 800; letter-spacing: -0.03em; }
-h2 { font-size: 2.1rem; font-weight: 750; letter-spacing: -0.025em; }
-h3 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.015em; }
-h4 { font-size: 1.1rem; font-weight: 600; }
+h1 { font-size: 2.9rem; font-weight: 800; letter-spacing: -0.035em; }
+h2 { font-size: 2.15rem; font-weight: 800; letter-spacing: -0.03em; }
+h3 { font-size: 1.35rem; font-weight: 750; letter-spacing: -0.02em; }
+h4 { font-size: 1.125rem; font-weight: 700; }
 
 p {
   color: var(--text-secondary);
@@ -97,7 +176,7 @@ p {
 a {
   color: var(--primary);
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 a:hover {
@@ -116,12 +195,16 @@ button {
   transition: all var(--transition-fast);
 }
 
-/* Layout Utilities */
+/* ==========================================================================
+   3D Glass Coated Core Components & Cards
+   ========================================================================== */
+
 .app-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #FFFFFF;
+  background-color: transparent;
+  position: relative;
 }
 
 .main-content {
@@ -132,121 +215,207 @@ button {
 
 .container-responsive {
   width: 100%;
-  max-width: 1160px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 0 1.75rem;
 }
 
 .container-narrow {
   width: 100%;
-  max-width: 780px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
-/* Base Card */
+/* 3D Glass Card Container */
 .resq-card {
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  padding: 1.5rem;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid var(--glass-border-specular);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3d);
+  padding: 1.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
 }
 
-/* Buttons */
+/* Subtle Specular Sheen on Glass Cards */
+.resq-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.02) 100%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.resq-card-interactive {
+  cursor: pointer;
+}
+
+.resq-card-interactive:hover {
+  transform: translateY(-4px) perspective(1000px);
+  box-shadow: var(--shadow-3d-hover);
+  border-color: rgba(56, 189, 248, 0.6);
+}
+
+/* ==========================================================================
+   3D Buttons with Glass Tactility & Bevels
+   ========================================================================== */
+
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.7rem 1.4rem;
-  font-weight: 600;
+  gap: 0.55rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
   border-radius: var(--radius-sm);
   font-size: 0.95rem;
   transition: all var(--transition-fast);
   text-align: center;
   white-space: nowrap;
+  position: relative;
+  user-select: none;
 }
 
+/* 3D Royal Blue Primary Button */
 .btn-primary {
-  background-color: var(--primary);
+  background: var(--royal-gradient-3d);
   color: var(--text-inverse);
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-btn-3d);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-shadow: 0 1px 2px rgba(10, 25, 47, 0.3);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: var(--primary-hover);
-  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-btn-3d-hover);
+  filter: brightness(1.06);
 }
 
+.btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 3px 8px rgba(29, 78, 216, 0.35), inset 0 2px 4px rgba(10, 25, 47, 0.3);
+}
+
+/* 3D Frosted Glass Secondary Button */
 .btn-secondary {
-  background-color: var(--bg-card);
-  color: var(--primary);
-  border: 1.5px solid var(--primary-border);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(224, 242, 254, 0.75) 100%);
+  color: var(--royal-700);
+  border: 1.5px solid rgba(147, 197, 253, 0.7);
+  box-shadow: 
+    0 4px 12px rgba(10, 25, 47, 0.05),
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.95),
+    inset 0 -1.5px 2px rgba(186, 230, 253, 0.4);
+  backdrop-filter: blur(10px);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: var(--primary-light);
-  border-color: var(--secondary);
+  background: linear-gradient(135deg, #FFFFFF 0%, rgba(224, 242, 254, 0.95) 100%);
+  border-color: var(--royal-600);
+  color: var(--royal-800);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 20px rgba(37, 99, 235, 0.15),
+    inset 0 2px 1.5px rgba(255, 255, 255, 1);
 }
 
+.btn-secondary:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(10, 25, 47, 0.06), inset 0 1px 3px rgba(147, 197, 253, 0.4);
+}
+
+/* 3D Outline / Ice Button */
 .btn-outline {
-  background-color: var(--bg-card);
-  color: var(--text-main);
-  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(8px);
+  color: var(--text-navy);
+  border: 1.5px solid var(--border-color);
+  box-shadow: 0 2px 6px rgba(10, 25, 47, 0.03), inset 0 1px 1px rgba(255, 255, 255, 0.8);
 }
 
 .btn-outline:hover:not(:disabled) {
-  border-color: var(--primary);
-  color: var(--primary);
-  background-color: var(--bg-section);
+  border-color: var(--royal-600);
+  color: var(--royal-700);
+  background: rgba(240, 249, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+}
+
+.btn-outline:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .btn-lg {
-  padding: 0.9rem 1.85rem;
+  padding: 0.95rem 2rem;
   font-size: 1.05rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
 }
 
 .btn-sm {
-  padding: 0.45rem 0.95rem;
+  padding: 0.45rem 1rem;
   font-size: 0.85rem;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .btn:disabled {
-  opacity: 0.55;
+  opacity: 0.5;
   cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-/* Badges */
+/* ==========================================================================
+   Glass Badges & 3D Status Chips
+   ========================================================================== */
+
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.25rem 0.65rem;
+  gap: 0.45rem;
+  padding: 0.3rem 0.75rem;
   border-radius: var(--radius-pill);
   font-size: 0.775rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 6px rgba(10, 25, 47, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
 }
 
-.badge-teal {
-  background-color: var(--primary-light);
-  color: var(--primary);
-  border: 1px solid var(--primary-border);
+.badge-teal, .badge-blue {
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  color: var(--royal-800);
+  border: 1px solid rgba(147, 197, 253, 0.6);
 }
 
 .badge-success {
-  background-color: var(--success-light);
-  color: var(--success);
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  color: #065F46;
   border: 1px solid var(--success-border);
 }
 
+.badge-warning {
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+  color: #92400E;
+  border: 1px solid var(--warning-border);
+}
+
+.badge-emergency {
+  background: linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 100%);
+  color: #9F1239;
+  border: 1px solid var(--emergency-border);
+}
+
 .badge-neutral {
-  background-color: var(--bg-subtle);
+  background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
   color: var(--text-secondary);
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(203, 213, 225, 0.8);
 }
 
 /* Status Indicator Dot */
@@ -255,22 +424,77 @@ button {
   height: 7px;
   border-radius: 50%;
   display: inline-block;
+  box-shadow: 0 0 8px currentColor;
 }
 
-/* Subtle reveal animation */
+.status-dot-pulse {
+  animation: pulseGlow 1.8s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 4px currentColor;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.75;
+    box-shadow: 0 0 12px currentColor;
+  }
+}
+
+/* ==========================================================================
+   3D Glass Animations & Perspective Utilities
+   ========================================================================== */
+
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.3s ease-out forwards;
+  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 3D Glass Hero Floating Card Effect */
+.glass-hero-float {
+  animation: float3d 6s ease-in-out infinite;
+}
+
+@keyframes float3d {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.4deg);
+  }
+}
+
+/* 3D Glass Layer / Panel */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: var(--shadow-3d);
+}
+
+/* Deep Navy Glass for Dark Elements */
+.glass-navy-panel {
+  background: linear-gradient(135deg, rgba(10, 25, 47, 0.95) 0%, rgba(13, 32, 61, 0.9) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  box-shadow: 0 20px 40px -10px rgba(5, 14, 29, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
 }
 
 /* Responsive */
 @media (max-width: 820px) {
   h1 { font-size: 2.2rem; }
-  h2 { font-size: 1.7rem; }
-  h3 { font-size: 1.2rem; }
-  .resq-card { padding: 1.25rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.25rem; }
+  .resq-card { padding: 1.35rem; }
 }
+

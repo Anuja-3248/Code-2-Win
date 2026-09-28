@@ -28,8 +28,11 @@ export const Navbar: React.FC<NavbarProps> = () => {
   return (
     <header
       style={{
-        backgroundColor: '#FFFFFF',
-        borderBottom: '1px solid var(--border-color)',
+        backgroundColor: 'rgba(255, 255, 255, 0.78)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        borderBottom: '1px solid rgba(186, 230, 253, 0.45)',
+        boxShadow: '0 4px 20px -2px rgba(10, 25, 47, 0.05), inset 0 -1px 0 rgba(255, 255, 255, 0.6)',
         position: 'sticky',
         top: 0,
         zIndex: 100,
@@ -41,7 +44,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: '72px',
+          height: '74px',
         }}
       >
         {/* Left: ResQLink Logo */}

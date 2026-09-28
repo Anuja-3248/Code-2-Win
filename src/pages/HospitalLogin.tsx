@@ -86,28 +86,29 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
   };
 
   return (
-    <div className="animate-fade-in" style={{ padding: '3.5rem 0 5rem' }}>
-      <div className="container-narrow" style={{ maxWidth: 480 }}>
-        {/* Main Authentication Card */}
+    <div className="animate-fade-in" style={{ padding: '4rem 0 5.5rem' }}>
+      <div className="container-narrow" style={{ maxWidth: 500 }}>
+        {/* Main Authentication Card - 3D Glass Coated */}
         <div
           className="resq-card"
           style={{
-            padding: '2.5rem 2rem',
-            border: '1.5px solid var(--border-color)',
-            boxShadow: 'var(--shadow-md)',
+            padding: '2.75rem 2.25rem',
+            border: '1.5px solid rgba(255, 255, 255, 0.95)',
+            boxShadow: 'var(--shadow-3d)',
+            backgroundColor: 'rgba(255, 255, 255, 0.85)',
           }}
         >
           {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.25rem' }}>
               <Logo size="lg" clickable={false} />
             </div>
 
-            <h1 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.35rem' }}>
+            <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-navy)', marginBottom: '0.4rem' }}>
               Hospital Portal
             </h1>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-              Update your hospital's live emergency resource data
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+              Update your hospital's live clinical resource telemetry
             </p>
           </div>
 
@@ -115,10 +116,11 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
           <div
             style={{
               display: 'flex',
-              backgroundColor: 'var(--bg-section)',
-              borderRadius: 'var(--radius-sm)',
+              backgroundColor: 'rgba(224, 242, 254, 0.6)',
+              border: '1px solid rgba(186, 230, 253, 0.8)',
+              borderRadius: 'var(--radius-md)',
               padding: '4px',
-              marginBottom: '1.5rem',
+              marginBottom: '1.75rem',
             }}
           >
             <button
@@ -129,15 +131,15 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
               }}
               style={{
                 flex: 1,
-                padding: '0.5rem',
-                borderRadius: '6px',
+                padding: '0.6rem',
+                borderRadius: '8px',
                 border: 'none',
                 backgroundColor: mode === 'login' ? '#FFFFFF' : 'transparent',
-                color: mode === 'login' ? 'var(--primary)' : 'var(--text-secondary)',
-                fontWeight: 700,
-                fontSize: '0.875rem',
+                color: mode === 'login' ? 'var(--royal-700)' : 'var(--text-secondary)',
+                fontWeight: 800,
+                fontSize: '0.9rem',
                 cursor: 'pointer',
-                boxShadow: mode === 'login' ? 'var(--shadow-xs)' : 'none',
+                boxShadow: mode === 'login' ? '0 2px 8px rgba(10, 25, 47, 0.08), inset 0 1px 1px #ffffff' : 'none',
                 transition: 'all 0.2s',
               }}
             >
@@ -151,15 +153,15 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
               }}
               style={{
                 flex: 1,
-                padding: '0.5rem',
-                borderRadius: '6px',
+                padding: '0.6rem',
+                borderRadius: '8px',
                 border: 'none',
                 backgroundColor: mode === 'signup' ? '#FFFFFF' : 'transparent',
-                color: mode === 'signup' ? 'var(--primary)' : 'var(--text-secondary)',
-                fontWeight: 700,
-                fontSize: '0.875rem',
+                color: mode === 'signup' ? 'var(--royal-700)' : 'var(--text-secondary)',
+                fontWeight: 800,
+                fontSize: '0.9rem',
                 cursor: 'pointer',
-                boxShadow: mode === 'signup' ? 'var(--shadow-xs)' : 'none',
+                boxShadow: mode === 'signup' ? '0 2px 8px rgba(10, 25, 47, 0.08), inset 0 1px 1px #ffffff' : 'none',
                 transition: 'all 0.2s',
               }}
             >

@@ -33,14 +33,15 @@ export const HospitalDetailModal: React.FC<HospitalDetailModalProps> = ({
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(36, 55, 70, 0.45)',
-        backdropFilter: 'blur(3px)',
+        backgroundColor: 'rgba(10, 25, 47, 0.55)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
         zIndex: 1000,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '1rem',
-        animation: 'fadeIn 0.2s ease',
+        animation: 'fadeIn 0.25s ease',
       }}
       onClick={onClose}
     >
@@ -51,22 +52,23 @@ export const HospitalDetailModal: React.FC<HospitalDetailModalProps> = ({
           maxWidth: 680,
           maxHeight: '90vh',
           overflowY: 'auto',
-          padding: '1.75rem',
+          padding: '2rem',
           position: 'relative',
-          boxShadow: 'var(--shadow-lg)',
-          border: '1px solid var(--primary-border)',
+          backgroundColor: 'rgba(255, 255, 255, 0.92)',
+          boxShadow: '0 25px 60px -10px rgba(5, 14, 29, 0.4), inset 0 1.5px 1px #ffffff',
+          border: '1.5px solid rgba(255, 255, 255, 0.95)',
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header with Close */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', marginBottom: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', marginBottom: '1.5rem' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap', marginBottom: '0.35rem' }}>
-              <h2 style={{ fontSize: '1.45rem', fontWeight: 800 }}>{hospital.name}</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap', marginBottom: '0.4rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-navy)' }}>{hospital.name}</h2>
               <StatusBadge status={hospital.status} size="sm" />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-              <MapPin size={15} style={{ color: 'var(--primary)', flexShrink: 0 }} />
+              <MapPin size={16} style={{ color: 'var(--royal-600)', flexShrink: 0 }} />
               <span>{hospital.address}</span>
             </div>
           </div>
@@ -76,15 +78,17 @@ export const HospitalDetailModal: React.FC<HospitalDetailModalProps> = ({
             onClick={onClose}
             aria-label="Close modal"
             style={{
-              width: 34,
-              height: 34,
+              width: 36,
+              height: 36,
               borderRadius: '50%',
-              backgroundColor: 'var(--bg-subtle)',
-              color: 'var(--text-secondary)',
+              backgroundColor: 'rgba(240, 249, 255, 0.8)',
+              border: '1px solid rgba(186, 230, 253, 0.8)',
+              color: 'var(--text-navy)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
+              boxShadow: '0 2px 6px rgba(10, 25, 47, 0.05)',
             }}
           >
             <X size={18} />
@@ -96,27 +100,27 @@ export const HospitalDetailModal: React.FC<HospitalDetailModalProps> = ({
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-            gap: '0.75rem',
-            marginBottom: '1.5rem',
+            gap: '0.85rem',
+            marginBottom: '1.75rem',
           }}
         >
-          <div style={{ backgroundColor: 'var(--primary-light)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--primary-border)' }}>
-            <span style={{ fontSize: '0.72rem', color: 'var(--primary)', fontWeight: 600, textTransform: 'uppercase' }}>Distance</span>
-            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--primary)' }}>
+          <div style={{ backgroundColor: 'rgba(239, 246, 255, 0.9)', padding: '0.85rem 1.1rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(147, 197, 253, 0.8)', boxShadow: 'inset 0 1px 1px #ffffff' }}>
+            <span style={{ fontSize: '0.725rem', color: 'var(--royal-700)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Distance</span>
+            <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--royal-800)' }}>
               {hospital.distanceKm ? `${hospital.distanceKm} km` : '3.2 km'}
             </div>
           </div>
 
-          <div style={{ backgroundColor: 'var(--success-light)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--success-border)' }}>
-            <span style={{ fontSize: '0.72rem', color: '#1e7e48', fontWeight: 600, textTransform: 'uppercase' }}>Ambulance ETA</span>
-            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1e7e48' }}>
+          <div style={{ backgroundColor: 'rgba(240, 253, 244, 0.9)', padding: '0.85rem 1.1rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(167, 243, 208, 0.8)', boxShadow: 'inset 0 1px 1px #ffffff' }}>
+            <span style={{ fontSize: '0.725rem', color: '#047857', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Ambulance ETA</span>
+            <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#047857' }}>
               {hospital.etaMinutes ? `${hospital.etaMinutes} min` : '9 min'}
             </div>
           </div>
 
-          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase' }}>Current Occupancy</span>
-            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: hospital.occupancyRate > 80 ? 'var(--warning)' : 'var(--text-main)' }}>
+          <div style={{ backgroundColor: 'rgba(248, 250, 252, 0.9)', padding: '0.85rem 1.1rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(203, 213, 225, 0.8)', boxShadow: 'inset 0 1px 1px #ffffff' }}>
+            <span style={{ fontSize: '0.725rem', color: 'var(--text-secondary)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Occupancy Rate</span>
+            <div style={{ fontSize: '1.35rem', fontWeight: 800, color: hospital.occupancyRate > 80 ? 'var(--warning)' : 'var(--text-navy)' }}>
               {hospital.occupancyRate}%
             </div>
           </div>
