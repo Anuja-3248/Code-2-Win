@@ -39,22 +39,27 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Keep fields synced if hospital prop updates
+  const prevHospitalIdRef = React.useRef(hospital.id);
+
+  // Keep fields synced if hospital prop updates to a different hospital
   useEffect(() => {
-    setHospitalName(hospital.name);
-    setAddress(hospital.address);
-    setLatitude(hospital.latitude);
-    setLongitude(hospital.longitude);
-    setIcuTotal(hospital.icuTotal);
-    setIcuAvailable(hospital.icuAvailable);
-    setVentilatorTotal(hospital.ventilatorsTotal);
-    setVentilatorsAvailable(hospital.ventilatorsAvailable);
-    setGeneralBedsAvailable(hospital.generalBedsAvailable);
-    setOccupancyRate(hospital.occupancyRate);
-    setAdmissionsLast30Min(hospital.admissionsLast30Min);
-    setDischargesLast30Min(hospital.dischargesLast30Min);
-    setEmergencyArrivalsLast30Min(hospital.emergencyArrivalsLast30Min);
-    setIcuAvailable30MinLater(hospital.predictedIcuAvailable30Min);
+    if (prevHospitalIdRef.current !== hospital.id) {
+      prevHospitalIdRef.current = hospital.id;
+      setHospitalName(hospital.name);
+      setAddress(hospital.address);
+      setLatitude(hospital.latitude);
+      setLongitude(hospital.longitude);
+      setIcuTotal(hospital.icuTotal);
+      setIcuAvailable(hospital.icuAvailable);
+      setVentilatorTotal(hospital.ventilatorsTotal);
+      setVentilatorsAvailable(hospital.ventilatorsAvailable);
+      setGeneralBedsAvailable(hospital.generalBedsAvailable);
+      setOccupancyRate(hospital.occupancyRate);
+      setAdmissionsLast30Min(hospital.admissionsLast30Min);
+      setDischargesLast30Min(hospital.dischargesLast30Min);
+      setEmergencyArrivalsLast30Min(hospital.emergencyArrivalsLast30Min);
+      setIcuAvailable30MinLater(hospital.predictedIcuAvailable30Min);
+    }
   }, [hospital]);
 
   const handleResourceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

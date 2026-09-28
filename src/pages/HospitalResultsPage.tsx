@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -50,7 +50,7 @@ export const HospitalResultsPage: React.FC = () => {
   const [selectedHospitalForDetails, setSelectedHospitalForDetails] = useState<Hospital | null>(null);
   const [selectedHospitalForNavigation, setSelectedHospitalForNavigation] = useState<Hospital | null>(null);
 
-  const executeSearch = async (reqToUse = request) => {
+  const executeSearch = useCallback(async (reqToUse = request) => {
     setIsSearching(true);
     try {
       const result = await ApiService.searchSuitableHospitals(reqToUse);
@@ -60,18 +60,27 @@ export const HospitalResultsPage: React.FC = () => {
     } finally {
       setIsSearching(false);
     }
-  };
+  }, [request]);
 
   useEffect(() => {
-    executeSearch(request);
+    let isMounted = true;
+    const run = async () => {
+      if (isMounted) {
+        await executeSearch(request);
+      }
+    };
+    run();
 
     // If hospital resources get updated in another tab/component, refresh matches automatically
     const handleHospitalUpdate = () => {
       executeSearch(request);
     };
     window.addEventListener('resqlink-hospitals-updated', handleHospitalUpdate);
-    return () => window.removeEventListener('resqlink-hospitals-updated', handleHospitalUpdate);
-  }, [request]);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('resqlink-hospitals-updated', handleHospitalUpdate);
+    };
+  }, [request, executeSearch]);
 
   const handleNavigateTrigger = (hospital: Hospital) => {
     setSelectedHospitalForDetails(null);

@@ -4,22 +4,36 @@ import { getStoredAmbulanceProfile, registerAmbulance, type RegisterAmbulanceInp
 import type { AmbulanceProfile } from '../types/ambulance';
 
 export const AmbulanceUnitHeader: React.FC = () => {
-  const [profile, setProfile] = useState<AmbulanceProfile | null>(null);
+  const [profile, setProfile] = useState<AmbulanceProfile | null>(() => getStoredAmbulanceProfile());
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   // Registration Form State
-  const [formData, setFormData] = useState<RegisterAmbulanceInput>({
-    email: '',
-    password: '',
-    vehicleNumber: 'MH12 AB 1080',
-    driverName: 'Ramesh Patil',
-    driverPhone: '+91 98220 12345',
-    ambulanceType: 'ALS',
-    baseStation: 'Pune EMS Center, Shivajinagar',
+  const [formData, setFormData] = useState<RegisterAmbulanceInput>(() => {
+    const active = getStoredAmbulanceProfile();
+    if (active) {
+      return {
+        email: active.email,
+        password: '',
+        vehicleNumber: active.vehicleNumber,
+        driverName: active.driverName,
+        driverPhone: active.driverPhone,
+        ambulanceType: active.ambulanceType,
+        baseStation: active.baseStation,
+      };
+    }
+    return {
+      email: '',
+      password: '',
+      vehicleNumber: 'MH12 AB 1080',
+      driverName: 'Ramesh Patil',
+      driverPhone: '+91 98220 12345',
+      ambulanceType: 'ALS',
+      baseStation: 'Pune EMS Center, Shivajinagar',
+    };
   });
 
   useEffect(() => {
-    let active = getStoredAmbulanceProfile();
+    const active = getStoredAmbulanceProfile();
     if (!active) {
       // Create default persistent unit so first-time ambulance dispatch works immediately
       registerAmbulance({
@@ -31,16 +45,6 @@ export const AmbulanceUnitHeader: React.FC = () => {
         baseStation: 'Pune EMS Center',
       }).then((newProf) => {
         setProfile(newProf);
-      });
-    } else {
-      setProfile(active);
-      setFormData({
-        email: active.email,
-        vehicleNumber: active.vehicleNumber,
-        driverName: active.driverName,
-        driverPhone: active.driverPhone,
-        ambulanceType: active.ambulanceType,
-        baseStation: active.baseStation,
       });
     }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Activity,
   Wind,
@@ -32,7 +32,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
   const [preAlerts, setPreAlerts] = useState<PreAlertPayload[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     setIsLoading(true);
     try {
       let data = await ApiService.fetchHospitalById(hospitalId);
@@ -48,14 +48,20 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [hospitalId]);
 
   useEffect(() => {
-    fetchDashboardData();
+    let isMounted = true;
+    const load = async () => {
+      if (isMounted) {
+        await fetchDashboardData();
+      }
+    };
+    load();
 
     // Subscribe to real-time incoming ambulance pre-alerts
     const unsubscribeAlerts = subscribeHospitalPreAlerts(hospitalId, (alerts) => {
-      setPreAlerts(alerts);
+      if (isMounted) setPreAlerts(alerts);
     });
 
     const handleHospitalUpdate = () => {
@@ -65,11 +71,12 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
     window.addEventListener('resqlink-logs-updated', handleHospitalUpdate);
 
     return () => {
+      isMounted = false;
       unsubscribeAlerts();
       window.removeEventListener('resqlink-hospitals-updated', handleHospitalUpdate);
       window.removeEventListener('resqlink-logs-updated', handleHospitalUpdate);
     };
-  }, [hospitalId]);
+  }, [hospitalId, fetchDashboardData]);
 
   const handleAcknowledgeAlert = async (alertId: string) => {
     await updatePreAlertStatus(alertId, 'ACKNOWLEDGED');
