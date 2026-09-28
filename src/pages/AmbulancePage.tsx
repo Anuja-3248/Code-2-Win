@@ -9,6 +9,8 @@ import { LocationCard } from '../components/LocationCard';
 import { LoadingState } from '../components/LoadingState';
 import { CONFIG } from '../services/config';
 
+import { AmbulanceUnitHeader } from '../components/AmbulanceUnitHeader';
+
 export const AmbulancePage: React.FC = () => {
   const navigate = useNavigate();
 
@@ -54,6 +56,9 @@ export const AmbulancePage: React.FC = () => {
   return (
     <div className="animate-fade-in" style={{ padding: '2.5rem 0 4rem' }}>
       <div className="container-narrow">
+        {/* Permanent Ambulance Unit Header */}
+        <AmbulanceUnitHeader />
+
         {/* Page Header */}
         <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '0.65rem' }}>

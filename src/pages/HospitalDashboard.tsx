@@ -8,11 +8,16 @@ import {
   RefreshCw,
   Sparkles,
   Ambulance,
+  Radio,
+  Check,
+  CheckCircle2,
 } from 'lucide-react';
 import type { Hospital, ResourceType, HospitalActivityLog } from '../types/hospital';
 import { ApiService } from '../services/apiService';
 import { StatusBadge } from '../components/StatusBadge';
 import { ResourceUpdateForm } from '../components/ResourceUpdateForm';
+import { subscribeHospitalPreAlerts, updatePreAlertStatus } from '../services/ambulanceService';
+import type { PreAlertPayload } from '../types/ambulance';
 import { Link } from 'react-router-dom';
 
 interface HospitalDashboardProps {
@@ -24,6 +29,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
 }) => {
   const [hospital, setHospital] = useState<Hospital | null>(null);
   const [logs, setLogs] = useState<HospitalActivityLog[]>([]);
+  const [preAlerts, setPreAlerts] = useState<PreAlertPayload[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchDashboardData = async () => {
@@ -42,6 +48,11 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
   useEffect(() => {
     fetchDashboardData();
 
+    // Subscribe to real-time incoming ambulance pre-alerts
+    const unsubscribeAlerts = subscribeHospitalPreAlerts(hospitalId, (alerts) => {
+      setPreAlerts(alerts);
+    });
+
     const handleHospitalUpdate = () => {
       fetchDashboardData();
     };
@@ -49,10 +60,19 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
     window.addEventListener('resqlink-logs-updated', handleHospitalUpdate);
 
     return () => {
+      unsubscribeAlerts();
       window.removeEventListener('resqlink-hospitals-updated', handleHospitalUpdate);
       window.removeEventListener('resqlink-logs-updated', handleHospitalUpdate);
     };
   }, [hospitalId]);
+
+  const handleAcknowledgeAlert = async (alertId: string) => {
+    await updatePreAlertStatus(alertId, 'ACKNOWLEDGED');
+  };
+
+  const handleMarkArrived = async (alertId: string) => {
+    await updatePreAlertStatus(alertId, 'ARRIVED');
+  };
 
   const handleUpdateAvailability = async (resourceType: ResourceType, count: number): Promise<boolean> => {
     if (!hospital) return false;
@@ -138,6 +158,155 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
               <RefreshCw size={14} />
             </button>
           </div>
+        </div>
+
+        {/* Live Incoming Ambulance Pre-Alerts Radar */}
+        <div
+          style={{
+            backgroundColor: preAlerts.some((a) => a.status === 'EN_ROUTE') ? '#fef2f2' : '#f8fafc',
+            border: `1.5px solid ${preAlerts.some((a) => a.status === 'EN_ROUTE') ? '#fca5a5' : '#e2e8f0'}`,
+            borderRadius: '12px',
+            padding: '1.25rem',
+            marginBottom: '2rem',
+            boxShadow: preAlerts.some((a) => a.status === 'EN_ROUTE') ? '0 4px 12px rgba(239, 68, 68, 0.15)' : 'none',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              <div
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: '50%',
+                  backgroundColor: preAlerts.some((a) => a.status === 'EN_ROUTE') ? '#ef4444' : '#64748b',
+                  color: '#fff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  animation: preAlerts.some((a) => a.status === 'EN_ROUTE') ? 'pulse 1.5s infinite' : 'none',
+                }}
+              >
+                <Radio size={16} />
+              </div>
+              <div>
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: '#1e293b' }}>
+                  Live Inbound Ambulance Pre-Alerts
+                </h3>
+                <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>
+                  Real-time ER telemetry sent by approaching ambulances via persistent unit IDs.
+                </p>
+              </div>
+            </div>
+
+            <span
+              style={{
+                backgroundColor: preAlerts.length > 0 ? '#fee2e2' : '#e2e8f0',
+                color: preAlerts.length > 0 ? '#991b1b' : '#475569',
+                padding: '4px 10px',
+                borderRadius: '20px',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+              }}
+            >
+              {preAlerts.filter((a) => a.status !== 'ARRIVED').length} Active En Route
+            </span>
+          </div>
+
+          {preAlerts.length === 0 ? (
+            <div style={{ padding: '0.75rem 1rem', fontSize: '0.85rem', color: '#64748b', backgroundColor: '#ffffff', borderRadius: '8px', border: '1px dashed #cbd5e1', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <CheckCircle2 size={16} color="#10b981" />
+              ER Triage Radar Clear — No emergency ambulances currently en route to this facility.
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {preAlerts.map((alert) => (
+                <div
+                  key={alert.id}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    border: `1px solid ${alert.status === 'EN_ROUTE' ? '#f87171' : '#cbd5e1'}`,
+                    borderRadius: '10px',
+                    padding: '1rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '1rem',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem' }}>
+                    <div
+                      style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: '8px',
+                        backgroundColor: alert.status === 'EN_ROUTE' ? '#fee2e2' : '#f1f5f9',
+                        color: alert.status === 'EN_ROUTE' ? '#dc2626' : '#475569',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <Ambulance size={20} />
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                        <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>
+                          Unit: {alert.ambulanceId} ({alert.vehicleNumber})
+                        </strong>
+                        <span
+                          style={{
+                            backgroundColor: alert.status === 'EN_ROUTE' ? '#fef2f2' : alert.status === 'ACKNOWLEDGED' ? '#f0fdf4' : '#f1f5f9',
+                            color: alert.status === 'EN_ROUTE' ? '#dc2626' : alert.status === 'ACKNOWLEDGED' ? '#16a34a' : '#64748b',
+                            padding: '2px 8px',
+                            borderRadius: '4px',
+                            fontSize: '0.72rem',
+                            fontWeight: 700,
+                            border: '1px solid currentColor',
+                          }}
+                        >
+                          {alert.status === 'EN_ROUTE' ? '🚨 EN ROUTE' : alert.status === 'ACKNOWLEDGED' ? '✅ TRIAGE PREPARED' : 'ARRIVED'}
+                        </span>
+                        <span style={{ fontSize: '0.75rem', color: '#dc2626', fontWeight: 700 }}>
+                          ETA: ~{Math.round(alert.etaMinutes)} Mins ({alert.distanceKm.toFixed(1)} km)
+                        </span>
+                      </div>
+                      <div style={{ fontSize: '0.825rem', color: '#475569', marginTop: '3px' }}>
+                        Requested: <strong style={{ color: '#1d4ed8' }}>{alert.quantity}x {alert.requiredResource} Bed</strong> • Driver: {alert.driverName} (<a href={`tel:${alert.driverPhone}`} style={{ color: '#2563eb', textDecoration: 'none' }}>{alert.driverPhone}</a>)
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '2px' }}>
+                        Alert ID: {alert.id} • Dispatched at {new Date(alert.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    {alert.status === 'EN_ROUTE' && (
+                      <button
+                        type="button"
+                        onClick={() => handleAcknowledgeAlert(alert.id)}
+                        className="btn btn-sm"
+                        style={{ backgroundColor: '#16a34a', color: '#fff', fontSize: '0.8rem', padding: '0.4rem 0.8rem' }}
+                      >
+                        <Check size={14} /> Acknowledge & Prep Bay
+                      </button>
+                    )}
+                    {alert.status === 'ACKNOWLEDGED' && (
+                      <button
+                        type="button"
+                        onClick={() => handleMarkArrived(alert.id)}
+                        className="btn btn-sm btn-outline"
+                        style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem' }}
+                      >
+                        Mark Patient Arrived
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* 4 Clean Resource Cards */}
