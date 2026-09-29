@@ -4,7 +4,7 @@ import * as hospitalService from './hospitalService';
 import * as locationService from './locationService';
 
 /**
- * API Service Facade connecting directly to Firebase Firestore with local fallback.
+ * API Service Facade connecting directly to Firebase Firestore.
  */
 export const ApiService = {
   // Location & Geocoding
@@ -47,10 +47,5 @@ export const ApiService = {
   // Hospital activity audit trail
   async getActivityLogs() {
     return hospitalService.getStoredActivityLogs();
-  },
-
-  // Utility reset
-  resetDemoData() {
-    hospitalService.resetMockData();
   }
 };

@@ -15,7 +15,7 @@ import {
 import { auth, db, isFirebaseConfigured } from './firebase';
 import type { Hospital, ResourceType, ResourceUpdatePayload, HospitalActivityLog } from '../types/hospital';
 import type { EmergencyRequest, EmergencySearchResult, SuitableHospitalMatch } from '../types/emergency';
-import { INITIAL_MOCK_HOSPITALS, INITIAL_ACTIVITY_LOGS } from '../data/mockHospitals';
+import { INITIAL_ACTIVITY_LOGS } from '../data/mockHospitals';
 import { calculateDistanceKm, calculateAmbulanceEta } from './locationService';
 import { CONFIG } from './config';
 
@@ -37,22 +37,22 @@ function parseNum(vals: any[], fallback: number): number {
 }
 
 /**
- * Convert Firestore document data (supports both snake_case from deepseeck_db.html and camelCase) to Hospital interface
+ * Convert Firestore document data (supports both snake_case and camelCase) to Hospital interface
  */
 export function convertDocToHospital(id: string, data: any): Hospital {
   const lat = parseNum([data.latitude, data.lat], 18.5204);
   const lng = parseNum([data.longitude, data.lng], 73.8567);
-  const icuTotal = parseNum([data.icu_total, data.icuTotal], 20);
+  const icuTotal = parseNum([data.icu_total, data.icuTotal], 0);
   const icuAvail = parseNum([data.icu_available, data.icuAvailable], 0);
-  const ventTotal = parseNum([data.ventilator_total, data.ventilatorsTotal, data.ventilators_total], 10);
+  const ventTotal = parseNum([data.ventilator_total, data.ventilatorsTotal, data.ventilators_total], 0);
   const ventAvail = parseNum([data.ventilators_available, data.ventilatorsAvailable, data.ventilator_available], 0);
-  const genTotal = parseNum([data.general_beds_total, data.generalBedsTotal], 100);
+  const genTotal = parseNum([data.general_beds_total, data.generalBedsTotal], 0);
   const genAvail = parseNum([data.general_beds_available, data.generalBedsAvailable], 0);
-  const occRate = parseNum([data.occupancy_rate, data.occupancyRate], 75);
+  const occRate = parseNum([data.occupancy_rate, data.occupancyRate], 0);
   const adm30 = parseNum([data.admission_last_30min, data.admissionsLast30Min], 0);
   const dis30 = parseNum([data.discharge_last_30min, data.dischargesLast30Min], 0);
   const em30 = parseNum([data.emergency_arrival_last_30min, data.emergencyArrivalsLast30Min], 0);
-  const icu30 = parseNum([data.icu_available_30min_later, data.predictedIcuAvailable30Min], Math.max(0, icuAvail - 1));
+  const icu30 = parseNum([data.icu_available_30min_later, data.predictedIcuAvailable30Min], 0);
 
   return {
     id: id || data.hospital_id || data.id,
@@ -82,24 +82,19 @@ export function convertDocToHospital(id: string, data: any): Hospital {
  * Helper to initialize or retrieve current local storage hospital state
  */
 export function getStoredHospitals(): Hospital[] {
-  if (typeof window === 'undefined') return INITIAL_MOCK_HOSPITALS;
+  if (typeof window === 'undefined') return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY_HOSPITALS);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         return parsed;
       }
     }
   } catch (e) {
     console.warn('Error reading stored hospitals', e);
   }
-  try {
-    localStorage.setItem(STORAGE_KEY_HOSPITALS, JSON.stringify(INITIAL_MOCK_HOSPITALS));
-  } catch (e) {
-    console.warn('Error initialising stored hospitals', e);
-  }
-  return INITIAL_MOCK_HOSPITALS;
+  return [];
 }
 
 export function saveStoredHospitals(hospitals: Hospital[]): void {
@@ -118,7 +113,7 @@ export function getStoredActivityLogs(): HospitalActivityLog[] {
     const raw = localStorage.getItem(STORAGE_KEY_LOGS);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         return parsed;
       }
     }
@@ -141,7 +136,10 @@ export function addStoredActivityLog(log: HospitalActivityLog): void {
 }
 
 /**
- * Hospital Signup (using Firebase Authentication with fail-safe local storage backup)
+ * Hospital Signup:
+ * 1. Generates strictly sequential serial ID (H001, H002, H003...) based on existing Firestore documents.
+ * 2. Authenticates via Firebase Auth.
+ * 3. Creates clean hospital entry with 0 pre-filled capacity until hospital manager inputs live data.
  */
 export async function signupHospital(
   emailInput: string,
@@ -151,17 +149,33 @@ export async function signupHospital(
   const email = emailInput.trim().toLowerCase();
   const password = passwordInput;
 
-  // Calculate generated ID H001, H002...
-  const locals = getStoredHospitals();
+  // Compute sequential serial ID H001, H002, H003... directly from Firestore and LocalStorage
   let maxNum = 0;
+  const locals = getStoredHospitals();
   locals.forEach((h) => {
     if (/^H\d+$/i.test(h.id)) {
       const n = parseInt(h.id.slice(1), 10);
       if (n > maxNum) maxNum = n;
     }
   });
+
+  if (isFirebaseConfigured && db) {
+    try {
+      const snap = await getDocs(collection(db, FIRESTORE_COLLECTION));
+      snap.forEach((d) => {
+        const id = d.id;
+        if (/^H\d+$/i.test(id)) {
+          const n = parseInt(id.slice(1), 10);
+          if (n > maxNum) maxNum = n;
+        }
+      });
+    } catch (err) {
+      console.warn("Firestore serial ID check notice:", err);
+    }
+  }
+
   const generatedId = "H" + String(maxNum + 1).padStart(3, "0");
-  const defaultName = hospitalNameInput || `Hospital ${generatedId}`;
+  const defaultName = hospitalNameInput?.trim() || `Hospital ${generatedId}`;
   let isCloudSynced = false;
 
   if (isFirebaseConfigured && auth && db) {
@@ -170,7 +184,7 @@ export async function signupHospital(
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
       console.log("✅ Created Firebase Auth Account:", userCred.user.uid);
 
-      // 2. Save hospital metadata in Firestore WITHOUT storing plaintext password
+      // 2. Save clean hospital metadata in Firestore (0 pre-filled capacity until telemetry form saved)
       const docData = {
         hospital_id: generatedId,
         id: generatedId,
@@ -178,20 +192,20 @@ export async function signupHospital(
         email,
         hospital_name: defaultName,
         name: defaultName,
-        address: "Sangamvadi, Pune",
+        address: "Pune, Maharashtra",
         latitude: 18.5204,
         longitude: 73.8567,
-        icu_total: 20,
-        icu_available: 5,
-        ventilator_total: 10,
-        ventilators_available: 3,
-        general_beds_total: 100,
-        general_beds_available: 25,
-        occupancy_rate: 75,
+        icu_total: 0,
+        icu_available: 0,
+        ventilator_total: 0,
+        ventilators_available: 0,
+        general_beds_total: 0,
+        general_beds_available: 0,
+        occupancy_rate: 0,
         admission_last_30min: 0,
         discharge_last_30min: 0,
         emergency_arrival_last_30min: 0,
-        icu_available_30min_later: 4
+        icu_available_30min_later: 0
       };
       await setDoc(doc(db, FIRESTORE_COLLECTION, generatedId), docData);
       isCloudSynced = true;
@@ -209,26 +223,26 @@ export async function signupHospital(
     }
   }
 
-  // Always save to localStorage as backup / primary local state
+  // Save clean hospital state to local storage cache
   const newHospObj: Hospital = {
     id: generatedId,
     name: defaultName,
-    address: "Sangamvadi, Pune",
+    address: "Pune, Maharashtra",
     phone: "+91 20 6645 5100",
     emergencyContact: "+91 20 6645 5999",
     latitude: 18.5204,
     longitude: 73.8567,
-    icuTotal: 20,
-    icuAvailable: 5,
-    ventilatorsTotal: 10,
-    ventilatorsAvailable: 3,
-    generalBedsTotal: 100,
-    generalBedsAvailable: 25,
-    occupancyRate: 75,
+    icuTotal: 0,
+    icuAvailable: 0,
+    ventilatorsTotal: 0,
+    ventilatorsAvailable: 0,
+    generalBedsTotal: 0,
+    generalBedsAvailable: 0,
+    occupancyRate: 0,
     admissionsLast30Min: 0,
     dischargesLast30Min: 0,
     emergencyArrivalsLast30Min: 0,
-    predictedIcuAvailable30Min: 4,
+    predictedIcuAvailable30Min: 0,
     status: 'Operational',
     lastUpdated: 'Just now'
   };
@@ -246,7 +260,7 @@ export async function signupHospital(
 }
 
 /**
- * Hospital Login (using Firebase Authentication)
+ * Hospital Login (using Firebase Authentication & Firestore doc matching)
  */
 export async function loginHospital(
   emailInput: string,
@@ -291,7 +305,7 @@ export async function loginHospital(
     }
   }
 
-  // Fallback to stored local hospitals
+  // Local fallback if Firebase offline
   const locals = getStoredHospitals();
   const found = locals.find(h => h.id.toLowerCase() === email.split('@')[0] || email.includes(h.id.toLowerCase()));
   if (found) {
@@ -303,13 +317,11 @@ export async function loginHospital(
     };
   }
 
-  // Default fallback
-  const fallbackHosp = locals[0] || INITIAL_MOCK_HOSPITALS[0];
-  return { success: true, hospitalId: fallbackHosp.id, email: email, hospitalName: fallbackHosp.name };
+  return { success: false, hospitalId: '', email: '', hospitalName: '', error: 'No matching hospital record found.' };
 }
 
 /**
- * 1. Fetch nearby hospitals within radius (merging Firestore and LocalStorage)
+ * 1. Fetch nearby hospitals within radius strictly from Firestore database
  */
 export async function getNearbyHospitals(
   latitude: number,
@@ -318,11 +330,7 @@ export async function getNearbyHospitals(
 ): Promise<Hospital[]> {
   const allMap = new Map<string, Hospital>();
 
-  // 1. Populate from local storage state first
-  const stored = getStoredHospitals();
-  stored.forEach((h) => allMap.set(h.id, h));
-
-  // 2. Fetch from Firestore cloud if configured
+  // 1. Fetch from Firestore cloud database
   if (isFirebaseConfigured && db) {
     try {
       const snap = await getDocs(collection(db, FIRESTORE_COLLECTION));
@@ -335,6 +343,12 @@ export async function getNearbyHospitals(
     } catch (err) {
       console.warn('Firestore getNearbyHospitals notice:', err);
     }
+  }
+
+  // 2. Merge local storage state fallback
+  if (allMap.size === 0) {
+    const stored = getStoredHospitals();
+    stored.forEach((h) => allMap.set(h.id, h));
   }
 
   const all = Array.from(allMap.values());
@@ -355,7 +369,7 @@ export async function getNearbyHospitals(
 }
 
 /**
- * 2. Fetch single hospital current resource availability
+ * 2. Fetch single hospital current resource availability from Firestore
  */
 export async function getHospitalAvailability(hospitalId: string): Promise<Hospital | null> {
   if (isFirebaseConfigured && db && hospitalId) {
@@ -370,12 +384,7 @@ export async function getHospitalAvailability(hospitalId: string): Promise<Hospi
   }
 
   const all = getStoredHospitals();
-  let found = all.find((h) => h.id === hospitalId);
-
-  if (!found) {
-    found = INITIAL_MOCK_HOSPITALS.find((h) => h.id === hospitalId);
-  }
-
+  const found = all.find((h) => h.id === hospitalId);
   return found || null;
 }
 
@@ -399,7 +408,7 @@ export async function predictHospitalAvailability(
 }
 
 /**
- * 4. Save full hospital telemetry (matching deepseeck_db.html handleSave fields)
+ * 4. Save full hospital telemetry to Firestore database
  */
 export async function saveFullHospitalTelemetry(
   hospitalId: string,
@@ -412,6 +421,7 @@ export async function saveFullHospitalTelemetry(
     icu_available?: number;
     ventilator_total?: number;
     ventilators_available?: number;
+    general_beds_total?: number;
     general_beds_available?: number;
     occupancy_rate?: number;
     admission_last_30min?: number;
@@ -424,12 +434,13 @@ export async function saveFullHospitalTelemetry(
   const address = payload.address || '';
   const lat = payload.latitude ?? 18.5204;
   const lng = payload.longitude ?? 73.8567;
-  const icuTot = payload.icuTotal ?? payload.icu_total ?? 20;
+  const icuTot = payload.icuTotal ?? payload.icu_total ?? 0;
   const icuAvail = payload.icuAvailable ?? payload.icu_available ?? 0;
-  const ventTot = payload.ventilatorsTotal ?? payload.ventilator_total ?? 10;
+  const ventTot = payload.ventilatorsTotal ?? payload.ventilator_total ?? 0;
   const ventAvail = payload.ventilatorsAvailable ?? payload.ventilators_available ?? 0;
+  const genTot = payload.generalBedsTotal ?? payload.general_beds_total ?? 0;
   const genAvail = payload.generalBedsAvailable ?? payload.general_beds_available ?? 0;
-  const occRate = payload.occupancyRate ?? payload.occupancy_rate ?? 75;
+  const occRate = payload.occupancyRate ?? payload.occupancy_rate ?? 0;
   const adm30 = payload.admissionsLast30Min ?? payload.admission_last_30min ?? 0;
   const dis30 = payload.dischargesLast30Min ?? payload.discharge_last_30min ?? 0;
   const em30 = payload.emergencyArrivalsLast30Min ?? payload.emergency_arrival_last_30min ?? 0;
@@ -451,6 +462,8 @@ export async function saveFullHospitalTelemetry(
     ventilatorsTotal: ventTot,
     ventilators_available: ventAvail,
     ventilatorsAvailable: ventAvail,
+    general_beds_total: genTot,
+    generalBedsTotal: genTot,
     general_beds_available: genAvail,
     generalBedsAvailable: genAvail,
     occupancy_rate: occRate,
@@ -490,7 +503,7 @@ export async function saveFullHospitalTelemetry(
     icuAvailable: icuAvail,
     ventilatorsTotal: ventTot,
     ventilatorsAvailable: ventAvail,
-    generalBedsTotal: idx !== -1 ? locals[idx].generalBedsTotal : 100,
+    generalBedsTotal: genTot,
     generalBedsAvailable: genAvail,
     occupancyRate: occRate,
     admissionsLast30Min: adm30,
@@ -524,7 +537,7 @@ export async function saveFullHospitalTelemetry(
 }
 
 /**
- * 5. Match and find suitable hospitals based on ambulance request (Strict deepseeck_db.html matching algorithm)
+ * 5. Match and find suitable hospitals based on live Firestore data
  */
 export async function findSuitableHospitals(
   request: EmergencyRequest
@@ -627,74 +640,4 @@ export async function updateHospitalResources(
   }
 
   return saveFullHospitalTelemetry(hospitalId, target);
-}
-
-/**
- * Seed all 30 Pune hospitals into Firestore & LocalStorage with linear IDs (H001..H030)
- */
-export async function seedAll30HospitalsToFirestore(): Promise<number> {
-  let count = 0;
-  localStorage.setItem(STORAGE_KEY_HOSPITALS, JSON.stringify(INITIAL_MOCK_HOSPITALS));
-  localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(INITIAL_ACTIVITY_LOGS));
-  window.dispatchEvent(new Event('resqlink-hospitals-updated'));
-  window.dispatchEvent(new Event('resqlink-logs-updated'));
-
-  if (isFirebaseConfigured && db) {
-    for (const h of INITIAL_MOCK_HOSPITALS) {
-      try {
-        const payload = {
-          hospital_id: h.id,
-          id: h.id,
-          email: `admin@${h.id.toLowerCase()}.resqlink.org`,
-          hospital_name: h.name,
-          name: h.name,
-          address: h.address,
-          latitude: h.latitude,
-          longitude: h.longitude,
-          icu_total: h.icuTotal,
-          icuTotal: h.icuTotal,
-          icu_available: h.icuAvailable,
-          icuAvailable: h.icuAvailable,
-          ventilator_total: h.ventilatorsTotal,
-          ventilatorsTotal: h.ventilatorsTotal,
-          ventilators_available: h.ventilatorsAvailable,
-          ventilatorsAvailable: h.ventilatorsAvailable,
-          general_beds_total: h.generalBedsTotal,
-          generalBedsTotal: h.generalBedsTotal,
-          general_beds_available: h.generalBedsAvailable,
-          generalBedsAvailable: h.generalBedsAvailable,
-          occupancy_rate: h.occupancyRate,
-          occupancyRate: h.occupancyRate,
-          admission_last_30min: h.admissionsLast30Min,
-          admissionsLast30Min: h.admissionsLast30Min,
-          discharge_last_30min: h.dischargesLast30Min,
-          dischargesLast30Min: h.dischargesLast30Min,
-          emergency_arrival_last_30min: h.emergencyArrivalsLast30Min,
-          emergencyArrivalsLast30Min: h.emergencyArrivalsLast30Min,
-          icu_available_30min_later: h.predictedIcuAvailable30Min,
-          predictedIcuAvailable30Min: h.predictedIcuAvailable30Min,
-          status: h.status,
-          lastUpdated: 'Just now'
-        };
-        await setDoc(doc(db, FIRESTORE_COLLECTION, h.id), payload, { merge: true });
-        count++;
-      } catch (err: any) {
-        console.warn(`Seeding notice for ${h.id}:`, err.message);
-      }
-    }
-    console.log(`✅ Seeded ${count} linear hospitals to Firestore database!`);
-  }
-  return count;
-}
-
-if (typeof window !== 'undefined') {
-  (window as any).seedHospitals = seedAll30HospitalsToFirestore;
-}
-
-/**
- * Reset mock data to factory state
- */
-export function resetMockData(): void {
-  if (typeof window === 'undefined') return;
-  seedAll30HospitalsToFirestore();
 }

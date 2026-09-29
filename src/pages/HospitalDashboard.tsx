@@ -35,11 +35,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
   const fetchDashboardData = useCallback(async () => {
     setIsLoading(true);
     try {
-      let data = await ApiService.fetchHospitalById(hospitalId);
-      if (!data) {
-        ApiService.resetDemoData();
-        data = await ApiService.fetchHospitalById(hospitalId);
-      }
+      const data = await ApiService.fetchHospitalById(hospitalId);
       setHospital(data);
       const activityLogs = await ApiService.getActivityLogs();
       setLogs(activityLogs);
@@ -135,7 +131,6 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
         <button
           type="button"
           onClick={() => {
-            ApiService.resetDemoData();
             fetchDashboardData();
           }}
           className="btn btn-primary"

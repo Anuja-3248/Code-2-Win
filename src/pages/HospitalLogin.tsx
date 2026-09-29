@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Lock, Mail, ArrowRight, Ambulance, Building, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Logo } from '../components/Logo';
 import { ApiService } from '../services/apiService';
-
-import { INITIAL_MOCK_HOSPITALS } from '../data/mockHospitals';
+import type { Hospital } from '../types/hospital';
 
 interface HospitalLoginProps {
   onLoginSuccess: (hospitalId: string, hospitalName: string) => void;
@@ -13,11 +12,14 @@ interface HospitalLoginProps {
 export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
   const [mode, setMode] = useState<'login' | 'signup'>('login');
+
+  // Registered hospitals fetched live from Firestore
+  const [liveHospitals, setLiveHospitals] = useState<Hospital[]>([]);
   
   // Login form state
-  const [loginEmail, setLoginEmail] = useState('admin@h001.resqlink.org');
-  const [loginPassword, setLoginPassword] = useState('••••••••••••');
-  const [hospitalIdPreset, setHospitalIdPreset] = useState('H001');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [hospitalIdPreset, setHospitalIdPreset] = useState('');
 
   // Signup form state
   const [signupEmail, setSignupEmail] = useState('');
@@ -26,6 +28,22 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
 
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
+
+  useEffect(() => {
+    async function loadLiveHospitals() {
+      try {
+        const list = await ApiService.fetchNearbyHospitals(18.5204, 73.8567, 1000);
+        setLiveHospitals(list);
+        if (list.length > 0) {
+          setHospitalIdPreset(list[0].id);
+          setLoginEmail(`admin@${list[0].id.toLowerCase()}.resqlink.org`);
+        }
+      } catch (err) {
+        console.warn('Notice loading live hospitals:', err);
+      }
+    }
+    loadLiveHospitals();
+  }, []);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,10 +56,7 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
         onLoginSuccess(res.hospitalId, res.hospitalName);
         navigate('/hospital/dashboard');
       } else {
-        const found = INITIAL_MOCK_HOSPITALS.find(h => h.id === hospitalIdPreset);
-        const selectedName = found ? found.name : 'Dr. D. Y. Patil Hospital';
-        onLoginSuccess(hospitalIdPreset, selectedName);
-        navigate('/hospital/dashboard');
+        setStatusMessage({ text: res.error || 'Invalid credentials or account does not exist.', type: 'error' });
       }
     } catch (err: any) {
       setStatusMessage({ text: err.message || 'Login failed', type: 'error' });
@@ -59,7 +74,7 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
       const res = await ApiService.signupHospital(signupEmail, signupPassword, signupHospitalName);
       if (res.success) {
         setStatusMessage({
-          text: `✅ Account created! Hospital ID: ${res.hospitalId}. Entering dashboard...`,
+          text: `✅ Account created! Serial Facility ID: ${res.hospitalId}. Entering hospital dashboard...`,
           type: 'success',
         });
         setSignupEmail('');
@@ -69,7 +84,7 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
         setTimeout(() => {
           onLoginSuccess(res.hospitalId, res.hospitalName);
           navigate('/hospital/dashboard');
-        }, 800);
+        }, 1000);
       } else {
         setStatusMessage({ text: res.error || 'Signup failed', type: 'error' });
       }
@@ -100,26 +115,28 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
         >
           {/* Header */}
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.25rem' }}>
-              <Logo size="lg" clickable={false} />
+            <div style={{ display: 'inline-flex', justifyContent: 'center', marginBottom: '1rem' }}>
+              <Logo size="lg" />
             </div>
-
-            <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-navy)', marginBottom: '0.4rem' }}>
-              Hospital Portal
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+              Hospital Control Portal
             </h1>
-            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-              Update your hospital's live clinical resource telemetry
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+              {mode === 'login'
+                ? 'Sign in to update critical care telemetry mesh'
+                : 'Register your hospital facility with sequential serial ID'}
             </p>
           </div>
 
-          {/* Mode Switch Tabs */}
+          {/* Mode Switcher Tabs */}
           <div
             style={{
-              display: 'flex',
-              backgroundColor: 'rgba(224, 242, 254, 0.6)',
-              border: '1px solid rgba(186, 230, 253, 0.8)',
-              borderRadius: 'var(--radius-md)',
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '0.5rem',
+              backgroundColor: 'rgba(235, 238, 245, 0.8)',
               padding: '4px',
+              borderRadius: 'var(--radius-sm)',
               marginBottom: '1.75rem',
             }}
           >
@@ -130,17 +147,16 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
                 setStatusMessage(null);
               }}
               style={{
-                flex: 1,
                 padding: '0.6rem',
-                borderRadius: '8px',
                 border: 'none',
+                borderRadius: 'calc(var(--radius-sm) - 2px)',
                 backgroundColor: mode === 'login' ? '#FFFFFF' : 'transparent',
-                color: mode === 'login' ? 'var(--royal-700)' : 'var(--text-secondary)',
-                fontWeight: 800,
-                fontSize: '0.9rem',
+                color: mode === 'login' ? 'var(--primary)' : 'var(--text-secondary)',
+                fontWeight: mode === 'login' ? 700 : 500,
+                fontSize: '0.875rem',
+                boxShadow: mode === 'login' ? 'var(--shadow-sm)' : 'none',
                 cursor: 'pointer',
-                boxShadow: mode === 'login' ? '0 2px 8px rgba(10, 25, 47, 0.08), inset 0 1px 1px #ffffff' : 'none',
-                transition: 'all 0.2s',
+                transition: 'all 0.2s ease',
               }}
             >
               Sign In
@@ -152,17 +168,16 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
                 setStatusMessage(null);
               }}
               style={{
-                flex: 1,
                 padding: '0.6rem',
-                borderRadius: '8px',
                 border: 'none',
+                borderRadius: 'calc(var(--radius-sm) - 2px)',
                 backgroundColor: mode === 'signup' ? '#FFFFFF' : 'transparent',
-                color: mode === 'signup' ? 'var(--royal-700)' : 'var(--text-secondary)',
-                fontWeight: 800,
-                fontSize: '0.9rem',
+                color: mode === 'signup' ? 'var(--primary)' : 'var(--text-secondary)',
+                fontWeight: mode === 'signup' ? 700 : 500,
+                fontSize: '0.875rem',
+                boxShadow: mode === 'signup' ? 'var(--shadow-sm)' : 'none',
                 cursor: 'pointer',
-                boxShadow: mode === 'signup' ? '0 2px 8px rgba(10, 25, 47, 0.08), inset 0 1px 1px #ffffff' : 'none',
-                transition: 'all 0.2s',
+                transition: 'all 0.2s ease',
               }}
             >
               Create Account
@@ -175,30 +190,29 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
               style={{
                 padding: '0.75rem 1rem',
                 borderRadius: 'var(--radius-sm)',
-                marginBottom: '1.25rem',
+                marginBottom: '1.5rem',
                 fontSize: '0.85rem',
-                fontWeight: 600,
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
+                gap: '0.5rem',
                 backgroundColor:
                   statusMessage.type === 'success'
-                    ? '#d4edda'
+                    ? 'rgba(16, 185, 129, 0.1)'
                     : statusMessage.type === 'error'
-                    ? '#f8d7da'
-                    : '#d1ecf1',
+                    ? 'rgba(239, 68, 68, 0.1)'
+                    : 'rgba(37, 99, 235, 0.1)',
                 color:
                   statusMessage.type === 'success'
-                    ? '#155724'
+                    ? '#059669'
                     : statusMessage.type === 'error'
-                    ? '#721c24'
-                    : '#0c5460',
+                    ? '#DC2626'
+                    : 'var(--primary)',
                 border: `1px solid ${
                   statusMessage.type === 'success'
-                    ? '#c3e6cb'
+                    ? 'rgba(16, 185, 129, 0.2)'
                     : statusMessage.type === 'error'
-                    ? '#f5c6cb'
-                    : '#bee5eb'
+                    ? 'rgba(239, 68, 68, 0.2)'
+                    : 'rgba(37, 99, 235, 0.2)'
                 }`,
               }}
             >
@@ -211,42 +225,44 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
             </div>
           )}
 
-          {/* SIGN IN FORM */}
+          {/* LOGIN FORM */}
           {mode === 'login' && (
             <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              {/* Facility Select Preset */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                <label
-                  htmlFor="hospital-id-select"
-                  style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}
-                >
-                  Select Facility Preset
-                </label>
-                <select
-                  id="hospital-id-select"
-                  value={hospitalIdPreset}
-                  onChange={(e) => {
-                    const id = e.target.value;
-                    setHospitalIdPreset(id);
-                    setLoginEmail(`admin@${id.toLowerCase()}.resqlink.org`);
-                  }}
-                  style={{
-                    padding: '0.75rem 0.85rem',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1.5px solid var(--border-color)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    color: 'var(--text-main)',
-                    fontSize: '0.9375rem',
-                    outline: 'none',
-                  }}
-                >
-                  {INITIAL_MOCK_HOSPITALS.map((h) => (
-                    <option key={h.id} value={h.id}>
-                      [{h.id}] {h.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {/* Registered Facility Preset Select (If available in Firestore) */}
+              {liveHospitals.length > 0 && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                  <label
+                    htmlFor="hospital-id-select"
+                    style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}
+                  >
+                    Select Registered Facility
+                  </label>
+                  <select
+                    id="hospital-id-select"
+                    value={hospitalIdPreset}
+                    onChange={(e) => {
+                      const id = e.target.value;
+                      setHospitalIdPreset(id);
+                      setLoginEmail(`admin@${id.toLowerCase()}.resqlink.org`);
+                    }}
+                    style={{
+                      padding: '0.75rem 0.85rem',
+                      borderRadius: 'var(--radius-sm)',
+                      border: '1.5px solid var(--border-color)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      color: 'var(--text-main)',
+                      fontSize: '0.9375rem',
+                      outline: 'none',
+                    }}
+                  >
+                    {liveHospitals.map((h) => (
+                      <option key={h.id} value={h.id}>
+                        [{h.id}] {h.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {/* Email Field */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
@@ -269,20 +285,18 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
                       padding: '0.75rem 0.85rem 0.75rem 2.5rem',
                       borderRadius: 'var(--radius-sm)',
                       border: '1.5px solid var(--border-color)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                      color: 'var(--text-main)',
                       fontSize: '0.9375rem',
                       outline: 'none',
                     }}
                   />
                   <Mail
-                    size={16}
+                    size={17}
                     style={{
                       position: 'absolute',
-                      left: 12,
+                      left: '0.85rem',
                       top: '50%',
                       transform: 'translateY(-50%)',
-                      color: 'var(--text-muted)',
+                      color: 'var(--text-secondary)',
                     }}
                   />
                 </div>
@@ -290,12 +304,14 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
 
               {/* Password Field */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                <label
-                  htmlFor="hospital-password-input"
-                  style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}
-                >
-                  Password
-                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <label
+                    htmlFor="hospital-password-input"
+                    style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}
+                  >
+                    Password
+                  </label>
+                </div>
                 <div style={{ position: 'relative' }}>
                   <input
                     id="hospital-password-input"
@@ -303,26 +319,24 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
                     required
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
-                    placeholder="Your password"
+                    placeholder="••••••••••••"
                     style={{
                       width: '100%',
                       padding: '0.75rem 0.85rem 0.75rem 2.5rem',
                       borderRadius: 'var(--radius-sm)',
                       border: '1.5px solid var(--border-color)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                      color: 'var(--text-main)',
                       fontSize: '0.9375rem',
                       outline: 'none',
                     }}
                   />
                   <Lock
-                    size={16}
+                    size={17}
                     style={{
                       position: 'absolute',
-                      left: 12,
+                      left: '0.85rem',
                       top: '50%',
                       transform: 'translateY(-50%)',
-                      color: 'var(--text-muted)',
+                      color: 'var(--text-secondary)',
                     }}
                   />
                 </div>
@@ -331,25 +345,38 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="btn btn-primary btn-lg"
-                style={{ width: '100%', marginTop: '0.5rem' }}
+                className="btn btn-primary"
+                style={{
+                  width: '100%',
+                  padding: '0.85rem',
+                  marginTop: '0.5rem',
+                  fontSize: '0.95rem',
+                  fontWeight: 700,
+                  gap: '0.5rem',
+                }}
               >
-                {isLoading ? 'Signing In...' : 'Sign In'}
-                <ArrowRight size={18} />
+                {isLoading ? (
+                  <span>Authenticating...</span>
+                ) : (
+                  <>
+                    <span>Access Dashboard</span>
+                    <ArrowRight size={17} />
+                  </>
+                )}
               </button>
             </form>
           )}
 
-          {/* SIGN UP FORM */}
+          {/* SIGNUP FORM */}
           {mode === 'signup' && (
             <form onSubmit={handleSignupSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              {/* Hospital Name */}
+              {/* Hospital Name Field */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                 <label
                   htmlFor="signup-name-input"
                   style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}
                 >
-                  Hospital Facility Name
+                  Hospital / Facility Name
                 </label>
                 <div style={{ position: 'relative' }}>
                   <input
@@ -358,26 +385,24 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
                     required
                     value={signupHospitalName}
                     onChange={(e) => setSignupHospitalName(e.target.value)}
-                    placeholder="e.g. Metro Care Emergency Center"
+                    placeholder="e.g. Metro Multispeciality Hospital"
                     style={{
                       width: '100%',
                       padding: '0.75rem 0.85rem 0.75rem 2.5rem',
                       borderRadius: 'var(--radius-sm)',
                       border: '1.5px solid var(--border-color)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                      color: 'var(--text-main)',
                       fontSize: '0.9375rem',
                       outline: 'none',
                     }}
                   />
                   <Building
-                    size={16}
+                    size={17}
                     style={{
                       position: 'absolute',
-                      left: 12,
+                      left: '0.85rem',
                       top: '50%',
                       transform: 'translateY(-50%)',
-                      color: 'var(--text-muted)',
+                      color: 'var(--text-secondary)',
                     }}
                   />
                 </div>
@@ -389,7 +414,7 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
                   htmlFor="signup-email-input"
                   style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}
                 >
-                  Authorized Email
+                  Authorized Email Address
                 </label>
                 <div style={{ position: 'relative' }}>
                   <input
@@ -404,20 +429,18 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
                       padding: '0.75rem 0.85rem 0.75rem 2.5rem',
                       borderRadius: 'var(--radius-sm)',
                       border: '1.5px solid var(--border-color)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                      color: 'var(--text-main)',
                       fontSize: '0.9375rem',
                       outline: 'none',
                     }}
                   />
                   <Mail
-                    size={16}
+                    size={17}
                     style={{
                       position: 'absolute',
-                      left: 12,
+                      left: '0.85rem',
                       top: '50%',
                       transform: 'translateY(-50%)',
-                      color: 'var(--text-muted)',
+                      color: 'var(--text-secondary)',
                     }}
                   />
                 </div>
@@ -429,35 +452,34 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
                   htmlFor="signup-password-input"
                   style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}
                 >
-                  Password
+                  Choose Password (min 6 chars)
                 </label>
                 <div style={{ position: 'relative' }}>
                   <input
                     id="signup-password-input"
                     type="password"
                     required
+                    minLength={6}
                     value={signupPassword}
                     onChange={(e) => setSignupPassword(e.target.value)}
-                    placeholder="Choose a secure password"
+                    placeholder="Create a strong password"
                     style={{
                       width: '100%',
                       padding: '0.75rem 0.85rem 0.75rem 2.5rem',
                       borderRadius: 'var(--radius-sm)',
                       border: '1.5px solid var(--border-color)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                      color: 'var(--text-main)',
                       fontSize: '0.9375rem',
                       outline: 'none',
                     }}
                   />
                   <Lock
-                    size={16}
+                    size={17}
                     style={{
                       position: 'absolute',
-                      left: 12,
+                      left: '0.85rem',
                       top: '50%',
                       transform: 'translateY(-50%)',
-                      color: 'var(--text-muted)',
+                      color: 'var(--text-secondary)',
                     }}
                   />
                 </div>
@@ -466,63 +488,57 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="btn btn-primary btn-lg"
-                style={{ width: '100%', marginTop: '0.5rem' }}
+                className="btn btn-primary"
+                style={{
+                  width: '100%',
+                  padding: '0.85rem',
+                  marginTop: '0.5rem',
+                  fontSize: '0.95rem',
+                  fontWeight: 700,
+                  gap: '0.5rem',
+                }}
               >
-                {isLoading ? 'Creating Account...' : 'Create Account'}
-                <ArrowRight size={18} />
+                {isLoading ? (
+                  <span>Registering Account...</span>
+                ) : (
+                  <>
+                    <span>Create Hospital Account</span>
+                    <ArrowRight size={17} />
+                  </>
+                )}
               </button>
             </form>
           )}
 
-          {/* Prototype Quick Selector Helpers */}
-          <div
-            style={{
-              marginTop: '1.75rem',
-              paddingTop: '1.25rem',
-              borderTop: '1px solid var(--border-color)',
-              fontSize: '0.8rem',
-              color: 'var(--text-secondary)',
-            }}
-          >
-            <span style={{ fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '0.5rem' }}>
-              Demo Facility Quick Select:
-            </span>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-              <button
-                type="button"
-                onClick={() => selectHospitalPreset('H001', 'admin@h001.resqlink.org')}
-                className="btn btn-outline btn-sm"
-                style={{ fontSize: '0.75rem' }}
-              >
-                H001 - D.Y. Patil
-              </button>
-              <button
-                type="button"
-                onClick={() => selectHospitalPreset('H002', 'admin@h002.resqlink.org')}
-                className="btn btn-outline btn-sm"
-                style={{ fontSize: '0.75rem' }}
-              >
-                H002 - JeevanJyoti
-              </button>
-              <button
-                type="button"
-                onClick={() => selectHospitalPreset('H003', 'admin@h003.resqlink.org')}
-                className="btn btn-outline btn-sm"
-                style={{ fontSize: '0.75rem' }}
-              >
-                H003 - Metro
-              </button>
-              <button
-                type="button"
-                onClick={() => selectHospitalPreset('H018', 'admin@h018.resqlink.org')}
-                className="btn btn-outline btn-sm"
-                style={{ fontSize: '0.75rem' }}
-              >
-                H018 - MIMER
-              </button>
+          {/* Quick Select for Registered Hospitals */}
+          {liveHospitals.length > 0 && mode === 'login' && (
+            <div
+              style={{
+                marginTop: '1.75rem',
+                paddingTop: '1.25rem',
+                borderTop: '1px solid var(--border-color)',
+                fontSize: '0.8rem',
+                color: 'var(--text-secondary)',
+              }}
+            >
+              <span style={{ fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '0.5rem' }}>
+                Registered Facilities in Database:
+              </span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                {liveHospitals.slice(0, 6).map((h) => (
+                  <button
+                    key={h.id}
+                    type="button"
+                    onClick={() => selectHospitalPreset(h.id, `admin@${h.id.toLowerCase()}.resqlink.org`)}
+                    className="btn btn-outline btn-sm"
+                    style={{ fontSize: '0.75rem' }}
+                  >
+                    {h.id} - {h.name.split(' ')[0]}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Return to Ambulance Portal Shortcut */}
