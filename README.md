@@ -762,7 +762,7 @@ Implement production-grade:
 @Anuja-3248 - Anuja Pawar
 @codewithvardan - Vardan Darunte 
 @rohankotsulwar-hue - Rohan Kotsulwar
-@sarthakankolekar-lab - Sarthal Ankolekar
+@sarthakankolekar-lab - Sarthak Ankolekar
 
 ***
 
