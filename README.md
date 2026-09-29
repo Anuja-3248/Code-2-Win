@@ -759,10 +759,10 @@ Implement production-grade:
 ***
 
 ## 👥 Team
-@Anuja-3248 - Anuja Pawar
-@codewithvardan - Vardan Darunte 
-@rohankotsulwar-hue - Rohan Kotsulwar
-@sarthakankolekar-lab - Sarthak Ankolekar
+1.@Anuja-3248 - Anuja Pawar
+2.@codewithvardan - Vardan Darunte 
+3.@rohankotsulwar-hue - Rohan Kotsulwar
+4.@sarthakankolekar-lab - Sarthak Ankolekar
 
 ***
 
@@ -774,4 +774,4 @@ ResQLink was developed as an emergency healthcare technology solution focused on
 
 ## 📄 License
 
-This project is developed for educational, hackathon, and prototype purposes.
+This project is developed for educational, hackathon, and prototype purposes. 
