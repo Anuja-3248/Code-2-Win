@@ -8,7 +8,11 @@ import {
   where,
   limit
 } from 'firebase/firestore';
-import { db, isFirebaseConfigured } from './firebase';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+} from 'firebase/auth';
+import { auth, db, isFirebaseConfigured } from './firebase';
 import type { Hospital, ResourceType, ResourceUpdatePayload, HospitalActivityLog } from '../types/hospital';
 import type { EmergencyRequest, EmergencySearchResult, SuitableHospitalMatch } from '../types/emergency';
 import { INITIAL_MOCK_HOSPITALS, INITIAL_ACTIVITY_LOGS } from '../data/mockHospitals';
@@ -137,7 +141,7 @@ export function addStoredActivityLog(log: HospitalActivityLog): void {
 }
 
 /**
- * Hospital Signup (matching deepseeck_db.html logic with fail-safe local storage backup)
+ * Hospital Signup (using Firebase Authentication with fail-safe local storage backup)
  */
 export async function signupHospital(
   emailInput: string,
@@ -160,20 +164,18 @@ export async function signupHospital(
   const defaultName = hospitalNameInput || `Hospital ${generatedId}`;
   let isCloudSynced = false;
 
-  if (isFirebaseConfigured && db) {
+  if (isFirebaseConfigured && auth && db) {
     try {
-      // Check if email is already registered in Firestore
-      const q = query(collection(db, FIRESTORE_COLLECTION), where("email", "==", email), limit(1));
-      const dup = await getDocs(q);
-      if (!dup.empty) {
-        return { success: false, hospitalId: '', email: '', hospitalName: '', error: 'Email already registered in system!' };
-      }
+      // 1. Authenticate & create user in Firebase Authentication
+      const userCred = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("✅ Created Firebase Auth Account:", userCred.user.uid);
 
+      // 2. Save hospital metadata in Firestore WITHOUT storing plaintext password
       const docData = {
         hospital_id: generatedId,
         id: generatedId,
+        uid: userCred.user.uid,
         email,
-        password,
         hospital_name: defaultName,
         name: defaultName,
         address: "Sangamvadi, Pune",
@@ -194,7 +196,16 @@ export async function signupHospital(
       await setDoc(doc(db, FIRESTORE_COLLECTION, generatedId), docData);
       isCloudSynced = true;
     } catch (err: any) {
-      console.warn("Firestore signup error (fallback to local state):", err.message);
+      console.warn("Firebase Auth / Firestore signup notice:", err.message);
+      if (err.code === 'auth/email-already-in-use') {
+        return { success: false, hospitalId: '', email: '', hospitalName: '', error: 'Email already registered in Firebase Auth!' };
+      }
+      if (err.code === 'auth/weak-password') {
+        return { success: false, hospitalId: '', email: '', hospitalName: '', error: 'Password must be at least 6 characters long.' };
+      }
+      if (err.code === 'auth/invalid-email') {
+        return { success: false, hospitalId: '', email: '', hospitalName: '', error: 'Invalid email address.' };
+      }
     }
   }
 
@@ -235,7 +246,7 @@ export async function signupHospital(
 }
 
 /**
- * Hospital Login (matching deepseeck_db.html email/password logic)
+ * Hospital Login (using Firebase Authentication)
  */
 export async function loginHospital(
   emailInput: string,
@@ -244,12 +255,16 @@ export async function loginHospital(
   const email = emailInput.trim().toLowerCase();
   const password = passwordInput;
 
-  if (isFirebaseConfigured && db) {
+  if (isFirebaseConfigured && auth && db) {
     try {
+      // 1. Authenticate credentials securely with Firebase Auth
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("✅ Authenticated with Firebase Auth:", email);
+
+      // 2. Fetch hospital document from Firestore by email or ID
       const q = query(
         collection(db, FIRESTORE_COLLECTION),
         where("email", "==", email),
-        where("password", "==", password),
         limit(1)
       );
       const snap = await getDocs(q);
@@ -265,7 +280,14 @@ export async function loginHospital(
         };
       }
     } catch (err: any) {
-      console.warn("Firestore login error (falling back to local state):", err.message);
+      console.warn("Firebase Auth login error:", err.message);
+      if (
+        err.code === 'auth/user-not-found' ||
+        err.code === 'auth/wrong-password' ||
+        err.code === 'auth/invalid-credential'
+      ) {
+        return { success: false, hospitalId: '', email: '', hospitalName: '', error: 'Invalid email or password credentials.' };
+      }
     }
   }
 
@@ -624,7 +646,6 @@ export async function seedAll30HospitalsToFirestore(): Promise<number> {
           hospital_id: h.id,
           id: h.id,
           email: `admin@${h.id.toLowerCase()}.resqlink.org`,
-          password: 'password123',
           hospital_name: h.name,
           name: h.name,
           address: h.address,
