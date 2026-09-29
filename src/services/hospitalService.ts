@@ -315,10 +315,12 @@ export function addStoredActivityLog(log: HospitalActivityLog): void {
 export async function signupHospital(
   emailInput: string,
   passwordInput: string,
-  hospitalNameInput?: string
+  hospitalNameInput?: string,
+  addressInput?: string
 ): Promise<{ success: boolean; hospitalId: string; email: string; hospitalName: string; isCloudSynced?: boolean; error?: string }> {
   const email = emailInput.trim().toLowerCase();
   const password = passwordInput;
+  const address = addressInput?.trim() || "Pune, Maharashtra";
 
   let maxNum = 0;
   if (isFirebaseConfigured && db) {
@@ -393,7 +395,7 @@ export async function signupHospital(
         email,
         hospital_name: defaultName,
         name: defaultName,
-        address: "Pune, Maharashtra",
+        address: address,
         latitude: 18.5204,
         longitude: 73.8567,
         lastUpdated: 'Just now'
@@ -424,7 +426,7 @@ export async function signupHospital(
   const newHospObj: Hospital = {
     id: generatedId,
     name: defaultName,
-    address: "Pune, Maharashtra",
+    address: address,
     phone: "+91 20 6645 5100",
     emergencyContact: "+91 20 6645 5999",
     latitude: 18.5204,
@@ -790,6 +792,76 @@ export async function saveFullHospitalTelemetry(
   });
 
   return { success: true, hospital: updatedHospitalObj };
+}
+
+/**
+ * Auto-deduct resource availability and update admissions / occupied counts when accepting an ambulance booking
+ */
+export async function acceptBookingResourceDeduction(
+  hospitalId: string,
+  resourceType: ResourceType,
+  quantity: number = 1
+): Promise<boolean> {
+  const current = await getHospitalAvailability(hospitalId);
+  if (!current) return false;
+
+  let icuAvail = current.icuAvailable ?? 0;
+  let icuOcc = current.icuOccupied ?? 0;
+  let icuAdm = current.admissionsIcu30min ?? current.admissionsLast30Min ?? 0;
+
+  let ventAvail = current.ventilatorsAvailable ?? 0;
+  let ventOcc = current.ventilatorsOccupied ?? 0;
+  let ventAdm = current.admissionsVentilator30min ?? 0;
+
+  let bedAvail = current.generalBedsAvailable ?? 0;
+  let bedOcc = current.generalBedsOccupied ?? 0;
+  let bedAdm = current.admissionsSimpleBeds30min ?? 0;
+
+  let emArrivals = (current.emergencyArrivals30min ?? current.emergencyArrivalsLast30Min ?? 0) + 1;
+
+  if (resourceType === 'ICU') {
+    icuAvail = Math.max(0, icuAvail - quantity);
+    icuOcc += quantity;
+    icuAdm += quantity;
+  } else if (resourceType === 'Ventilator') {
+    ventAvail = Math.max(0, ventAvail - quantity);
+    ventOcc += quantity;
+    ventAdm += quantity;
+  } else if (resourceType === 'General Bed') {
+    bedAvail = Math.max(0, bedAvail - quantity);
+    bedOcc += quantity;
+    bedAdm += quantity;
+  }
+
+  const payload = {
+    hospital_id: current.id,
+    date_time: get30MinSlotKey(),
+    name: current.name,
+    hospital_name: current.name,
+    address: current.address,
+    latitude: current.latitude,
+    longitude: current.longitude,
+
+    icu_available: icuAvail,
+    icu_occupied: icuOcc,
+    ventilator_available: ventAvail,
+    ventilator_occupied: ventOcc,
+    simple_beds_available: bedAvail,
+    simple_beds_occupied: bedOcc,
+
+    admissions_icu_30min: icuAdm,
+    admissions_ventilator_30min: ventAdm,
+    admissions_simple_beds_30min: bedAdm,
+
+    discharges_icu_30min: current.dischargesIcu30min ?? current.dischargesLast30Min ?? 0,
+    discharges_ventilator_30min: current.dischargesVentilator30min ?? 0,
+    discharges_simple_beds_30min: current.dischargesSimpleBeds30min ?? 0,
+
+    emergency_arrivals_30min: emArrivals,
+  };
+
+  const res = await saveFullHospitalTelemetry(current.id, payload);
+  return res.success;
 }
 
 /**

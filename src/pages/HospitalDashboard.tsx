@@ -103,6 +103,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
         attendingDoctor: attendingDoctorInput,
         hospitalNotes: hospitalNotesInput,
       });
+      window.dispatchEvent(new Event('resqlink-hospitals-updated'));
       await fetchDashboardData();
       setSelectedBookingForAccept(null);
     } catch (err) {

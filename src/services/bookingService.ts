@@ -10,7 +10,7 @@ import {
 import { db, isFirebaseConfigured } from './firebase';
 import type { EmergencyBooking, CreateBookingInput, AcceptBookingPayload, BookingStatus } from '../types/booking';
 import { getStoredAmbulanceProfile } from './ambulanceService';
-import { ApiService } from './apiService';
+import { acceptBookingResourceDeduction } from './hospitalService';
 
 const STORAGE_BOOKINGS_KEY = 'resqlink_all_bookings';
 const STORAGE_ACTIVE_BOOKING_ID = 'resqlink_active_booking_id';
@@ -134,32 +134,11 @@ export async function acceptHospitalBooking(
     console.error('Failed to update booking locally:', err);
   }
 
-  // Auto-decrement hospital capacity and log activity if target booking exists
+  // Auto-deduct resource availability and update telemetry counts for accepted booking
   if (targetBooking) {
     const booking = targetBooking as EmergencyBooking;
     try {
-      const currentHosp = await ApiService.fetchHospitalById(booking.targetHospitalId);
-      if (currentHosp) {
-        if (booking.requiredResource === 'ICU') {
-          await ApiService.updateAvailability(currentHosp.id, {
-            resourceType: 'ICU',
-            availableCount: Math.max(0, currentHosp.icuAvailable - booking.quantity),
-            updatedBy: `Reserved for Booking ${booking.id}`,
-          });
-        } else if (booking.requiredResource === 'Ventilator') {
-          await ApiService.updateAvailability(currentHosp.id, {
-            resourceType: 'Ventilator',
-            availableCount: Math.max(0, currentHosp.ventilatorsAvailable - booking.quantity),
-            updatedBy: `Reserved for Booking ${booking.id}`,
-          });
-        } else if (booking.requiredResource === 'General Bed') {
-          await ApiService.updateAvailability(currentHosp.id, {
-            resourceType: 'General Bed',
-            availableCount: Math.max(0, currentHosp.generalBedsAvailable - booking.quantity),
-            updatedBy: `Reserved for Booking ${booking.id}`,
-          });
-        }
-      }
+      await acceptBookingResourceDeduction(booking.targetHospitalId, booking.requiredResource as any, booking.quantity || 1);
     } catch (e) {
       console.warn('Auto capacity decrement note:', e);
     }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Lock, Mail, ArrowRight, Ambulance, Building, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Lock, Mail, ArrowRight, Ambulance, Building, CheckCircle2, AlertCircle, MapPin } from 'lucide-react';
 import { Logo } from '../components/Logo';
 import { ApiService } from '../services/apiService';
 import type { Hospital } from '../types/hospital';
@@ -25,6 +25,7 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
   const [signupHospitalName, setSignupHospitalName] = useState('');
+  const [signupAddress, setSignupAddress] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
@@ -71,7 +72,7 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
     setStatusMessage(null);
 
     try {
-      const res = await ApiService.signupHospital(signupEmail, signupPassword, signupHospitalName);
+      const res = await ApiService.signupHospital(signupEmail, signupPassword, signupHospitalName, signupAddress);
       if (res.success) {
         setStatusMessage({
           text: `✅ Account created! Serial Facility ID: ${res.hospitalId}. Entering hospital dashboard...`,
@@ -80,6 +81,7 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
         setSignupEmail('');
         setSignupPassword('');
         setSignupHospitalName('');
+        setSignupAddress('');
 
         setTimeout(() => {
           onLoginSuccess(res.hospitalId, res.hospitalName);
@@ -396,6 +398,44 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
                     }}
                   />
                   <Building
+                    size={17}
+                    style={{
+                      position: 'absolute',
+                      left: '0.85rem',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: 'var(--text-secondary)',
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Hospital Address Field */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                <label
+                  htmlFor="signup-address-input"
+                  style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}
+                >
+                  Hospital Address / Location
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    id="signup-address-input"
+                    type="text"
+                    required
+                    value={signupAddress}
+                    onChange={(e) => setSignupAddress(e.target.value)}
+                    placeholder="e.g. Karve Road, Erandwane, Pune"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 0.85rem 0.75rem 2.5rem',
+                      borderRadius: 'var(--radius-sm)',
+                      border: '1.5px solid var(--border-color)',
+                      fontSize: '0.9375rem',
+                      outline: 'none',
+                    }}
+                  />
+                  <MapPin
                     size={17}
                     style={{
                       position: 'absolute',

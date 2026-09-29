@@ -13,8 +13,8 @@ export const ApiService = {
   },
 
   // Hospital Authentication & Signup (Firestore collection "hospitals")
-  async signupHospital(email: string, password: string, hospitalName?: string) {
-    return hospitalService.signupHospital(email, password, hospitalName);
+  async signupHospital(email: string, password: string, hospitalName?: string, address?: string) {
+    return hospitalService.signupHospital(email, password, hospitalName, address);
   },
 
   async loginHospital(email: string, password: string) {
