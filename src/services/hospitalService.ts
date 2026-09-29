@@ -78,9 +78,6 @@ export function convertDocToHospital(id: string, data: any): Hospital {
   };
 }
 
-/**
- * Helper to initialize or retrieve current local storage hospital state
- */
 export function getStoredHospitals(): Hospital[] {
   if (typeof window === 'undefined') return [];
   try {
@@ -100,7 +97,11 @@ export function getStoredHospitals(): Hospital[] {
 export function saveStoredHospitals(hospitals: Hospital[]): void {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(STORAGE_KEY_HOSPITALS, JSON.stringify(hospitals));
+    if (hospitals.length === 0) {
+      localStorage.removeItem(STORAGE_KEY_HOSPITALS);
+    } else {
+      localStorage.setItem(STORAGE_KEY_HOSPITALS, JSON.stringify(hospitals));
+    }
     window.dispatchEvent(new Event('resqlink-hospitals-updated'));
   } catch (e) {
     console.warn('Error saving hospitals', e);
@@ -149,16 +150,7 @@ export async function signupHospital(
   const email = emailInput.trim().toLowerCase();
   const password = passwordInput;
 
-  // Compute sequential serial ID H001, H002, H003... directly from Firestore and LocalStorage
   let maxNum = 0;
-  const locals = getStoredHospitals();
-  locals.forEach((h) => {
-    if (/^H\d+$/i.test(h.id)) {
-      const n = parseInt(h.id.slice(1), 10);
-      if (n > maxNum) maxNum = n;
-    }
-  });
-
   if (isFirebaseConfigured && db) {
     try {
       const snap = await getDocs(collection(db, FIRESTORE_COLLECTION));
@@ -172,6 +164,14 @@ export async function signupHospital(
     } catch (err) {
       console.warn("Firestore serial ID check notice:", err);
     }
+  } else {
+    const locals = getStoredHospitals();
+    locals.forEach((h) => {
+      if (/^H\d+$/i.test(h.id)) {
+        const n = parseInt(h.id.slice(1), 10);
+        if (n > maxNum) maxNum = n;
+      }
+    });
   }
 
   const generatedId = "H" + String(maxNum + 1).padStart(3, "0");
@@ -223,7 +223,6 @@ export async function signupHospital(
     }
   }
 
-  // Save clean hospital state to local storage cache
   const newHospObj: Hospital = {
     id: generatedId,
     name: defaultName,
@@ -247,8 +246,9 @@ export async function signupHospital(
     lastUpdated: 'Just now'
   };
 
-  locals.push(newHospObj);
-  saveStoredHospitals(locals);
+  const currentLocals = getStoredHospitals();
+  currentLocals.push(newHospObj);
+  saveStoredHospitals(currentLocals);
 
   return {
     success: true,
@@ -330,7 +330,7 @@ export async function getNearbyHospitals(
 ): Promise<Hospital[]> {
   const allMap = new Map<string, Hospital>();
 
-  // 1. Fetch from Firestore cloud database
+  // 1. Fetch strictly from Firestore cloud database
   if (isFirebaseConfigured && db) {
     try {
       const snap = await getDocs(collection(db, FIRESTORE_COLLECTION));
@@ -339,14 +339,17 @@ export async function getNearbyHospitals(
           const cloudHosp = convertDocToHospital(d.id, d.data());
           allMap.set(cloudHosp.id, cloudHosp);
         });
+      } else {
+        // Firestore is empty - clear stale localStorage cache
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem(STORAGE_KEY_HOSPITALS);
+        }
       }
     } catch (err) {
       console.warn('Firestore getNearbyHospitals notice:', err);
     }
-  }
-
-  // 2. Merge local storage state fallback
-  if (allMap.size === 0) {
+  } else {
+    // Offline local storage mode
     const stored = getStoredHospitals();
     stored.forEach((h) => allMap.set(h.id, h));
   }
@@ -369,7 +372,7 @@ export async function getNearbyHospitals(
 }
 
 /**
- * 2. Fetch single hospital current resource availability from Firestore
+ * 2. Fetch single hospital current resource availability strictly from Firestore
  */
 export async function getHospitalAvailability(hospitalId: string): Promise<Hospital | null> {
   if (isFirebaseConfigured && db && hospitalId) {
@@ -537,7 +540,7 @@ export async function saveFullHospitalTelemetry(
 }
 
 /**
- * 5. Match and find suitable hospitals based on live Firestore data
+ * 5. Match and find suitable hospitals strictly based on live Firestore data
  */
 export async function findSuitableHospitals(
   request: EmergencyRequest
