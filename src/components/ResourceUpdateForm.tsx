@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, CheckCircle2, AlertCircle, Clock, Save } from 'lucide-react';
+import { Activity, CheckCircle2, AlertCircle, Clock, Save, MapPin, Building2 } from 'lucide-react';
 import type { Hospital, ResourceType } from '../types/hospital';
 import { calculateTelemetryMetrics, validateTelemetryInputs, get30MinSlotKey } from '../services/hospitalService';
 
@@ -16,7 +16,13 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
   // Active 30-min slot key
   const [currentSlotKey, setCurrentSlotKey] = useState(get30MinSlotKey());
 
-  // Input states
+  // Facility metadata state
+  const [hospitalName, setHospitalName] = useState(hospital.name || '');
+  const [address, setAddress] = useState(hospital.address || '');
+  const [latitude, setLatitude] = useState<number | string>(hospital.latitude ?? 18.5204);
+  const [longitude, setLongitude] = useState<number | string>(hospital.longitude ?? 73.8567);
+
+  // Resource Input states
   const [icuAvailable, setIcuAvailable] = useState<number | string>(hospital.icuAvailable ?? 0);
   const [icuOccupied, setIcuOccupied] = useState<number | string>(hospital.icuOccupied ?? 0);
 
@@ -46,6 +52,11 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
   useEffect(() => {
     if (prevHospitalIdRef.current !== hospital.id) {
       prevHospitalIdRef.current = hospital.id;
+      setHospitalName(hospital.name || '');
+      setAddress(hospital.address || '');
+      setLatitude(hospital.latitude ?? 18.5204);
+      setLongitude(hospital.longitude ?? 73.8567);
+
       setIcuAvailable(hospital.icuAvailable ?? 0);
       setIcuOccupied(hospital.icuOccupied ?? 0);
       setVentilatorAvailable(hospital.ventilatorsAvailable ?? 0);
@@ -72,6 +83,27 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
     }, 15000);
     return () => clearInterval(timer);
   }, []);
+
+  // Fetch current GPS location
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      setErrorMessage('Geolocation is not supported by your browser.');
+      return;
+    }
+    setSuccessMessage('📍 Fetching live GPS coordinates...');
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setLatitude(parseFloat(pos.coords.latitude.toFixed(6)));
+        setLongitude(parseFloat(pos.coords.longitude.toFixed(6)));
+        setSuccessMessage(`✅ GPS Updated: ${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`);
+        setTimeout(() => setSuccessMessage(null), 4000);
+      },
+      (err) => {
+        setErrorMessage(`❌ Location error: ${err.message}`);
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
 
   // Parse numbers safely for real-time live preview
   const numIcuAvail = Math.max(0, Number(icuAvailable) || 0);
@@ -116,6 +148,14 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
     setSuccessMessage(null);
     setErrorMessage(null);
 
+    const parsedLat = typeof latitude === 'string' ? parseFloat(latitude) : latitude;
+    const parsedLng = typeof longitude === 'string' ? parseFloat(longitude) : longitude;
+
+    if (isNaN(parsedLat) || isNaN(parsedLng)) {
+      setErrorMessage('❌ Please enter valid numerical latitude and longitude coordinates.');
+      return;
+    }
+
     const rawInputs = {
       icu_available: numIcuAvail,
       icu_occupied: numIcuOcc,
@@ -147,17 +187,17 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
       const payload = {
         hospital_id: hospital.id,
         date_time: currentSlotKey,
-        name: hospital.name,
-        hospital_name: hospital.name,
-        address: hospital.address,
-        latitude: hospital.latitude,
-        longitude: hospital.longitude,
+        name: hospitalName.trim() || hospital.name,
+        hospital_name: hospitalName.trim() || hospital.name,
+        address: address.trim() || hospital.address,
+        latitude: parsedLat,
+        longitude: parsedLng,
         ...rawInputs,
       };
 
       const success = await onSaveFullTelemetry(payload);
       if (success) {
-        setSuccessMessage(`✅ 30-Min Telemetry row [${currentSlotKey}] saved and archived to Firestore!`);
+        setSuccessMessage(`✅ Facility & 30-Min Telemetry row [${currentSlotKey}] saved to Firestore!`);
         setTimeout(() => setSuccessMessage(null), 5000);
       } else {
         setErrorMessage('Failed to save telemetry record. Please try again.');
@@ -221,7 +261,7 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
             <span>Hospital Resource Telemetry</span>
           </h3>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
-            30-Minute Interval Real-Time Telemetry & Historical Log System
+            30-Minute Interval Real-Time Telemetry & Facility Location System
           </p>
         </div>
 
@@ -290,6 +330,77 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
       )}
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        {/* SECTION 0: FACILITY NAME, ADDRESS & GPS COORDINATES */}
+        <div style={{ backgroundColor: 'rgba(238, 242, 255, 0.7)', padding: '1.25rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(99, 102, 241, 0.25)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#4F46E5', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Building2 size={18} />
+              <span>Facility Metadata & GPS Geolocation</span>
+            </h4>
+
+            <button
+              type="button"
+              onClick={handleGetLocation}
+              className="btn btn-secondary"
+              style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', gap: '6px', backgroundColor: '#FFFFFF', border: '1px solid #4F46E5', color: '#4F46E5' }}
+            >
+              <MapPin size={14} /> Fetch GPS Location
+            </button>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+            <div>
+              <label style={labelStyle}>Hospital Name</label>
+              <input
+                type="text"
+                required
+                value={hospitalName}
+                onChange={(e) => setHospitalName(e.target.value)}
+                placeholder="e.g. Sanjivani Multispeciality Hospital"
+                style={inputStyle}
+              />
+            </div>
+
+            <div>
+              <label style={labelStyle}>Address / Area</label>
+              <input
+                type="text"
+                required
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="e.g. Deccan Gymkhana, Pune"
+                style={inputStyle}
+              />
+            </div>
+
+            <div>
+              <label style={labelStyle}>Latitude (GPS)</label>
+              <input
+                type="number"
+                step="any"
+                required
+                value={latitude}
+                onChange={(e) => setLatitude(e.target.value)}
+                placeholder="18.5204"
+                style={inputStyle}
+              />
+            </div>
+
+            <div>
+              <label style={labelStyle}>Longitude (GPS)</label>
+              <input
+                type="number"
+                step="any"
+                required
+                value={longitude}
+                onChange={(e) => setLongitude(e.target.value)}
+                placeholder="73.8567"
+                style={inputStyle}
+              />
+            </div>
+          </div>
+        </div>
+
         {/* SECTION 1: ICU BEDS */}
         <div style={{ backgroundColor: 'rgba(248, 250, 252, 0.7)', padding: '1.25rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
           <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -505,7 +616,7 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
                 🚨 Emergency Arrivals (Last 30 Min)
               </h4>
               <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                Tracked as a separate feature for future machine learning prediction models (not directly subtracted from availability).
+                Tracked as a separate feature for future machine learning prediction models.
               </p>
             </div>
             <div style={{ width: '160px' }}>
@@ -537,11 +648,11 @@ export const ResourceUpdateForm: React.FC<ResourceUpdateFormProps> = ({
             }}
           >
             {isSubmitting ? (
-              <span>Saving 30-Min Telemetry...</span>
+              <span>Saving Telemetry...</span>
             ) : (
               <>
                 <Save size={18} />
-                <span>Save 30-Min Telemetry Record</span>
+                <span>Save Facility & Telemetry Data</span>
               </>
             )}
           </button>
