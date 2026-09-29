@@ -4,10 +4,13 @@
 
 > **Connecting ambulances to the right care, faster.**
 
+🌐 **Live Application:** [https://code-2-win.vercel.app/](https://code-2-win.vercel.app/)
+
 ResQLink is a real-time emergency healthcare coordination platform that helps ambulance teams identify suitable hospitals based on resource availability, distance, estimated travel time, and predicted capacity.
 
 The platform creates a communication bridge between ambulances and hospitals by allowing hospitals to update emergency resource information through a dedicated dashboard while enabling ambulance teams to search, compare, and book available resources.
 
+> **Live Deployment:** [code-2-win.vercel.app](https://code-2-win.vercel.app/)  
 > **Project status:** Educational and hackathon prototype  
 > **Primary location:** Pune, Maharashtra, India  
 > **Team:** Code-2-Win
