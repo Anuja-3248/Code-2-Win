@@ -8,7 +8,6 @@ import {
   MapPin,
   Sparkles,
   ShieldCheck,
-  Activity,
   Radio,
   Zap,
 } from 'lucide-react';
@@ -195,67 +194,6 @@ export const LandingPage: React.FC = () => {
                       pointerEvents: 'none',
                     }}
                   />
-                </div>
-
-                {/* Floating 3D Telemetry Pill */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: 24,
-                    left: 24,
-                    right: 24,
-                    backgroundColor: 'rgba(10, 25, 47, 0.92)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                    border: '1px solid rgba(56, 189, 248, 0.4)',
-                    borderRadius: 'var(--radius-md)',
-                    padding: '0.85rem 1.15rem',
-                    color: '#FFFFFF',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 12px 28px rgba(5, 14, 29, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3)',
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div
-                      style={{
-                        width: 32,
-                        height: 32,
-                        borderRadius: '8px',
-                        backgroundColor: 'rgba(37, 99, 235, 0.3)',
-                        border: '1px solid #38BDF8',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#38BDF8',
-                      }}
-                    >
-                      <Activity size={16} />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.02em' }}>Live Hospital Sync</div>
-                      <div style={{ fontSize: '0.72rem', color: '#BAE6FD' }}>Real-Time Route & Capacity Active</div>
-                    </div>
-                  </div>
-
-                  <span
-                    style={{
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      backgroundColor: 'rgba(5, 150, 105, 0.25)',
-                      border: '1px solid rgba(16, 185, 129, 0.6)',
-                      color: '#6EE7B7',
-                      padding: '3px 8px',
-                      borderRadius: 'var(--radius-pill)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                    }}
-                  >
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#10B981' }} />
-                    99.8% Online
-                  </span>
                 </div>
               </div>
             </div>
