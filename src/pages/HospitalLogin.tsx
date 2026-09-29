@@ -90,7 +90,7 @@ export const HospitalLogin: React.FC<HospitalLoginProps> = ({ onLoginSuccess }) 
       <div className="container-narrow" style={{ maxWidth: 500 }}>
         {/* Main Authentication Card - 3D Glass Coated */}
         <div
-          className="resq-card"
+          className="resq-card reveal-scale"
           style={{
             padding: '2.75rem 2.25rem',
             border: '1.5px solid rgba(255, 255, 255, 0.95)',

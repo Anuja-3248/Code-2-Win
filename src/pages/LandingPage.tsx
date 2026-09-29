@@ -37,7 +37,7 @@ export const LandingPage: React.FC = () => {
             }}
           >
             {/* Left Content */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.6rem', position: 'relative', zIndex: 2 }}>
+            <div className="reveal-slide-right" style={{ display: 'flex', flexDirection: 'column', gap: '1.6rem', position: 'relative', zIndex: 2 }}>
               {/* Clinical Precision Badge */}
               <div style={{ display: 'inline-flex', alignItems: 'center' }}>
                 <span
@@ -142,7 +142,7 @@ export const LandingPage: React.FC = () => {
             </div>
 
             {/* Right: High-quality 3D Glass Coated Paramedic Frame */}
-            <div style={{ position: 'relative' }}>
+            <div className="reveal-slide-left delay-200" style={{ position: 'relative' }}>
               {/* Ambient Glow Background behind Glass */}
               <div
                 style={{
@@ -282,7 +282,7 @@ export const LandingPage: React.FC = () => {
           >
             {/* Real Doctor Care Photograph with 3D Glass Layering */}
             <div
-              className="resq-card"
+              className="resq-card reveal-slide-right"
               style={{
                 padding: '12px',
                 borderRadius: 'var(--radius-xl)',
@@ -313,7 +313,7 @@ export const LandingPage: React.FC = () => {
             </div>
 
             {/* Editorial Text Block */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.35rem' }}>
+            <div className="reveal-slide-left delay-100" style={{ display: 'flex', flexDirection: 'column', gap: '1.35rem' }}>
               <div style={{ display: 'inline-flex' }}>
                 <span className="badge badge-teal">
                   <ShieldCheck size={14} />
@@ -362,7 +362,7 @@ export const LandingPage: React.FC = () => {
                 }}
               >
                 <div
-                  className="resq-card"
+                  className="resq-card reveal-scale delay-100"
                   style={{
                     padding: '1.1rem 1rem',
                     textAlign: 'center',
@@ -380,7 +380,7 @@ export const LandingPage: React.FC = () => {
                 </div>
 
                 <div
-                  className="resq-card"
+                  className="resq-card reveal-scale delay-200"
                   style={{
                     padding: '1.1rem 1rem',
                     textAlign: 'center',
@@ -398,7 +398,7 @@ export const LandingPage: React.FC = () => {
                 </div>
 
                 <div
-                  className="resq-card"
+                  className="resq-card reveal-scale delay-300"
                   style={{
                     padding: '1.1rem 1rem',
                     textAlign: 'center',
@@ -430,7 +430,7 @@ export const LandingPage: React.FC = () => {
       >
         <div className="container-responsive">
           {/* Section Header */}
-          <div style={{ maxWidth: '680px', marginBottom: '3.5rem' }}>
+          <div className="reveal-slide-up" style={{ maxWidth: '680px', marginBottom: '3.5rem' }}>
             <div style={{ display: 'inline-flex', marginBottom: '0.65rem' }}>
               <span className="badge badge-teal">
                 <Zap size={14} />
@@ -460,7 +460,7 @@ export const LandingPage: React.FC = () => {
           >
             {/* Step 1 */}
             <div
-              className="resq-card resq-card-interactive"
+              className="resq-card resq-card-interactive reveal-slide-up stagger-1"
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -500,7 +500,7 @@ export const LandingPage: React.FC = () => {
 
             {/* Step 2 */}
             <div
-              className="resq-card resq-card-interactive"
+              className="resq-card resq-card-interactive reveal-slide-up stagger-2"
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -540,7 +540,7 @@ export const LandingPage: React.FC = () => {
 
             {/* Step 3 */}
             <div
-              className="resq-card resq-card-interactive"
+              className="resq-card resq-card-interactive reveal-slide-up stagger-3"
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -589,7 +589,7 @@ export const LandingPage: React.FC = () => {
         }}
       >
         <div className="container-responsive">
-          <div style={{ textAlign: 'center', maxWidth: '660px', margin: '0 auto 3.5rem' }}>
+          <div className="reveal-slide-up" style={{ textAlign: 'center', maxWidth: '660px', margin: '0 auto 3.5rem' }}>
             <div style={{ display: 'inline-flex', marginBottom: '0.65rem' }}>
               <span className="badge badge-teal">
                 <Sparkles size={14} />
@@ -613,7 +613,7 @@ export const LandingPage: React.FC = () => {
 
           {/* 3D Glass Browser Mockup */}
           <div
-            className="resq-card"
+            className="resq-card reveal-scale delay-200"
             style={{
               maxWidth: '880px',
               margin: '0 auto',
@@ -758,7 +758,7 @@ export const LandingPage: React.FC = () => {
             }}
           >
             {/* Left Content */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.35rem' }}>
+            <div className="reveal-slide-right" style={{ display: 'flex', flexDirection: 'column', gap: '1.35rem' }}>
               <div style={{ display: 'inline-flex' }}>
                 <span className="badge badge-teal">
                   <Hospital size={14} />
@@ -812,7 +812,7 @@ export const LandingPage: React.FC = () => {
 
             {/* Right: Real Hospital Staff Image with 3D Glass Frame */}
             <div
-              className="resq-card"
+              className="resq-card reveal-slide-left delay-200"
               style={{
                 padding: '12px',
                 borderRadius: 'var(--radius-xl)',
@@ -854,7 +854,7 @@ export const LandingPage: React.FC = () => {
       >
         <div className="container-narrow">
           <div
-            className="glass-navy-panel"
+            className="glass-navy-panel reveal-scale"
             style={{
               padding: '4rem 2.5rem',
               borderRadius: 'var(--radius-xl)',

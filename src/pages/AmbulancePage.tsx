@@ -60,7 +60,7 @@ export const AmbulancePage: React.FC = () => {
         <AmbulanceUnitHeader />
 
         {/* Page Header */}
-        <div style={{ marginBottom: '2.25rem', textAlign: 'center' }}>
+        <div className="reveal-slide-down" style={{ marginBottom: '2.25rem', textAlign: 'center' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '0.75rem' }}>
             <span className="badge badge-teal" style={{ padding: '0.4rem 0.95rem', fontSize: '0.825rem' }}>
               <Ambulance size={15} style={{ color: 'var(--royal-600)' }} />
@@ -87,7 +87,7 @@ export const AmbulancePage: React.FC = () => {
         {/* Large Emergency Request Card - 3D Glass Coated */}
         <form onSubmit={handleSubmit}>
           <div
-            className="resq-card"
+            className="resq-card reveal-scale delay-100"
             style={{
               padding: '2.5rem 2.25rem',
               display: 'flex',
@@ -99,7 +99,7 @@ export const AmbulancePage: React.FC = () => {
             }}
           >
             {/* Step 1: Select Resource */}
-            <div>
+            <div className="reveal-slide-up delay-200">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.15rem' }}>
                 <label
                   style={{
@@ -150,7 +150,7 @@ export const AmbulancePage: React.FC = () => {
             <div style={{ height: 1, backgroundColor: 'rgba(186, 230, 253, 0.6)' }} />
 
             {/* Step 2: Quantity Selector */}
-            <div>
+            <div className="reveal-slide-up delay-300">
               <QuantitySelector
                 value={quantity}
                 onChange={(q) => setQuantity(q)}
@@ -164,7 +164,7 @@ export const AmbulancePage: React.FC = () => {
             <div style={{ height: 1, backgroundColor: 'rgba(186, 230, 253, 0.6)' }} />
 
             {/* Step 3: Ambulance Location */}
-            <div>
+            <div className="reveal-slide-up delay-400">
               <LocationCard
                 location={location}
                 onLocationChange={(newLoc) => setLocation(newLoc)}
@@ -174,7 +174,7 @@ export const AmbulancePage: React.FC = () => {
             <div style={{ height: 1, backgroundColor: 'rgba(186, 230, 253, 0.6)' }} />
 
             {/* Step 4: Submit Button & Note */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+            <div className="reveal-slide-up delay-500" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               <button
                 type="submit"
                 className="btn btn-primary btn-lg"

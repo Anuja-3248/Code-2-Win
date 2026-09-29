@@ -101,7 +101,7 @@ export const HospitalResultsPage: React.FC = () => {
     <div className="animate-fade-in" style={{ padding: '2.5rem 0 4rem' }}>
       <div className="container-responsive">
         {/* Top Breadcrumb / Return to Search */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+        <div className="reveal-slide-down" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
           <Link
             to="/ambulance"
             className="btn btn-outline btn-sm"
@@ -124,7 +124,7 @@ export const HospitalResultsPage: React.FC = () => {
 
         {/* Request Summary Top Card - 3D Glass Coated */}
         <div
-          className="resq-card"
+          className="resq-card reveal-slide-down delay-100"
           style={{
             backgroundColor: 'rgba(255, 255, 255, 0.88)',
             border: '1.5px solid rgba(186, 230, 253, 0.8)',
@@ -169,7 +169,7 @@ export const HospitalResultsPage: React.FC = () => {
         </div>
 
         {/* Results Heading */}
-        <div style={{ marginBottom: '1.5rem' }}>
+        <div className="reveal-slide-up delay-200" style={{ marginBottom: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.25rem' }}>
             <h1 style={{ fontSize: '1.85rem', fontWeight: 800 }}>Suitable Hospitals Nearby</h1>
             <span className="badge badge-teal">

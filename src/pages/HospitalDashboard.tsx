@@ -152,6 +152,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
       <div className="container-responsive">
         {/* Top Operational Status Header */}
         <div
+          className="reveal-slide-down"
           style={{
             display: 'flex',
             alignItems: 'flex-start',
@@ -210,7 +211,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
 
         {/* Live Incoming Ambulance Pre-Alerts Radar - 3D Glass Panel */}
         <div
-          className="resq-card"
+          className="resq-card reveal-slide-up delay-100"
           style={{
             backgroundColor: preAlerts.some((a) => a.status === 'EN_ROUTE') ? 'rgba(254, 242, 242, 0.9)' : 'rgba(255, 255, 255, 0.85)',
             border: `1.5px solid ${preAlerts.some((a) => a.status === 'EN_ROUTE') ? 'rgba(252, 165, 165, 0.8)' : 'rgba(186, 230, 253, 0.8)'}`,
@@ -361,7 +362,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
           }}
         >
           {/* Card 1: ICU Beds */}
-          <div className="resq-card" style={{ border: '1px solid var(--border-color)' }}>
+          <div className="resq-card reveal-slide-up stagger-1" style={{ border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)' }}>
                 <div style={{ width: 34, height: 34, borderRadius: '8px', backgroundColor: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -390,7 +391,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
           </div>
 
           {/* Card 2: Ventilators */}
-          <div className="resq-card" style={{ border: '1px solid var(--border-color)' }}>
+          <div className="resq-card reveal-slide-up stagger-2" style={{ border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)' }}>
                 <div style={{ width: 34, height: 34, borderRadius: '8px', backgroundColor: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -419,7 +420,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
           </div>
 
           {/* Card 3: General Beds */}
-          <div className="resq-card" style={{ border: '1px solid var(--border-color)' }}>
+          <div className="resq-card reveal-slide-up stagger-3" style={{ border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)' }}>
                 <div style={{ width: 34, height: 34, borderRadius: '8px', backgroundColor: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -448,7 +449,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
           </div>
 
           {/* Card 4: Emergency Capacity & Occupancy */}
-          <div className="resq-card" style={{ border: '1px solid var(--border-color)' }}>
+          <div className="resq-card reveal-slide-up stagger-4" style={{ border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)' }}>
                 <div style={{ width: 34, height: 34, borderRadius: '8px', backgroundColor: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -486,7 +487,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
           }}
         >
           {/* Left Column: Update Resource Section */}
-          <div>
+          <div className="reveal-slide-right delay-200">
             <ResourceUpdateForm
               hospital={hospital}
               onUpdate={handleUpdateAvailability}
@@ -522,7 +523,7 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
           </div>
 
           {/* Right Column: Recent Activity Timeline */}
-          <div className="resq-card" style={{ border: '1px solid var(--border-color)' }}>
+          <div className="resq-card reveal-slide-left delay-200" style={{ border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Clock size={18} style={{ color: 'var(--primary)' }} />

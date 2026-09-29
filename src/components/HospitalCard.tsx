@@ -41,9 +41,11 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
       ? hospital.predictedVentilatorsAvailable30Min || Math.max(0, currentCount - 1)
       : hospital.predictedGeneralBedsAvailable30Min || Math.max(0, currentCount - 2);
 
+  const staggerClass = rank ? `stagger-${Math.min(rank, 6)}` : 'reveal-slide-up';
+
   return (
     <div
-      className="resq-card resq-card-interactive animate-fade-in"
+      className={`resq-card resq-card-interactive reveal-slide-up ${staggerClass}`}
       style={{
         display: 'flex',
         flexDirection: 'column',
