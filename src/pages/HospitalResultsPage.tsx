@@ -12,6 +12,8 @@ import { ApiService } from '../services/apiService';
 import { HospitalCard } from '../components/HospitalCard';
 import { HospitalDetailModal } from '../components/HospitalDetailModal';
 import { NavigationModal } from '../components/NavigationModal';
+import { BookingModal } from '../components/BookingModal';
+import { ActiveBookingBanner } from '../components/ActiveBookingBanner';
 import { EmptyState } from '../components/EmptyState';
 import { LoadingState } from '../components/LoadingState';
 import { CONFIG } from '../services/config';
@@ -49,6 +51,7 @@ export const HospitalResultsPage: React.FC = () => {
   // Modals state
   const [selectedHospitalForDetails, setSelectedHospitalForDetails] = useState<Hospital | null>(null);
   const [selectedHospitalForNavigation, setSelectedHospitalForNavigation] = useState<Hospital | null>(null);
+  const [selectedHospitalForBooking, setSelectedHospitalForBooking] = useState<Hospital | null>(null);
 
   const executeSearch = useCallback(async (reqToUse = request) => {
     setIsSearching(true);
@@ -100,6 +103,14 @@ export const HospitalResultsPage: React.FC = () => {
   return (
     <div className="animate-fade-in" style={{ padding: '2.5rem 0 4rem' }}>
       <div className="container-responsive">
+        {/* Active Inbound Booking Live Radar & Status HUD */}
+        <ActiveBookingBanner
+          onOpenNavigation={(b) => {
+            const found = matches.find((m) => m.hospital.id === b.targetHospitalId);
+            if (found) setSelectedHospitalForNavigation(found.hospital);
+          }}
+        />
+
         {/* Top Breadcrumb / Return to Search */}
         <div className="reveal-slide-down" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
           <Link
@@ -209,6 +220,7 @@ export const HospitalResultsPage: React.FC = () => {
                 etaMinutes={match.etaMinutes}
                 onViewHospital={(hosp) => setSelectedHospitalForDetails(hosp)}
                 onNavigate={handleNavigateTrigger}
+                onBookHospital={(hosp) => setSelectedHospitalForBooking(hosp)}
               />
             ))}
           </div>
@@ -222,6 +234,7 @@ export const HospitalResultsPage: React.FC = () => {
           requestedResource={request.resource}
           onClose={() => setSelectedHospitalForDetails(null)}
           onNavigate={handleNavigateTrigger}
+          onBookHospital={(hosp) => setSelectedHospitalForBooking(hosp)}
         />
       )}
 
@@ -230,6 +243,18 @@ export const HospitalResultsPage: React.FC = () => {
         <NavigationModal
           hospital={selectedHospitalForNavigation}
           onClose={() => setSelectedHospitalForNavigation(null)}
+        />
+      )}
+
+      {/* Emergency Bed Booking Modal */}
+      {selectedHospitalForBooking && (
+        <BookingModal
+          hospital={selectedHospitalForBooking}
+          request={request}
+          onClose={() => setSelectedHospitalForBooking(null)}
+          onBookingSuccess={() => {
+            setSelectedHospitalForBooking(null);
+          }}
         />
       )}
     </div>

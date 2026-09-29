@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Navigation, Eye, Clock, Sparkles } from 'lucide-react';
+import { MapPin, Navigation, Eye, Clock, Sparkles, Send } from 'lucide-react';
 import type { Hospital, ResourceType } from '../types/hospital';
 import { StatusBadge, type StatusBadgeVariant } from './StatusBadge';
 import { LivePredictionIndicator } from './LivePredictionIndicator';
@@ -13,6 +13,7 @@ interface HospitalCardProps {
   etaMinutes: number;
   onViewHospital: (hospital: Hospital) => void;
   onNavigate: (hospital: Hospital) => void;
+  onBookHospital?: (hospital: Hospital) => void;
   rank?: number;
 }
 
@@ -25,6 +26,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
   etaMinutes,
   onViewHospital,
   onNavigate,
+  onBookHospital,
   rank,
 }) => {
   const currentCount =
@@ -49,37 +51,55 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '1.35rem',
-        border: rank === 1 ? '2px solid var(--royal-600)' : '1px solid rgba(186, 230, 253, 0.7)',
+        gap: '1.25rem',
+        border: rank === 1 ? '2.5px solid var(--royal-600)' : '1px solid rgba(186, 230, 253, 0.7)',
         position: 'relative',
-        backgroundColor: rank === 1 ? 'rgba(255, 255, 255, 0.94)' : 'rgba(255, 255, 255, 0.85)',
-        boxShadow: rank === 1 ? '0 16px 36px -6px rgba(37, 99, 235, 0.18), inset 0 1px 1px #ffffff' : 'var(--shadow-3d)',
+        overflow: 'visible',
+        backgroundColor: rank === 1 ? 'rgba(255, 255, 255, 0.96)' : 'rgba(255, 255, 255, 0.85)',
+        boxShadow: rank === 1 ? '0 16px 36px -6px rgba(37, 99, 235, 0.2), inset 0 1px 1px #ffffff' : 'var(--shadow-3d)',
       }}
     >
       {/* Top Best Match Ribbon if rank 1 */}
       {rank === 1 && (
-        <div
-          style={{
-            position: 'absolute',
-            top: -12,
-            right: 18,
-            background: 'var(--royal-gradient-3d)',
-            color: '#ffffff',
-            fontSize: '0.75rem',
-            fontWeight: 800,
-            padding: '3px 12px',
-            borderRadius: 'var(--radius-pill)',
-            letterSpacing: '0.04em',
-            textTransform: 'uppercase',
-            boxShadow: '0 4px 12px rgba(29, 78, 216, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-          }}
-        >
-          <Sparkles size={12} />
-          Optimal Route Match
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginBottom: '-0.25rem' }}>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onNavigate(hospital);
+            }}
+            title={`Open optimal emergency GPS navigation route to ${hospital.name}`}
+            aria-label={`View optimal route navigation to ${hospital.name}`}
+            style={{
+              background: 'var(--royal-gradient-3d)',
+              color: '#ffffff',
+              fontSize: '0.8rem',
+              fontWeight: 800,
+              padding: '6px 14px',
+              borderRadius: 'var(--radius-pill)',
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              boxShadow: '0 4px 14px rgba(29, 78, 216, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              border: '1px solid rgba(255, 255, 255, 0.4)',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
+              e.currentTarget.style.boxShadow = '0 6px 18px rgba(29, 78, 216, 0.55)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0) scale(1)';
+              e.currentTarget.style.boxShadow = '0 4px 14px rgba(29, 78, 216, 0.35)';
+            }}
+          >
+            <Sparkles size={14} className="status-dot-pulse" />
+            <span>Optimal Route Match</span>
+            <Navigation size={13} style={{ marginLeft: '2px', opacity: 0.95 }} />
+          </button>
         </div>
       )}
 
@@ -143,30 +163,48 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '0.85rem',
+          gap: '0.75rem',
           paddingTop: '0.65rem',
           borderTop: '1px solid rgba(186, 230, 253, 0.5)',
           flexWrap: 'wrap',
         }}
       >
+        {onBookHospital && (
+          <button
+            type="button"
+            onClick={() => onBookHospital(hospital)}
+            className="btn btn-primary"
+            style={{
+              flex: '1 1 180px',
+              backgroundColor: '#E11D48',
+              backgroundImage: 'linear-gradient(135deg, #F43F5E 0%, #E11D48 50%, #BE123C 100%)',
+              boxShadow: '0 6px 18px -2px rgba(225, 29, 72, 0.45)',
+              gap: '6px',
+            }}
+          >
+            <Send size={15} />
+            Book Bed / Send Alert
+          </button>
+        )}
+
         <button
           type="button"
           onClick={() => onViewHospital(hospital)}
           className="btn btn-secondary"
-          style={{ flex: 1, minWidth: '130px' }}
+          style={{ flex: '1 1 130px' }}
         >
-          <Eye size={16} />
+          <Eye size={15} />
           View Hospital
         </button>
 
         <button
           type="button"
           onClick={() => onNavigate(hospital)}
-          className="btn btn-primary"
-          style={{ flex: 1, minWidth: '130px' }}
+          className="btn btn-outline"
+          style={{ flex: '1 1 130px', borderColor: 'var(--royal-600)', color: 'var(--royal-700)' }}
         >
-          <Navigation size={16} />
-          Navigate Now
+          <Navigation size={15} />
+          Navigate
         </button>
       </div>
     </div>

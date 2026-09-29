@@ -11,13 +11,19 @@ import {
   Radio,
   Check,
   CheckCircle2,
+  X,
 } from 'lucide-react';
 import type { Hospital, ResourceType, HospitalActivityLog } from '../types/hospital';
 import { ApiService } from '../services/apiService';
 import { StatusBadge } from '../components/StatusBadge';
 import { ResourceUpdateForm } from '../components/ResourceUpdateForm';
-import { subscribeHospitalPreAlerts, updatePreAlertStatus } from '../services/ambulanceService';
-import type { PreAlertPayload } from '../types/ambulance';
+import {
+  subscribeHospitalBookings,
+  acceptHospitalBooking,
+  declineHospitalBooking,
+  markPatientAdmitted
+} from '../services/bookingService';
+import type { EmergencyBooking } from '../types/booking';
 import { Link } from 'react-router-dom';
 
 interface HospitalDashboardProps {
@@ -29,8 +35,15 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
 }) => {
   const [hospital, setHospital] = useState<Hospital | null>(null);
   const [logs, setLogs] = useState<HospitalActivityLog[]>([]);
-  const [preAlerts, setPreAlerts] = useState<PreAlertPayload[]>([]);
+  const [bookings, setBookings] = useState<EmergencyBooking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Booking Acceptance Dialog State
+  const [selectedBookingForAccept, setSelectedBookingForAccept] = useState<EmergencyBooking | null>(null);
+  const [allocatedBayInput, setAllocatedBayInput] = useState('ICU Bay 02 (Trauma Wing)');
+  const [attendingDoctorInput, setAttendingDoctorInput] = useState('Dr. Arvind Sharma (Chief of Trauma)');
+  const [hospitalNotesInput, setHospitalNotesInput] = useState('Critical care team scrubbed. Direct ambulance to ER Gate 2.');
+  const [isProcessingBooking, setIsProcessingBooking] = useState(false);
 
   const fetchDashboardData = useCallback(async () => {
     setIsLoading(true);
@@ -55,9 +68,9 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
     };
     load();
 
-    // Subscribe to real-time incoming ambulance pre-alerts
-    const unsubscribeAlerts = subscribeHospitalPreAlerts(hospitalId, (alerts) => {
-      if (isMounted) setPreAlerts(alerts);
+    // Subscribe to real-time hospital booking requests
+    const unsubscribeBookings = subscribeHospitalBookings(hospitalId, (bookingList) => {
+      if (isMounted) setBookings(bookingList);
     });
 
     const handleHospitalUpdate = () => {
@@ -68,18 +81,47 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
 
     return () => {
       isMounted = false;
-      unsubscribeAlerts();
+      unsubscribeBookings();
       window.removeEventListener('resqlink-hospitals-updated', handleHospitalUpdate);
       window.removeEventListener('resqlink-logs-updated', handleHospitalUpdate);
     };
   }, [hospitalId, fetchDashboardData]);
 
-  const handleAcknowledgeAlert = async (alertId: string) => {
-    await updatePreAlertStatus(alertId, 'ACKNOWLEDGED');
+  const handleOpenAcceptDialog = (booking: EmergencyBooking) => {
+    setSelectedBookingForAccept(booking);
+    setAllocatedBayInput(booking.requiredResource === 'Ventilator' ? 'Resuscitation Bay 01 (Ventilator Attached)' : 'ICU Trauma Bay 02');
   };
 
-  const handleMarkArrived = async (alertId: string) => {
-    await updatePreAlertStatus(alertId, 'ARRIVED');
+  const handleConfirmAcceptBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedBookingForAccept) return;
+    setIsProcessingBooking(true);
+
+    try {
+      await acceptHospitalBooking(selectedBookingForAccept.id, {
+        allocatedBay: allocatedBayInput,
+        attendingDoctor: attendingDoctorInput,
+        hospitalNotes: hospitalNotesInput,
+      });
+      await fetchDashboardData();
+      setSelectedBookingForAccept(null);
+    } catch (err) {
+      console.error('Failed to accept booking:', err);
+    } finally {
+      setIsProcessingBooking(false);
+    }
+  };
+
+  const handleDeclineBooking = async (bookingId: string) => {
+    if (window.confirm('Divert this booking request to nearby facilities?')) {
+      await declineHospitalBooking(bookingId);
+      await fetchDashboardData();
+    }
+  };
+
+  const handleMarkBookingAdmitted = async (bookingId: string) => {
+    await markPatientAdmitted(bookingId);
+    await fetchDashboardData();
   };
 
   const handleUpdateAvailability = async (resourceType: ResourceType, count: number): Promise<boolean> => {
@@ -204,145 +246,238 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
           </div>
         </div>
 
-        {/* Live Incoming Ambulance Pre-Alerts Radar - 3D Glass Panel */}
+        {/* Live Inbound Booking Requests & Pre-Alerts Radar - 3D Glass Panel */}
         <div
           className="resq-card reveal-slide-up delay-100"
           style={{
-            backgroundColor: preAlerts.some((a) => a.status === 'EN_ROUTE') ? 'rgba(254, 242, 242, 0.9)' : 'rgba(255, 255, 255, 0.85)',
-            border: `1.5px solid ${preAlerts.some((a) => a.status === 'EN_ROUTE') ? 'rgba(252, 165, 165, 0.8)' : 'rgba(186, 230, 253, 0.8)'}`,
-            padding: '1.5rem',
-            marginBottom: '2rem',
-            boxShadow: preAlerts.some((a) => a.status === 'EN_ROUTE') ? '0 12px 28px rgba(225, 29, 72, 0.15)' : 'var(--shadow-3d)',
+            backgroundColor: bookings.some((b) => b.status === 'PENDING')
+              ? 'rgba(255, 251, 235, 0.95)'
+              : bookings.some((b) => b.status === 'ACCEPTED')
+              ? 'rgba(240, 253, 244, 0.95)'
+              : 'rgba(255, 255, 255, 0.88)',
+            border: `1.5px solid ${
+              bookings.some((b) => b.status === 'PENDING')
+                ? '#F59E0B'
+                : bookings.some((b) => b.status === 'ACCEPTED')
+                ? '#10B981'
+                : 'rgba(186, 230, 253, 0.8)'
+            }`,
+            padding: '1.75rem',
+            marginBottom: '2.25rem',
+            boxShadow: bookings.some((b) => b.status === 'PENDING')
+              ? '0 12px 32px rgba(245, 158, 11, 0.18)'
+              : 'var(--shadow-3d)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
               <div
                 style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: '10px',
-                  backgroundColor: preAlerts.some((a) => a.status === 'EN_ROUTE') ? 'var(--emergency)' : 'var(--royal-600)',
+                  width: 42,
+                  height: 42,
+                  borderRadius: '12px',
+                  backgroundColor: bookings.some((b) => b.status === 'PENDING') ? '#F59E0B' : 'var(--royal-600)',
                   color: '#fff',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 4px 10px rgba(29, 78, 216, 0.3)',
+                  boxShadow: '0 4px 12px rgba(29, 78, 216, 0.3)',
                 }}
               >
-                <Radio size={18} className="status-dot-pulse" />
+                <Radio size={22} className="status-dot-pulse" />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0, color: 'var(--text-navy)' }}>
-                  Live Inbound Ambulance Pre-Alerts
-                </h3>
-                <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', margin: 0 }}>
-                  Real-time ER telemetry communicated by approaching ambulances in transit.
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, color: 'var(--text-navy)' }}>
+                    Inbound Hospital Emergency Bookings
+                  </h3>
+                  <span className="badge badge-emergency" style={{ fontSize: '0.72rem' }}>
+                    Live Radar
+                  </span>
+                </div>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: '2px 0 0 0' }}>
+                  Review, accept and allocate emergency trauma bays for approaching ambulances in real-time.
                 </p>
               </div>
             </div>
 
-            <span
-              className={preAlerts.length > 0 ? 'badge badge-emergency' : 'badge badge-teal'}
-              style={{ fontSize: '0.8rem' }}
-            >
-              {preAlerts.filter((a) => a.status !== 'ARRIVED').length} Active En Route
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span
+                className={bookings.some((b) => b.status === 'PENDING') ? 'badge badge-warning' : 'badge badge-teal'}
+                style={{ fontSize: '0.8rem' }}
+              >
+                {bookings.filter((b) => b.status === 'PENDING').length} Pending Action
+              </span>
+              <span
+                className="badge badge-success"
+                style={{ fontSize: '0.8rem' }}
+              >
+                {bookings.filter((b) => b.status === 'ACCEPTED').length} Confirmed In-Route
+              </span>
+            </div>
           </div>
 
-          {preAlerts.length === 0 ? (
-            <div style={{ padding: '0.85rem 1.25rem', fontSize: '0.875rem', color: 'var(--text-secondary)', backgroundColor: 'rgba(240, 249, 255, 0.6)', borderRadius: 'var(--radius-sm)', border: '1px dashed rgba(147, 197, 253, 0.8)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CheckCircle2 size={18} color="#059669" />
-              <span>ER Triage Radar Clear — No emergency ambulances currently routed to this facility.</span>
+          {bookings.length === 0 ? (
+            <div style={{ padding: '1.15rem 1.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)', backgroundColor: 'rgba(240, 249, 255, 0.6)', borderRadius: 'var(--radius-sm)', border: '1px dashed rgba(147, 197, 253, 0.8)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <CheckCircle2 size={20} color="#059669" />
+              <span>ER Triage Radar Clear — No emergency ambulance booking requests currently pending for this hospital.</span>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {preAlerts.map((alert) => (
-                <div
-                  key={alert.id}
-                  style={{
-                    backgroundColor: '#ffffff',
-                    border: `1px solid ${alert.status === 'EN_ROUTE' ? '#f87171' : '#cbd5e1'}`,
-                    borderRadius: '10px',
-                    padding: '1rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    flexWrap: 'wrap',
-                    gap: '1rem',
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem' }}>
-                    <div
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: '8px',
-                        backgroundColor: alert.status === 'EN_ROUTE' ? '#fee2e2' : '#f1f5f9',
-                        color: alert.status === 'EN_ROUTE' ? '#dc2626' : '#475569',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                      }}
-                    >
-                      <Ambulance size={20} />
-                    </div>
-                    <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                        <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>
-                          Unit: {alert.ambulanceId} ({alert.vehicleNumber})
-                        </strong>
-                        <span
-                          style={{
-                            backgroundColor: alert.status === 'EN_ROUTE' ? '#fef2f2' : alert.status === 'ACKNOWLEDGED' ? '#f0fdf4' : '#f1f5f9',
-                            color: alert.status === 'EN_ROUTE' ? '#dc2626' : alert.status === 'ACKNOWLEDGED' ? '#16a34a' : '#64748b',
-                            padding: '2px 8px',
-                            borderRadius: '4px',
-                            fontSize: '0.72rem',
-                            fontWeight: 700,
-                            border: '1px solid currentColor',
-                          }}
-                        >
-                          {alert.status === 'EN_ROUTE' ? '🚨 EN ROUTE' : alert.status === 'ACKNOWLEDGED' ? '✅ TRIAGE PREPARED' : 'ARRIVED'}
-                        </span>
-                        <span style={{ fontSize: '0.75rem', color: '#dc2626', fontWeight: 700 }}>
-                          ETA: ~{Math.round(alert.etaMinutes)} Mins ({alert.distanceKm.toFixed(1)} km)
-                        </span>
-                      </div>
-                      <div style={{ fontSize: '0.825rem', color: '#475569', marginTop: '3px' }}>
-                        Requested: <strong style={{ color: '#1d4ed8' }}>{alert.quantity}x {alert.requiredResource} Bed</strong> • Driver: {alert.driverName} (<a href={`tel:${alert.driverPhone}`} style={{ color: '#2563eb', textDecoration: 'none' }}>{alert.driverPhone}</a>)
-                      </div>
-                      <div style={{ fontSize: '0.75rem', color: '#94A3B8', marginTop: '2px' }}>
-                        Alert ID: {alert.id} • Dispatched at {new Date(alert.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </div>
-                    </div>
-                  </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {bookings.map((booking) => {
+                const isPending = booking.status === 'PENDING';
+                const isAccepted = booking.status === 'ACCEPTED';
+                const isAdmitted = booking.status === 'ADMITTED';
+                const isDeclined = booking.status === 'DECLINED';
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    {alert.status === 'EN_ROUTE' && (
-                      <button
-                        type="button"
-                        onClick={() => handleAcknowledgeAlert(alert.id)}
-                        className="btn btn-sm"
-                        style={{ backgroundColor: '#16a34a', color: '#fff', fontSize: '0.8rem', padding: '0.4rem 0.8rem' }}
+                return (
+                  <div
+                    key={booking.id}
+                    style={{
+                      backgroundColor: '#ffffff',
+                      border: `1.5px solid ${
+                        isPending ? '#F59E0B' : isAccepted ? '#10B981' : isDeclined ? '#EF4444' : '#94A3B8'
+                      }`,
+                      borderRadius: 'var(--radius-md)',
+                      padding: '1.25rem 1.4rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                      gap: '1.25rem',
+                      boxShadow: isPending ? '0 4px 14px rgba(245, 158, 11, 0.12)' : 'var(--shadow-xs)',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', flex: 1, minWidth: '300px' }}>
+                      <div
+                        style={{
+                          width: 46,
+                          height: 46,
+                          borderRadius: '10px',
+                          backgroundColor: isPending ? '#FEF3C7' : isAccepted ? '#D1FAE5' : '#F1F5F9',
+                          color: isPending ? '#B45309' : isAccepted ? '#047857' : '#475569',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0,
+                          fontSize: '1.2rem',
+                          fontWeight: 800,
+                        }}
                       >
-                        <Check size={14} /> Acknowledge & Prep Bay
-                      </button>
-                    )}
-                    {alert.status === 'ACKNOWLEDGED' && (
-                      <button
-                        type="button"
-                        onClick={() => handleMarkArrived(alert.id)}
-                        className="btn btn-sm btn-outline"
-                        style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem' }}
-                      >
-                        Mark Patient Arrived
-                      </button>
-                    )}
+                        <Ambulance size={24} />
+                      </div>
+
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                          <strong style={{ fontSize: '1.05rem', color: 'var(--text-navy)' }}>
+                            {booking.patientName} (Age {booking.patientAge} • {booking.patientGender})
+                          </strong>
+
+                          <span
+                            style={{
+                              backgroundColor: booking.urgencyLevel === 'Critical' ? '#fee2e2' : '#fef3c7',
+                              color: booking.urgencyLevel === 'Critical' ? '#dc2626' : '#b45309',
+                              padding: '2px 8px',
+                              borderRadius: 'var(--radius-pill)',
+                              fontSize: '0.72rem',
+                              fontWeight: 800,
+                              border: '1px solid currentColor',
+                            }}
+                          >
+                            ⚠️ {booking.urgencyLevel} Urgency
+                          </span>
+
+                          <span
+                            style={{
+                              backgroundColor: isPending ? '#FEF3C7' : isAccepted ? '#ECFDF5' : '#F1F5F9',
+                              color: isPending ? '#92400E' : isAccepted ? '#065F46' : '#64748B',
+                              padding: '2px 8px',
+                              borderRadius: '4px',
+                              fontSize: '0.72rem',
+                              fontWeight: 800,
+                              border: '1px solid currentColor',
+                            }}
+                          >
+                            {isPending ? '🟡 PENDING ER CONFIRMATION' : isAccepted ? '🟢 CONFIRMED & ALLOCATED' : isAdmitted ? '🔵 ADMITTED' : '🔴 DECLINED'}
+                          </span>
+
+                          <span style={{ fontSize: '0.78rem', color: '#dc2626', fontWeight: 800, marginLeft: 'auto' }}>
+                            ETA: ~{Math.round(booking.etaMinutes)} Mins ({booking.distanceKm.toFixed(1)} km away)
+                          </span>
+                        </div>
+
+                        <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                          Requested Resource: <strong style={{ color: 'var(--royal-700)' }}>{booking.quantity}x {booking.requiredResource} Bed</strong> • Unit: <strong>{booking.ambulanceId}</strong> ({booking.vehicleNumber}) • Driver: <strong>{booking.driverName}</strong> (<a href={`tel:${booking.driverPhone}`} style={{ color: 'var(--royal-600)', textDecoration: 'none' }}>{booking.driverPhone}</a>)
+                        </div>
+
+                        {booking.patientCondition && (
+                          <div style={{ fontSize: '0.825rem', color: '#475569', marginTop: '3px', fontStyle: 'italic', backgroundColor: 'rgba(240, 249, 255, 0.7)', padding: '4px 8px', borderRadius: '4px', borderLeft: '3px solid var(--royal-600)' }}>
+                            Field Notes: "{booking.patientCondition}"
+                          </div>
+                        )}
+
+                        {isAccepted && (
+                          <div style={{ fontSize: '0.85rem', color: '#047857', fontWeight: 700, marginTop: '5px' }}>
+                            🎯 Allocated: <strong>{booking.allocatedBay}</strong> • Assigned: <strong>{booking.attendingDoctor}</strong>
+                          </div>
+                        )}
+
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px', fontFamily: 'monospace' }}>
+                          Booking ID: {booking.id} • Transmitted at {new Date(booking.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons for Hospital Staff */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+                      {isPending && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => handleOpenAcceptDialog(booking)}
+                            className="btn btn-sm"
+                            style={{
+                              backgroundColor: '#10B981',
+                              backgroundImage: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                              color: '#ffffff',
+                              fontWeight: 800,
+                              fontSize: '0.825rem',
+                              padding: '0.5rem 1rem',
+                              boxShadow: '0 4px 12px rgba(5, 150, 105, 0.3)',
+                              gap: '5px',
+                            }}
+                          >
+                            <Check size={15} />
+                            Accept & Allocate Bay
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleDeclineBooking(booking.id)}
+                            className="btn btn-sm btn-outline"
+                            style={{ fontSize: '0.8rem', color: '#DC2626', borderColor: '#FCA5A5' }}
+                          >
+                            <X size={14} />
+                            Decline / Divert
+                          </button>
+                        </>
+                      )}
+
+                      {isAccepted && (
+                        <button
+                          type="button"
+                          onClick={() => handleMarkBookingAdmitted(booking.id)}
+                          className="btn btn-sm btn-secondary"
+                          style={{ fontSize: '0.825rem', gap: '5px' }}
+                        >
+                          <CheckCircle2 size={15} />
+                          Mark Patient Admitted
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -587,6 +722,159 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Hospital Accept & Bay Allocation Modal */}
+      {selectedBookingForAccept && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(10, 25, 47, 0.65)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            zIndex: 1100,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1.25rem',
+            animation: 'fadeIn 0.25s ease',
+          }}
+          onClick={() => setSelectedBookingForAccept(null)}
+        >
+          <div
+            className="resq-card"
+            style={{
+              width: '100%',
+              maxWidth: 560,
+              padding: '2.25rem',
+              backgroundColor: 'rgba(255, 255, 255, 0.98)',
+              boxShadow: '0 25px 60px -10px rgba(5, 14, 29, 0.45), inset 0 1.5px 1px #ffffff',
+              border: '1.5px solid rgba(255, 255, 255, 0.95)',
+              borderRadius: 'var(--radius-xl)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '8px', backgroundColor: '#ECFDF5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Check size={20} />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-navy)', margin: 0 }}>
+                    Accept & Allocate Bay
+                  </h3>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: 0 }}>
+                    Confirm emergency intake for Ref #{selectedBookingForAccept.id}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setSelectedBookingForAccept(null)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Inbound Booking Patient Summary */}
+            <div
+              style={{
+                backgroundColor: 'rgba(240, 249, 255, 0.75)',
+                border: '1px solid rgba(186, 230, 253, 0.8)',
+                borderRadius: 'var(--radius-md)',
+                padding: '1rem',
+                marginBottom: '1.5rem',
+                fontSize: '0.875rem',
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                <span>Patient: <strong style={{ color: 'var(--text-navy)' }}>{selectedBookingForAccept.patientName}</strong> (Age {selectedBookingForAccept.patientAge})</span>
+                <span className="badge badge-emergency" style={{ fontSize: '0.72rem' }}>{selectedBookingForAccept.urgencyLevel} Priority</span>
+              </div>
+              <div>
+                Approaching Unit: <strong>{selectedBookingForAccept.ambulanceId}</strong> ({selectedBookingForAccept.vehicleNumber}) • ETA: <strong>{Math.round(selectedBookingForAccept.etaMinutes)} min</strong>
+              </div>
+              <div style={{ marginTop: '4px', color: 'var(--royal-700)', fontWeight: 700 }}>
+                Resource Requested: {selectedBookingForAccept.quantity}x {selectedBookingForAccept.requiredResource} Bed
+              </div>
+            </div>
+
+            <form onSubmit={handleConfirmAcceptBooking} style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-navy)', marginBottom: '0.35rem' }}>
+                  Assign Room / Bay Number
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={allocatedBayInput}
+                  onChange={(e) => setAllocatedBayInput(e.target.value)}
+                  className="input-field"
+                  placeholder="e.g. ICU Bay 03 (Trauma Critical Wing)"
+                  style={{ width: '100%', padding: '0.65rem 0.85rem', fontWeight: 700 }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-navy)', marginBottom: '0.35rem' }}>
+                  Attending Emergency Doctor / Lead Officer
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={attendingDoctorInput}
+                  onChange={(e) => setAttendingDoctorInput(e.target.value)}
+                  className="input-field"
+                  placeholder="e.g. Dr. Arvind Sharma (Chief of Trauma)"
+                  style={{ width: '100%', padding: '0.65rem 0.85rem' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-navy)', marginBottom: '0.35rem' }}>
+                  Instructions for Paramedic Team
+                </label>
+                <textarea
+                  rows={2}
+                  value={hospitalNotesInput}
+                  onChange={(e) => setHospitalNotesInput(e.target.value)}
+                  className="input-field"
+                  placeholder="e.g. Bring patient directly to ER Gate 2. Resuscitation team is standing by."
+                  style={{ width: '100%', padding: '0.65rem 0.85rem', fontSize: '0.85rem' }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '0.5rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setSelectedBookingForAccept(null)}
+                  disabled={isProcessingBooking}
+                  className="btn btn-outline"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={isProcessingBooking}
+                  className="btn btn-primary"
+                  style={{
+                    backgroundColor: '#10B981',
+                    backgroundImage: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                    boxShadow: '0 4px 12px rgba(5, 150, 105, 0.35)',
+                    gap: '6px',
+                  }}
+                >
+                  <CheckCircle2 size={16} />
+                  {isProcessingBooking ? 'Confirming...' : 'Confirm Acceptance & Reserve Bed'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import {
   Bed,
   Wind,
   ShieldCheck,
+  Send,
 } from 'lucide-react';
 import type { Hospital, ResourceType } from '../types/hospital';
 import { StatusBadge } from './StatusBadge';
@@ -18,6 +19,7 @@ interface HospitalDetailModalProps {
   requestedResource?: ResourceType;
   onClose: () => void;
   onNavigate: (hospital: Hospital) => void;
+  onBookHospital?: (hospital: Hospital) => void;
 }
 
 export const HospitalDetailModal: React.FC<HospitalDetailModalProps> = ({
@@ -25,6 +27,7 @@ export const HospitalDetailModal: React.FC<HospitalDetailModalProps> = ({
   requestedResource = 'ICU',
   onClose,
   onNavigate,
+  onBookHospital,
 }) => {
   if (!hospital) return null;
 
@@ -258,13 +261,33 @@ export const HospitalDetailModal: React.FC<HospitalDetailModalProps> = ({
             onClick={onClose}
             className="btn btn-outline"
           >
-            Close Details
+            Close
           </button>
+
+          {onBookHospital && (
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onBookHospital(hospital);
+              }}
+              className="btn btn-primary"
+              style={{
+                backgroundColor: '#E11D48',
+                backgroundImage: 'linear-gradient(135deg, #F43F5E 0%, #E11D48 50%, #BE123C 100%)',
+                boxShadow: '0 6px 18px -2px rgba(225, 29, 72, 0.45)',
+                gap: '6px',
+              }}
+            >
+              <Send size={16} />
+              Book Bed & Send Pre-Alert
+            </button>
+          )}
 
           <button
             type="button"
             onClick={() => onNavigate(hospital)}
-            className="btn btn-primary"
+            className="btn btn-secondary"
             style={{ gap: '0.5rem' }}
           >
             <Navigation size={16} />
