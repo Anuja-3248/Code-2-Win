@@ -1,81 +1,332 @@
-# 🚑 ResQLink — Real-Time Emergency Hospital Resource Allocation
+# 🚑 ResQLink
+
+### Real-Time Emergency Hospital Resource Allocation
 
 > **Connecting ambulances to the right care, faster.**
 
-ResQLink is a real-time emergency healthcare coordination platform designed to help ambulances quickly identify hospitals with the required medical resources.
+ResQLink is a real-time emergency healthcare coordination platform that helps ambulance teams identify suitable hospitals based on resource availability, distance, estimated travel time, and predicted capacity.
 
-The platform connects **ambulance teams** with **hospital resource information**, evaluates nearby hospitals based on resource availability and travel distance, provides **30-minute predicted capacity**, and allows hospitals to continuously update their emergency resources.
+The platform creates a communication bridge between ambulances and hospitals by allowing hospitals to update emergency resource information through a dedicated dashboard while enabling ambulance teams to search, compare, and book available resources.
 
----
+> **Project status:** Educational and hackathon prototype  
+> **Primary location:** Pune, Maharashtra, India  
+> **Team:** Code-2-Win
 
-## 🎯 Problem Statement
+***
 
-During medical emergencies, ambulance teams may spend valuable time contacting multiple hospitals to find available ICU beds, ventilators, or general beds.
+## 📌 Table of Contents
 
-At the same time, hospitals need a reliable way to communicate their current emergency resource availability.
+- [Overview](#-overview)
+- [Problem Statement](#-problem-statement)
+- [Our Solution](#-our-solution)
+- [Core Features](#-core-features)
+- [Application Workflow](#-application-workflow)
+- [Hospital Matching System](#-hospital-matching-system)
+- [30-Minute Capacity Prediction](#-30-minute-capacity-prediction)
+- [System Architecture](#-system-architecture)
+- [Technology Stack](#-technology-stack)
+- [Project Structure](#-project-structure)
+- [Firebase Data Management](#-firebase-data-management)
+- [Default Configuration](#-default-configuration)
+- [Installation and Setup](#-installation-and-setup)
+- [Available Commands](#-available-commands)
+- [Application Routes](#-application-routes)
+- [Current Implementation Notes](#-current-implementation-notes)
+- [Future Enhancements](#-future-enhancements)
+- [Team](#-team)
+- [License](#-license)
 
-This lack of real-time coordination can lead to:
+***
 
-* Delays in finding suitable hospitals
-* Unnecessary communication between ambulances and hospitals
-* Difficulty identifying hospitals with sufficient resources
-* Resource information becoming outdated
-* Poor visibility into expected resource availability when the ambulance arrives
+## 🌍 Overview
 
-### 💡 Our Solution
+During a medical emergency, ambulance teams may lose valuable time calling multiple hospitals to locate ICU beds, ventilators, or general beds.
 
-**ResQLink** provides a centralized emergency resource coordination system where:
+ResQLink addresses this coordination problem through a centralized platform that allows ambulance personnel to:
 
-1. Ambulance personnel submit an emergency resource request.
-2. The system obtains the ambulance's location.
-3. Nearby hospitals are evaluated.
-4. Available resources are compared with the requested quantity.
-5. Hospital distance and estimated ambulance travel time are calculated.
-6. Current and predicted 30-minute availability are displayed.
-7. Suitable hospitals are presented to the ambulance team.
-8. The ambulance can view hospital details, navigate to the hospital, and initiate a resource booking.
-9. Hospitals can update their live resource telemetry through a dedicated dashboard.
+- Submit emergency resource requests.
+- Share their current location.
+- Discover nearby hospitals.
+- Compare current resource availability.
+- Review estimated ambulance travel time.
+- View approximately 30-minute predicted availability.
+- Initiate emergency resource bookings.
+- Navigate to the selected hospital.
 
----
+Hospitals can update their resource telemetry through an authenticated operational dashboard.
 
-# 🚨 Key Features
+***
 
-## 🚑 1. Ambulance Emergency Portal
+## 🚨 Problem Statement
 
-The ambulance interface is designed for quick emergency input without requiring hospital-side authentication.
+Emergency ambulance teams often face difficulty finding hospitals with the required resources at the right time.
 
-### Emergency request flow
+This can result in:
 
-* Select required medical resource:
+- Delays in identifying suitable hospitals.
+- Repeated phone calls between ambulance teams and hospitals.
+- Difficulty verifying ICU, ventilator, or bed availability.
+- Resource information becoming outdated.
+- Poor visibility into expected availability when the ambulance arrives.
+- Inefficient emergency resource coordination.
 
-  * ICU Beds
-  * Ventilators
-  * General Beds
-* Select required quantity
-* Obtain current location using browser GPS
-* Use Pune as a fallback location when GPS is unavailable
-* Submit emergency request
-* Automatically search nearby hospitals
+ResQLink is designed to reduce these delays by providing a structured and centralized resource discovery system.
 
-The system supports quantities from **1–10 units**.
+***
 
----
+## 💡 Our Solution
 
-## 🏥 2. Intelligent Hospital Matching
+ResQLink evaluates nearby hospitals using emergency resource and location data.
 
-ResQLink evaluates nearby hospitals based on:
+The platform follows this process:
 
-* Current resource availability
-* Requested resource quantity
-* Hospital distance
-* Estimated ambulance travel time
-* Predicted resource availability after 30 minutes
+```text
+Emergency Resource Request
+            ↓
+Ambulance Location
+            ↓
+Nearby Hospital Search
+            ↓
+Resource Availability Check
+            ↓
+Distance and ETA Calculation
+            ↓
+30-Minute Capacity Estimation
+            ↓
+Hospital Ranking
+            ↓
+Booking and Navigation
+```
 
-The system evaluates hospitals within the configured search area and returns up to the **top 3 suitable hospitals**.
+Hospitals can continuously update their resource information, while ambulance teams can view the latest available data before selecting a destination.
 
-### Matching logic
+***
 
-For every hospital, ResQLink determines:
+## ✨ Core Features
+
+### 🚑 Ambulance Emergency Portal
+
+The ambulance portal is designed for quick emergency input with minimal interaction.
+
+Features include:
+
+- Selection of required medical resource:
+  - ICU beds
+  - Ventilators
+  - General beds
+- Quantity selection from 1 to 10 units.
+- Browser-based GPS location detection.
+- Pune location fallback when GPS is unavailable.
+- Automatic search for suitable nearby hospitals.
+- Hospital comparison based on resource availability and distance.
+- Access to hospital details and emergency contact information.
+- Emergency resource booking.
+- Navigation through Google Maps integration.
+- Live active booking status.
+
+***
+
+### 🏥 Intelligent Hospital Matching
+
+ResQLink evaluates hospitals using multiple factors:
+
+- Current resource availability.
+- Requested resource quantity.
+- Distance from the ambulance.
+- Estimated ambulance travel time.
+- Predicted availability after approximately 30 minutes.
+- Hospital operating status.
+- Overall suitability.
+
+A hospital is considered suitable when its currently available resource count is greater than or equal to the requested quantity.
+
+The system returns up to the top three suitable hospitals from the configured search area.
+
+***
+
+### 📊 30-Minute Capacity Prediction
+
+ResQLink displays an estimated resource availability for approximately 30 minutes into the future.
+
+The prediction layer uses hospital telemetry such as:
+
+- Current available resources.
+- Occupied resources.
+- Admissions during the previous 30 minutes.
+- Discharges during the previous 30 minutes.
+- Emergency arrivals.
+- Occupancy rates.
+- Total resource capacity.
+
+Historical 30-minute telemetry records are preserved to support future analytics and machine-learning development.
+
+> **Important:** The current implementation contains a 30-minute calculation and prediction layer. It should not be described as a trained machine-learning model unless a separately trained model is integrated into the project.
+
+***
+
+### 🏥 Hospital Control Portal
+
+Hospitals have access to a dedicated authentication and operations dashboard.
+
+Hospital portal features include:
+
+- Hospital account creation.
+- Hospital login.
+- Automatically generated facility IDs.
+- ICU resource management.
+- Ventilator resource management.
+- General bed management.
+- Occupancy tracking.
+- Admission information.
+- Discharge information.
+- Emergency arrival information.
+- 30-minute telemetry storage.
+- Activity and audit history.
+
+Hospital IDs follow a sequential format:
+
+```text
+H001
+H002
+H003
+...
+```
+
+***
+
+### 📡 Real-Time Resource Updates
+
+Hospital resource changes are stored and propagated through the application data layer.
+
+When a hospital updates its resource information:
+
+1. The latest data is stored.
+2. The hospital record is updated.
+3. Ambulance-side searches can refresh available matches.
+4. New emergency requests can use the most recent resource information.
+
+This allows the ambulance interface to work with updated hospital availability data.
+
+***
+
+### 📍 Location and ETA Calculation
+
+ResQLink uses the browser Geolocation API to determine the ambulance's current location.
+
+The platform calculates:
+
+- Distance between the ambulance and hospital.
+- Approximate ambulance travel time.
+- Hospital proximity for ranking and comparison.
+
+The current implementation uses an estimated average ambulance speed of:
+
+```text
+35 km/h
+```
+
+This is an approximate calculation and does not represent live traffic-based navigation.
+
+***
+
+### 🗺️ Hospital Details and Navigation
+
+For each suitable hospital, ambulance teams can view:
+
+- Hospital name.
+- Hospital location.
+- Current resource availability.
+- Predicted resource availability.
+- Distance from the ambulance.
+- Estimated ETA.
+- Emergency contact information.
+- Hospital resource details.
+
+The system also provides Google Maps navigation support.
+
+***
+
+### 🛏️ Emergency Resource Booking
+
+After selecting a suitable hospital, the ambulance team can initiate an emergency booking.
+
+```text
+Emergency Request
+        ↓
+Hospital Search
+        ↓
+Suitable Hospital
+        ↓
+Hospital Details
+        ↓
+Emergency Resource Booking
+        ↓
+Booking Confirmation
+        ↓
+Navigation / En Route
+```
+
+An active booking can be displayed through the application's live booking status interface.
+
+***
+
+## 🔄 Application Workflow
+
+### Ambulance Workflow
+
+```text
+Open ResQLink
+      ↓
+Open Ambulance Portal
+      ↓
+Select Required Resource
+      ↓
+Select Resource Quantity
+      ↓
+Obtain Current Location
+      ↓
+Search Nearby Hospitals
+      ↓
+Evaluate Hospital Availability
+      ↓
+Calculate Distance and ETA
+      ↓
+Check 30-Minute Availability
+      ↓
+Display Suitable Hospitals
+      ↓
+View Hospital Details
+      ↓
+Book Resource or Navigate
+```
+
+### Hospital Workflow
+
+```text
+Open Hospital Portal
+      ↓
+Sign Up or Login
+      ↓
+Open Hospital Dashboard
+      ↓
+Enter Resource Telemetry
+      ↓
+Calculate Occupancy and Prediction
+      ↓
+Save Current Telemetry
+      ↓
+Store Historical Record
+      ↓
+Update Hospital Availability
+```
+
+***
+
+## 🧠 Hospital Matching System
+
+The hospital matching service evaluates every hospital using resource availability and proximity.
+
+### Matching Process
 
 ```text
 Current Availability
@@ -86,259 +337,145 @@ Distance Calculation
         ↓
 Ambulance ETA Calculation
         ↓
-30-Minute Predicted Availability
+30-Minute Availability Estimation
         ↓
-Hospital Status
+Hospital Status Evaluation
         ↓
 Suitable Hospital Results
 ```
 
-Hospitals are considered suitable when their **current available resource count is greater than or equal to the requested quantity**.
+### Availability Score
 
----
+The availability component is calculated using the relationship between currently available resources and requested resources.
 
-## 📊 3. 30-Minute Capacity Prediction
-
-The platform displays predicted resource availability for approximately 30 minutes ahead.
-
-The system maintains telemetry such as:
-
-* Current available resources
-* Occupied resources
-* Admissions during the last 30 minutes
-* Discharges during the last 30 minutes
-* Emergency arrivals
-* Occupancy rates
-* Calculated resource totals
-* Predicted availability after 30 minutes
-
-The architecture also preserves historical 30-minute telemetry records, allowing the stored data to support future machine-learning development.
-
-> **Note:** The current implementation contains a 30-minute prediction/calculation layer; it should not be described as a trained ML model unless a separate trained model is connected to the project.
-
----
-
-# 🏥 4. Hospital Control Portal
-
-Hospitals have a dedicated authentication and operational dashboard.
-
-### Hospital features
-
-* Hospital account creation
-* Hospital login
-* Automatically generated facility ID
-* Resource availability management
-* ICU telemetry
-* Ventilator telemetry
-* General bed telemetry
-* Occupancy information
-* Admissions and discharge information
-* Emergency arrival information
-* 30-minute telemetry storage
-* Activity/audit history
-
-Hospital IDs follow a sequential format such as:
+Conceptually:
 
 ```text
-H001
-H002
-H003
-...
+Availability Score =
+Available Resources / Requested Resources
 ```
 
----
+### Proximity Score
 
-# 📡 5. Real-Time Resource Updates
+The proximity score decreases as the distance between the ambulance and hospital increases.
 
-Hospital resource changes are stored and propagated through the application's data layer.
+### Match Score
 
-When hospital resource information changes, ambulance-side hospital searches can refresh their available matches.
-
-This allows the ambulance interface to work with the most recently available hospital resource information.
-
----
-
-# 📍 6. Location & ETA
-
-ResQLink uses browser geolocation to determine the ambulance's current location.
-
-The system calculates:
-
-* Distance between ambulance and hospital
-* Approximate ambulance ETA
-
-The current implementation uses an estimated average ambulance speed of:
+The system conceptually combines availability and proximity:
 
 ```text
-35 km/h
+Match Score =
+Availability Score + Proximity Score
 ```
 
-This is intended as an approximate emergency travel estimate rather than live traffic-based navigation.
+Hospitals that currently have sufficient resources are prioritized, and the closest suitable hospitals are returned to the ambulance team.
 
----
+### Hospital Status Categories
 
-# 🗺️ 7. Hospital Details & Navigation
+A hospital can be represented using statuses such as:
 
-For each suitable hospital, the ambulance user can access:
+- Available
+- Suitable
+- High Demand
+- Critical Capacity
 
-* Hospital name
-* Hospital location
-* Resource availability
-* Predicted availability
-* Distance
-* Estimated ETA
-* Emergency contact information
-* Hospital resource details
+***
 
-The application also provides navigation functionality and Google Maps integration.
+## 📈 Resource Telemetry
 
----
+Each hospital can manage telemetry for three major resource categories.
 
-# 🛏️ 8. Emergency Resource Booking
-
-After selecting a suitable hospital, the ambulance team can initiate an emergency resource booking.
-
-The booking workflow includes:
-
-```text
-Emergency Request
-       ↓
-Hospital Search
-       ↓
-Suitable Hospital
-       ↓
-View Hospital
-       ↓
-Book Emergency Resource
-       ↓
-Booking Confirmation
-       ↓
-Navigation / En Route
-```
-
-An active booking can also be displayed through the application's live booking status interface.
-
----
-
-# 🔐 9. Firebase Integration
-
-ResQLink uses Firebase for cloud-based application functionality.
-
-### Firebase services used
-
-* **Firebase Authentication**
-
-  * Hospital account authentication
-  * Hospital login/signup
-
-* **Cloud Firestore**
-
-  * Hospital records
-  * Resource telemetry
-  * Historical 30-minute records
-
-* **Firebase Realtime Database**
-
-  * Database integration is initialized for real-time application requirements
-
-The application also maintains a local storage cache/fallback for hospital and activity information.
-
----
-
-# 🧮 Resource Telemetry
-
-Each hospital can maintain telemetry for three major resource categories:
-
-| Resource     | Availability | Occupancy | 30-Min Prediction |
-| ------------ | -----------: | --------: | ----------------: |
-| ICU Beds     |            ✅ |         ✅ |                 ✅ |
-| Ventilators  |            ✅ |         ✅ |                 ✅ |
-| General Beds |            ✅ |         ✅ |                 ✅ |
+| Resource Type | Availability | Occupancy | 30-Minute Prediction |
+|---|---:|---:|---:|
+| ICU Beds | ✅ | ✅ | ✅ |
+| Ventilators | ✅ | ✅ | ✅ |
+| General Beds | ✅ | ✅ | ✅ |
 
 Additional telemetry includes:
 
-* Admissions
-* Discharges
-* Emergency arrivals
-* Occupancy rate
-* Resource totals
-* Timestamped historical records
+- Admissions.
+- Discharges.
+- Emergency arrivals.
+- Occupancy percentage.
+- Total resource capacity.
+- Timestamped historical records.
+- Calculated predicted availability.
 
----
+***
 
-# 🏗️ System Architecture
+## 🏗️ System Architecture
 
 ```text
-                    ┌─────────────────────┐
-                    │      ResQLink       │
-                    │   Web Application   │
-                    └──────────┬──────────┘
-                               │
-              ┌────────────────┴────────────────┐
-              │                                 │
-              ▼                                 ▼
-      ┌───────────────┐                 ┌────────────────┐
-      │ Ambulance App │                 │ Hospital Portal│
-      └───────┬───────┘                 └───────┬────────┘
-              │                                 │
-              │ Emergency Request               │ Resource Update
-              ▼                                 ▼
-      ┌────────────────────────────────────────────────┐
-      │             Application Service Layer          │
-      │                                                │
-      │  • Hospital Search                             │
-      │  • Resource Matching                           │
-      │  • Distance Calculation                        │
-      │  • ETA Calculation                             │
-      │  • Capacity Prediction                         │
-      │  • Booking                                     │
-      └──────────────────────┬─────────────────────────┘
-                             │
-                             ▼
-                   ┌───────────────────┐
-                   │ Firebase Services │
-                   ├───────────────────┤
-                   │ Authentication    │
-                   │ Firestore         │
-                   │ Realtime Database  │
-                   └───────────────────┘
+                         ┌─────────────────────┐
+                         │      ResQLink       │
+                         │    Web Application  │
+                         └──────────┬──────────┘
+                                    │
+              ┌─────────────────────┴─────────────────────┐
+              │                                           │
+              ▼                                           ▼
+      ┌───────────────┐                           ┌────────────────┐
+      │ Ambulance App │                           │ Hospital Portal│
+      └───────┬───────┘                           └───────┬────────┘
+              │                                           │
+              │ Emergency Request                         │ Resource Update
+              ▼                                           ▼
+      ┌────────────────────────────────────────────────────────┐
+      │              Application Service Layer                  │
+      │                                                        │
+      │  • Hospital Search                                     │
+      │  • Resource Matching                                   │
+      │  • Distance Calculation                                │
+      │  • ETA Calculation                                     │
+      │  • Capacity Prediction                                 │
+      │  • Emergency Booking                                   │
+      └──────────────────────────┬─────────────────────────────┘
+                                 │
+                                 ▼
+                      ┌─────────────────────┐
+                      │   Firebase Services │
+                      ├─────────────────────┤
+                      │ Authentication      │
+                      │ Cloud Firestore     │
+                      │ Realtime Database   │
+                      └─────────────────────┘
 ```
 
----
+***
 
-# 🧩 Technology Stack
+## 🧩 Technology Stack
 
-## Frontend
+### Frontend
 
-* **React 19**
-* **TypeScript**
-* **Vite**
-* **React Router**
-* **Lucide React**
-* CSS
+- React 19
+- TypeScript
+- Vite
+- React Router
+- Lucide React
+- CSS
 
-## Backend / Cloud Services
+### Backend and Cloud Services
 
-* **Firebase Authentication**
-* **Cloud Firestore**
-* **Firebase Realtime Database**
+- Firebase Authentication
+- Cloud Firestore
+- Firebase Realtime Database
 
-## Browser APIs
+### Browser APIs and Storage
 
-* Geolocation API
-* Session Storage
-* Local Storage
+- Browser Geolocation API
+- Session Storage
+- Local Storage
 
-## Development Tools
+### Development Tools
 
-* TypeScript
-* Vite
-* Oxlint
-* npm
+- TypeScript
+- Vite
+- Oxlint
+- npm
 
----
+***
 
-# 📁 Project Structure
+## 📁 Project Structure
 
 ```text
 Code-2-Win/
@@ -348,7 +485,6 @@ Code-2-Win/
 │   └── icons.svg
 │
 ├── src/
-│   │
 │   ├── assets/
 │   │   └── images/
 │   │
@@ -398,140 +534,76 @@ Code-2-Win/
 └── README.md
 ```
 
----
+***
 
-# 🔄 Application Workflow
+## 🔥 Firebase Integration
 
-### Ambulance Workflow
+ResQLink uses Firebase for cloud-based application functionality.
 
-```text
-Open ResQLink
-      ↓
-Ambulance Portal
-      ↓
-Select Required Resource
-      ↓
-Select Quantity
-      ↓
-Get Current Location
-      ↓
-Search Hospitals
-      ↓
-Evaluate Hospital Availability
-      ↓
-Calculate Distance & ETA
-      ↓
-Check 30-Minute Availability
-      ↓
-Display Suitable Hospitals
-      ↓
-View Hospital Details
-      ↓
-Book / Navigate
-```
+### Firebase Authentication
 
-### Hospital Workflow
+Used for:
 
-```text
-Hospital Portal
-      ↓
-Sign Up / Login
-      ↓
-Hospital Dashboard
-      ↓
-Enter Resource Telemetry
-      ↓
-Calculate Occupancy & Predictions
-      ↓
-Save Current Telemetry
-      ↓
-Store Historical 30-Minute Record
-      ↓
-Update Hospital Availability
-```
+- Hospital account registration.
+- Hospital login.
+- Authenticated dashboard access.
+- Hospital identity management.
 
----
+### Cloud Firestore
 
-# 🧠 Hospital Matching Algorithm
+Used to store:
 
-For every hospital, ResQLink calculates a match using resource availability and proximity.
+- Hospital records.
+- Resource telemetry.
+- Current hospital availability.
+- Historical 30-minute records.
+- Booking-related information.
+- Activity and audit data.
 
-### Availability Score
+### Firebase Realtime Database
 
-The implementation calculates an availability component based on the ratio between available resources and requested resources.
+The project initializes Firebase Realtime Database for real-time application requirements and future live-update functionality.
 
-### Proximity Score
+### Local Storage Fallback
 
-The proximity component decreases as the hospital becomes farther from the ambulance.
+The application also maintains local storage-based caching and fallback behavior for hospital and activity information.
 
-### Match Score
+***
 
-Conceptually:
+## 📍 Default Configuration
 
-```text
-Match Score
-    =
-Availability Score
-    +
-Proximity Score
-```
+| Configuration | Value |
+|---|---|
+| Default location | Pune, Maharashtra |
+| Latitude | 18.5204 |
+| Longitude | 73.8567 |
+| Search radius | 25 km |
+| Estimated ambulance speed | 35 km/h |
+| Maximum requested quantity | 10 units |
+| Maximum displayed suitable hospitals | 3 |
 
-The system then identifies hospitals that currently have enough resources and returns the closest suitable results.
+The hospital matching service may evaluate a wider candidate range during the matching process before returning the most suitable results.
 
-Hospital status can be represented as:
+***
 
-* `Available`
-* `Suitable`
-* `High Demand`
-* `Critical Capacity`
+## ⚙️ Installation and Setup
 
----
-
-# 📍 Default Configuration
-
-The current configuration includes:
-
-```text
-Default Location:
-Pune, Maharashtra
-
-Latitude:
-18.5204
-
-Longitude:
-73.8567
-
-Search Radius:
-25 km
-
-Estimated Ambulance Speed:
-35 km/h
-```
-
-The hospital matching service can also evaluate a wider candidate range during the matching process.
-
----
-
-# ⚙️ Installation & Setup
-
-## 1. Clone the Repository
+### 1. Clone the Repository
 
 ```bash
 git clone <YOUR_REPOSITORY_URL>
 cd Code-2-Win
 ```
 
-## 2. Install Dependencies
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-## 3. Configure Environment Variables
+### 3. Configure Environment Variables
 
-Create a `.env` file in the project root.
-
-Example:
+Create a `.env` file in the project root:
 
 ```env
 VITE_FIREBASE_API_KEY=your_api_key
@@ -543,141 +615,163 @@ VITE_FIREBASE_APP_ID=your_app_id
 VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
 ```
 
-> Never commit private credentials, secrets, or production configuration values to GitHub.
+Do not commit private credentials, secrets, or production configuration values to GitHub.
 
-## 4. Start Development Server
+### 4. Start the Development Server
 
 ```bash
 npm run dev
 ```
 
-The Vite development server will provide a local URL, typically:
+The Vite development server will usually be available at:
 
 ```text
 http://localhost:5173
 ```
 
----
+***
 
-# 🏗️ Production Build
+## 🛠️ Available Commands
 
-To create a production build:
+| Command | Purpose |
+|---|---|
+| `npm install` | Install project dependencies |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run preview` | Preview the production build |
+| `npm run lint` | Run the project linter |
+
+### Production Build
 
 ```bash
 npm run build
 ```
 
-To preview the production build:
+### Preview Production Build
 
 ```bash
 npm run preview
 ```
 
----
-
-# 🧹 Linting
-
-Run the project's linter with:
+### Run Linting
 
 ```bash
 npm run lint
 ```
 
----
+***
 
-# 🔑 Main Application Routes
+## 🔑 Application Routes
 
-| Route                 | Purpose                                |
-| --------------------- | -------------------------------------- |
-| `/`                   | ResQLink landing page                  |
-| `/ambulance`          | Ambulance emergency request portal     |
-| `/ambulance/results`  | Suitable hospital results              |
-| `/hospital/login`     | Hospital authentication                |
+| Route | Purpose |
+|---|---|
+| `/` | ResQLink landing page |
+| `/ambulance` | Ambulance emergency request portal |
+| `/ambulance/results` | Suitable hospital results |
+| `/hospital/login` | Hospital authentication |
 | `/hospital/dashboard` | Hospital resource management dashboard |
 
----
+***
 
-# 🔮 Future Enhancements
+## ⚠️ Current Implementation Notes
 
-The current architecture can be extended with:
+- Hospital data is designed around Firebase Firestore with local-storage caching and fallback support.
+- Browser geolocation requires user permission.
+- Pune is used as the fallback location when GPS data is unavailable.
+- Ambulance ETA is estimated using an average speed of 35 km/h.
+- The ETA does not represent live traffic conditions.
+- The current 30-minute prediction layer is based on telemetry and calculation logic.
+- The current prediction layer is not a trained machine-learning model.
+- A trained machine-learning model can be integrated in a future version.
+- Firebase configuration should be provided through environment variables.
+- The repository archive contains a `.env` file; secrets and environment-specific credentials should be removed before publishing the project publicly.
+- This project is intended for educational, demonstration, and hackathon use.
+- The platform should not be used as a replacement for official emergency dispatch or clinical decision-making systems.
+
+***
+
+## 🔮 Future Enhancements
 
 ### 🤖 Advanced Machine Learning
 
-Replace the current prediction layer with a trained ML model using historical hospital telemetry.
+Replace the current prediction layer with a trained model using historical hospital telemetry.
 
-Possible inputs:
+Potential inputs include:
 
-* Historical admissions
-* Discharges
-* Emergency arrivals
-* Occupancy rates
-* Time of day
-* Day of week
-* Hospital resource type
-* Historical demand patterns
+- Historical admissions.
+- Historical discharges.
+- Emergency arrivals.
+- Occupancy rates.
+- Time of day.
+- Day of week.
+- Hospital resource type.
+- Historical demand patterns.
 
-Possible outputs:
+Potential outputs include:
 
-```text
-Predicted ICU Availability
-Predicted Ventilator Availability
-Predicted General Bed Availability
-```
+- Predicted ICU availability.
+- Predicted ventilator availability.
+- Predicted general bed availability.
 
 ### 📍 Live Traffic-Based ETA
 
-Integrate a real-time mapping/traffic service to replace the current estimated-speed ETA calculation.
+Integrate a real-time mapping and traffic service to improve ambulance arrival-time calculations.
 
 ### 🏥 Hospital Network Expansion
 
-Support multiple cities and larger hospital networks.
+Expand the platform to support:
+
+- Multiple cities.
+- Larger hospital networks.
+- Regional emergency coordination.
+- Public and private hospitals.
 
 ### 📊 Analytics Dashboard
 
-Add:
+Add analytics for:
 
-* Historical demand graphs
-* Resource utilization trends
-* Hospital performance analytics
-* Emergency demand forecasting
+- Historical emergency demand.
+- Resource utilization trends.
+- Hospital performance.
+- Emergency demand forecasting.
+- Average booking and response times.
 
 ### 🔔 Real-Time Notifications
 
-Notify hospitals when an ambulance is approaching or has requested emergency resources.
+Notify hospitals when:
+
+- An ambulance requests a resource.
+- An ambulance is approaching.
+- A booking is created.
+- Resource availability changes.
 
 ### 🔒 Enhanced Security
 
 Implement production-grade:
 
-* Role-based access control
-* Firestore security rules
-* Server-side validation
-* Secure API architecture
-* Audit logging
+- Role-based access control.
+- Firestore security rules.
+- Server-side validation.
+- Secure API architecture.
+- Audit logging.
+- Protected hospital and booking data.
 
----
+***
 
-# ⚠️ Current Implementation Notes
+## 👥 Team
+@Anuja-3248 - Anuja Pawar
+@codewithvardan - Vardan Darunte 
+@rohankotsulwar-hue - Rohan Kotsulwar
+@sarthakankolekar-lab - Sarthal Ankolekar
 
-* Hospital data is designed around Firebase Firestore with local-storage caching/fallback.
-* Browser geolocation requires user permission.
-* Ambulance ETA is an estimate based on configured average speed and does not represent live traffic conditions.
-* The current 30-minute prediction layer is based on the application's telemetry/calculation architecture; a separately trained ML model can be integrated later.
-* Firebase configuration should be supplied through environment variables for production deployment.
-* The repository contains a `.env` file in the uploaded archive; secrets and environment-specific credentials should be excluded from public Git repositories.
+***
 
----
+### Code-2-Win
 
-# 👥 Team
+ResQLink was developed as an emergency healthcare technology solution focused on reducing the time required to identify suitable hospital resources.
 
-**Project:** ResQLink
-**Team:** Code-2-Win
+***
 
-Built as an emergency healthcare technology solution focused on reducing the time required to identify suitable hospital resources.
-
----
-
-# 📄 License
+## 📄 License
 
 This project is developed for educational, hackathon, and prototype purposes.
-
