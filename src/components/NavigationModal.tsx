@@ -17,7 +17,9 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({ hospital, onCl
 
   if (!hospital) return null;
 
-  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${hospital.latitude},${hospital.longitude}&destination_place_id=${encodeURIComponent(hospital.name)}`;
+  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+    `${hospital.name}, ${hospital.address}`
+  )}`;
 
   // Load active request from prop or session
   const activeReq: EmergencyRequest = request || (() => {

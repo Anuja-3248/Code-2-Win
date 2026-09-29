@@ -33,9 +33,11 @@ export const ActiveBookingBanner: React.FC<ActiveBookingBannerProps> = ({ onOpen
   const isDeclined = activeBooking.status === 'DECLINED';
   const isPending = activeBooking.status === 'PENDING';
 
-  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-    activeBooking.targetHospitalName
-  )}`;
+  const destQuery = activeBooking.targetHospitalAddress
+    ? `${activeBooking.targetHospitalName}, ${activeBooking.targetHospitalAddress}`
+    : activeBooking.targetHospitalName;
+
+  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destQuery)}`;
 
   return (
     <div

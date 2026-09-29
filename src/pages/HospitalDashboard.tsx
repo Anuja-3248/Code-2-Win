@@ -95,17 +95,18 @@ export const HospitalDashboard: React.FC<HospitalDashboardProps> = ({
   const handleConfirmAcceptBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedBookingForAccept) return;
+    const bookingToAccept = selectedBookingForAccept;
+    setSelectedBookingForAccept(null);
     setIsProcessingBooking(true);
 
     try {
-      await acceptHospitalBooking(selectedBookingForAccept.id, {
+      await acceptHospitalBooking(bookingToAccept.id, {
         allocatedBay: allocatedBayInput,
         attendingDoctor: attendingDoctorInput,
         hospitalNotes: hospitalNotesInput,
       });
       window.dispatchEvent(new Event('resqlink-hospitals-updated'));
       await fetchDashboardData();
-      setSelectedBookingForAccept(null);
     } catch (err) {
       console.error('Failed to accept booking:', err);
     } finally {
